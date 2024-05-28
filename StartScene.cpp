@@ -51,8 +51,8 @@ bool StartScene::init()
 	RotateBy* leaf3Rotate = RotateBy::create(.06f, 30);
 	RotateBy* leaf3ReturnRotate = RotateBy::create(.06f, -30);
 	Sequence* Leaf3Seq = Sequence::create(leafDealyTime, leaf3Rotate, leaf3ReturnRotate, leaf3Rotate, leaf3ReturnRotate, nullptr);
-	RepeatForever* leaf3Repeat = RepeatForever::create(Leaf3Seq);
-	mainCarrotLeaf_3->runAction(leaf3Repeat->clone());
+	RepeatForever* leaf3RF = RepeatForever::create(Leaf3Seq);
+	mainCarrotLeaf_3->runAction(leaf3RF->clone());
 
 	// ÂÜ²·Ò¶×Ó2
 	Sprite* mainCarrotLeaf_2 = Sprite::create("leaf-2.png");
@@ -64,8 +64,8 @@ bool StartScene::init()
 	RotateBy* leaf2Rotate = RotateBy::create(.06f, 30);
 	RotateBy* leaf2ReturnRotate = RotateBy::create(.06f, -30);
 	Sequence* Leaf2Seq = Sequence::create(leaf2Rotate, leaf2ReturnRotate, leaf2Rotate, leaf2ReturnRotate, leafDealyTime, nullptr);
-	RepeatForever* leaf2Repeat = RepeatForever::create(Leaf2Seq);
-	mainCarrotLeaf_2->runAction(leaf2Repeat->clone());
+	RepeatForever* leaf2RF = RepeatForever::create(Leaf2Seq);
+	mainCarrotLeaf_2->runAction(leaf2RF->clone());
 
 	// ÂÜ²·ÉíÌå
 	Sprite* mainCarrot = Sprite::create("carrot.png");
