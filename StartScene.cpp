@@ -1,6 +1,6 @@
 #include "StartScene.h"
-#include"ui\CocosGUI.h"
-
+#include "ui\CocosGUI.h"
+#include "AdventureScene.h"
 using namespace cocos2d::ui;
 
 StartScene* StartScene::create()
@@ -113,7 +113,9 @@ bool StartScene::init()
 	btn_Adventure->setPressedActionEnabled(true);
 	this->addChild(btn_Adventure);
 	btn_Adventure->addClickEventListener([&](Ref* ref) {
-
+		Director* director = Director::getInstance();
+		AdventureScene* adventureScene = AdventureScene::create();
+		director->replaceScene(adventureScene);
 	});
 
 	//开始界面的按钮--boss模式
