@@ -51,8 +51,8 @@ bool StartScene::init()
 	RotateBy* leaf3Rotate = RotateBy::create(.06f, 30);
 	RotateBy* leaf3ReturnRotate = RotateBy::create(.06f, -30);
 	Sequence* Leaf3Seq = Sequence::create(leafDealyTime, leaf3Rotate, leaf3ReturnRotate, leaf3Rotate, leaf3ReturnRotate, nullptr);
-	RepeatForever* leaf3Repeat = RepeatForever::create(Leaf3Seq);
-	mainCarrotLeaf_3->runAction(leaf3Repeat->clone());
+	RepeatForever* leaf3RF = RepeatForever::create(Leaf3Seq);
+	mainCarrotLeaf_3->runAction(leaf3RF->clone());
 
 	// 萝卜叶子2
 	Sprite* mainCarrotLeaf_2 = Sprite::create("leaf-2.png");
@@ -64,8 +64,8 @@ bool StartScene::init()
 	RotateBy* leaf2Rotate = RotateBy::create(.06f, 30);
 	RotateBy* leaf2ReturnRotate = RotateBy::create(.06f, -30);
 	Sequence* Leaf2Seq = Sequence::create(leaf2Rotate, leaf2ReturnRotate, leaf2Rotate, leaf2ReturnRotate, leafDealyTime, nullptr);
-	RepeatForever* leaf2Repeat = RepeatForever::create(Leaf2Seq);
-	mainCarrotLeaf_2->runAction(leaf2Repeat->clone());
+	RepeatForever* leaf2RF = RepeatForever::create(Leaf2Seq);
+	mainCarrotLeaf_2->runAction(leaf2RF->clone());
 
 	// 萝卜身体
 	Sprite* mainCarrot = Sprite::create("carrot.png");
@@ -92,15 +92,10 @@ bool StartScene::init()
 	// 创建开始界面——免费宝石
 	Sprite* freeStone = Sprite::create("btn_freestone.png");
 	//freeStone->setRotation(45.f);
-	freeStone->setPosition(Vec2(860, 560));
-	freeStone->setScale(.6f);
+	freeStone->setAnchorPoint(Vec2::ANCHOR_TOP_RIGHT);
+	freeStone->setPosition(Vec2(960, 640));
+	freeStone->setScale(1.f);
 	this->addChild(freeStone, 1);
-
-	//宝石旋转
-	RotateBy* freeStonRotate = RotateBy::create(.6f, 360);
-	Sequence* FreeStoneSeq = Sequence::create(freeStonRotate, nullptr);
-	RepeatForever* freeStoneRepeat = RepeatForever::create(FreeStoneSeq);
-	freeStone->runAction(freeStoneRepeat->clone());
 
 	return true;
 }
