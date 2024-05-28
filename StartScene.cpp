@@ -104,26 +104,35 @@ bool StartScene::init()
 	ScaleBy* logoScale = ScaleBy::create(.8f, .5f);
 	ScaleBy* logoReturnScale = ScaleBy::create(.8f, 2.f);
 	Sequence* LogoSeq = Sequence::create(logoReturnScale, logoScale, nullptr);
-	RepeatForever* logoRepeat = RepeatForever::create(LogoSeq);
-	carrotLogo->runAction(logoRepeat->clone());
+	RepeatForever* logoRF = RepeatForever::create(LogoSeq);
+	carrotLogo->runAction(logoRF->clone());
 
 	//开始界面的按钮--冒险模式
-	Button* adventure = Button::create("btn_adventure_normal_CN.png", "btn_adventure_pressed_CN.png");
-	adventure->setPosition(Vec2(200, 50));
-	adventure->setPressedActionEnabled(true);
-	this->addChild(adventure);
+	Button* btn_Adventure = Button::create("btn_adventure_normal_CN.png", "btn_adventure_pressed_CN.png");
+	btn_Adventure->setPosition(Vec2(200, 50));
+	btn_Adventure->setPressedActionEnabled(true);
+	this->addChild(btn_Adventure);
+	btn_Adventure->addClickEventListener([&](Ref* ref) {
+
+	});
 
 	//开始界面的按钮--boss模式
-	Button* boss = Button::create("btn_boss_normal_CN.png", "btn_boss_pressed_CN.png");
-	boss->setPosition(Vec2(480, 60));
-	boss->setPressedActionEnabled(true);
-	this->addChild(boss);
+	Button* btn_Boss = Button::create("btn_boss_normal_CN.png", "btn_boss_pressed_CN.png");
+	btn_Boss->setPosition(Vec2(480, 60));
+	btn_Boss->setPressedActionEnabled(true);
+	this->addChild(btn_Boss);
+	btn_Boss->addClickEventListener([&](Ref* ref) {
+
+	});
 
 	//开始界面的按钮--怪兽窝
-	Button* next = Button::create("btn_nest_normal_CN.png", "btn_nest_pressed_CN.png");
-	next->setPosition(Vec2(760, 50));
-	next->setPressedActionEnabled(true);
-	this->addChild(next);
+	Button* btn_Monster = Button::create("btn_nest_normal_CN.png", "btn_nest_pressed_CN.png");
+	btn_Monster->setPosition(Vec2(760, 50));
+	btn_Monster->setPressedActionEnabled(true);
+	this->addChild(btn_Monster);
+	btn_Monster->addClickEventListener([&](Ref* ref) {
+
+	});
 
 
 	return true;
