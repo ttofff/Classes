@@ -1,5 +1,6 @@
 #include "AdventureScene.h"
 #include"ui\CocosGUI.h"
+#include "StartScene.h"
 
 using namespace cocos2d::ui;
 
@@ -48,14 +49,20 @@ bool AdventureScene::init()
 	theme_pointright_normal->addClickEventListener([&](Ref* ref){});
 
 	//返回主页按钮
-	Button* theme_home_normal = Button::create("theme_home_normal.png", "theme_home_normal.png");
+	Button* theme_home_normal = Button::create("theme_home_normal.png", "theme_home_pressed.png");
 	theme_home_normal->setPosition(Vec2(30, 610));
 	theme_home_normal->setPressedActionEnabled(true);
 	this->addChild(theme_home_normal, 3);
-	theme_home_normal->addClickEventListener([&](Ref* ref){});
+	theme_home_normal->setScale(1.2f);
+	theme_home_normal->addClickEventListener([&](Ref* ref)
+	{
+		Director* director = Director::getInstance();
+		StartScene* StartScene = StartScene::create();
+		director->replaceScene(StartScene);
+	});
 
 	//帮助按钮
-	Button* ss_help_normal = Button::create("ss_help_normal.png", "ss_help_normal.png");
+	Button* ss_help_normal = Button::create("ss_help_normal.png", "ss_help_pressed.png");
 	ss_help_normal->setPosition(Vec2(930, 610));
 	ss_help_normal->setPressedActionEnabled(true);
 	this->addChild(ss_help_normal, 3);
