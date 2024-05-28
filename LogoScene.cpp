@@ -27,8 +27,9 @@ bool LogoScene::init()
     this->addChild(layerColor, 0);
     
     // 创建Logo图片背景
-    Sprite* logo = Sprite::create("fslogo.png");
+    Sprite* logo = Sprite::create("CarrotLogo.png");
     logo->setPosition(Vec2(480,320));
+	logo->setScale(.5f);
     this->addChild(logo, 1);
 
 	//切换到下一场景
