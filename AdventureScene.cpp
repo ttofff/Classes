@@ -39,28 +39,32 @@ bool AdventureScene::init()
 	theme_pointleft_normal->setPressedActionEnabled(true);
 	this->addChild(theme_pointleft_normal,3);
 	theme_pointleft_normal->addClickEventListener([&](Ref* ref){});
+
 	//右移按钮
 	Button* theme_pointright_normal = Button::create("theme_pointright_normal.png", "theme_pointright_pressed.png");
 	theme_pointright_normal->setPosition(Vec2(860, 320));
 	theme_pointright_normal->setPressedActionEnabled(true);
 	this->addChild(theme_pointright_normal,3);
 	theme_pointright_normal->addClickEventListener([&](Ref* ref){});
+
 	//返回主页按钮
 	Button* theme_home_normal = Button::create("theme_home_normal.png", "theme_home_normal.png");
 	theme_home_normal->setPosition(Vec2(30, 610));
 	theme_home_normal->setPressedActionEnabled(true);
 	this->addChild(theme_home_normal, 3);
 	theme_home_normal->addClickEventListener([&](Ref* ref){});
+
 	//帮助按钮
 	Button* ss_help_normal = Button::create("ss_help_normal.png", "ss_help_normal.png");
 	ss_help_normal->setPosition(Vec2(930, 610));
 	ss_help_normal->setPressedActionEnabled(true);
 	this->addChild(ss_help_normal, 3);
 	ss_help_normal->addClickEventListener([&](Ref* ref){});
+
 	//关卡可用的炮塔
 	Sprite* ss_towers_01 = Sprite::create("ss_towers_01.png");
 	ss_towers_01->setAnchorPoint(Vec2(0.5, 0));
-	ss_towers_01->setPosition(Vec2(480, 100));
+	ss_towers_01->setPosition(Vec2(480, 90));
 	this->addChild(ss_towers_01, 1);
 
 	//选择关卡图
@@ -68,6 +72,13 @@ bool AdventureScene::init()
 	//theme_bg_CN->setAnchorPoint(Vec2(0.5, 0));
 	theme_bg_CN->setPosition(Vec2(480, 610));
 	this->addChild(theme_bg_CN, 1);
+	
+	//开始游戏按钮
+	Button* ss_begin_normal = Button::create("theme_play_pressed.png");
+	ss_begin_normal->setPosition(Vec2(480, 60));
+	ss_begin_normal->setPressedActionEnabled(true);
+	this->addChild(ss_begin_normal, 3);
+	ss_begin_normal->addClickEventListener([&](Ref* ref){});
 
 	return true;
 }
