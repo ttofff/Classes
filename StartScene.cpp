@@ -51,7 +51,7 @@ bool StartScene::init()
 	RotateBy* leaf3Rotate = RotateBy::create(.06f, 30);
 	RotateBy* leaf3ReturnRotate = RotateBy::create(.06f, -30);
 	Sequence* Leaf3Seq = Sequence::create(leafDealyTime, leaf3Rotate, leaf3ReturnRotate, leaf3Rotate, leaf3ReturnRotate, nullptr);
-	Repeat* leaf3Repeat = Repeat::create(Leaf3Seq, 20);
+	RepeatForever* leaf3Repeat = RepeatForever::create(Leaf3Seq);
 	mainCarrotLeaf_3->runAction(leaf3Repeat->clone());
 
 	// 萝卜叶子2
@@ -64,7 +64,7 @@ bool StartScene::init()
 	RotateBy* leaf2Rotate = RotateBy::create(.06f, 30);
 	RotateBy* leaf2ReturnRotate = RotateBy::create(.06f, -30);
 	Sequence* Leaf2Seq = Sequence::create(leaf2Rotate, leaf2ReturnRotate, leaf2Rotate, leaf2ReturnRotate, leafDealyTime, nullptr);
-	Repeat* leaf2Repeat = Repeat::create(Leaf2Seq, 20);
+	RepeatForever* leaf2Repeat = RepeatForever::create(Leaf2Seq);
 	mainCarrotLeaf_2->runAction(leaf2Repeat->clone());
 
 	// 萝卜身体
@@ -86,16 +86,21 @@ bool StartScene::init()
 	MoveBy* birdMove = MoveBy::create(.8f, Vec2(0, -90));
 	MoveBy* birdRetrunMove = MoveBy::create(.8f, Vec2(0, 90));
 	Sequence* birdSeq = Sequence::create(birdMove, birdRetrunMove, nullptr);
-	Repeat* birdRepeat = Repeat::create(birdSeq, 30);
+	RepeatForever* birdRepeat = RepeatForever::create(birdSeq);
 	mainBird->runAction(birdRepeat->clone());
 
 	// 创建开始界面——免费宝石
 	Sprite* freeStone = Sprite::create("btn_freestone.png");
 	//freeStone->setRotation(45.f);
-	freeStone->setAnchorPoint(Vec2::ANCHOR_TOP_RIGHT);
-	freeStone->setPosition(Vec2(960, 640));
-	freeStone->setScale(1.f);
+	freeStone->setPosition(Vec2(860, 560));
+	freeStone->setScale(.6f);
 	this->addChild(freeStone, 1);
+
+	//宝石旋转
+	RotateBy* freeStonRotate = RotateBy::create(.6f, 360);
+	Sequence* FreeStoneSeq = Sequence::create(freeStonRotate, nullptr);
+	RepeatForever* freeStoneRepeat = RepeatForever::create(FreeStoneSeq);
+	freeStone->runAction(freeStoneRepeat->clone());
 
 	return true;
 }
