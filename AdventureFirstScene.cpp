@@ -1,13 +1,12 @@
-#include "AdventureScene.h"
-#include"ui\CocosGUI.h"
 #include "AdventureFirstScene.h"
+#include"ui\CocosGUI.h"
 #include "StartScene.h"
 
 using namespace cocos2d::ui;
 
 
 
-bool AdventureScene::init()
+bool AdventureFirstScene::init()
 {
 	if (!Scene::init())
 	{
@@ -29,15 +28,19 @@ bool AdventureScene::init()
 	ss_cloud->setPosition(Vec2(480, 0));
 	this->addChild(ss_cloud, 0);
 
-	Button* theme_pack01 = Button::create("theme_pack01.png");
-	theme_pack01->setPosition(Vec2(480, 320));
-	theme_pack01->setPressedActionEnabled(true);
-	this->addChild(theme_pack01,1);
-	theme_pack01->addClickEventListener([&](Ref* ref){
-		Director* director = Director::getInstance();
-		AdventureFirstScene* adventureFirstScene = AdventureFirstScene::create();
-		director->replaceScene(adventureFirstScene);
-	});
+	
+	//关卡1
+	Button* ss_map01 = Button::create("ss_map01.png");
+	ss_map01->setPosition(Vec2(480, 320));
+	ss_map01->setPressedActionEnabled(true);
+	this->addChild(ss_map01,2);
+	ss_map01->addClickEventListener([&](Ref* ref){});
+	//关卡可用的炮塔
+
+	Sprite* ss_towers_01 = Sprite::create("ss_towers_01.png");
+	ss_towers_01->setAnchorPoint(Vec2(0.5, 0));
+	ss_towers_01->setPosition(Vec2(480, 90));
+	this->addChild(ss_towers_01, 2);
 
 
 	
@@ -84,7 +87,12 @@ bool AdventureScene::init()
 	theme_bg_CN->setPosition(Vec2(480, 610));
 	this->addChild(theme_bg_CN, 1);
 	
-	
+	//开始游戏按钮
+	Button* ss_begin_normal = Button::create("theme_play_pressed.png");
+	ss_begin_normal->setPosition(Vec2(480, 60));
+	ss_begin_normal->setPressedActionEnabled(true);
+	this->addChild(ss_begin_normal, 3);
+	ss_begin_normal->addClickEventListener([&](Ref* ref){});
 
 	return true;
 }
