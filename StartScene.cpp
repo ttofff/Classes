@@ -1,4 +1,7 @@
 #include "StartScene.h"
+#include"ui\CocosGUI.h"
+
+using namespace cocos2d::ui;
 
 StartScene* StartScene::create()
 {
@@ -103,6 +106,24 @@ bool StartScene::init()
 	Sequence* LogoSeq = Sequence::create(logoReturnScale, logoScale, nullptr);
 	RepeatForever* logoRepeat = RepeatForever::create(LogoSeq);
 	carrotLogo->runAction(logoRepeat->clone());
+
+	//开始界面的按钮--冒险模式
+	Button* adventure = Button::create("btn_adventure_normal_CN.png", "btn_adventure_pressed_CN.png");
+	adventure->setPosition(Vec2(200, 50));
+	adventure->setPressedActionEnabled(true);
+	this->addChild(adventure);
+
+	//开始界面的按钮--boss模式
+	Button* boss = Button::create("btn_boss_normal_CN.png", "btn_boss_pressed_CN.png");
+	boss->setPosition(Vec2(480, 60));
+	boss->setPressedActionEnabled(true);
+	this->addChild(boss);
+
+	//开始界面的按钮--怪兽窝
+	Button* next = Button::create("btn_nest_normal_CN.png", "btn_nest_pressed_CN.png");
+	next->setPosition(Vec2(760, 50));
+	next->setPressedActionEnabled(true);
+	this->addChild(next);
 
 
 	return true;
