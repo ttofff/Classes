@@ -89,13 +89,21 @@ bool StartScene::init()
 	RepeatForever* birdRepeat = RepeatForever::create(birdSeq);
 	mainBird->runAction(birdRepeat->clone());
 
-	// 创建开始界面——免费宝石
-	Sprite* freeStone = Sprite::create("btn_freestone.png");
+	// 创建开始界面——logo
+	Sprite* carrotLogo = Sprite::create("CarrotLogo.png");
 	//freeStone->setRotation(45.f);
-	freeStone->setAnchorPoint(Vec2::ANCHOR_TOP_RIGHT);
-	freeStone->setPosition(Vec2(960, 640));
-	freeStone->setScale(1.f);
-	this->addChild(freeStone, 1);
+	//carrotLogo->setAnchorPoint(Vec2::ANCHOR_TOP_RIGHT);
+	carrotLogo->setPosition(Vec2(860, 570));
+	carrotLogo->setScale(.1f);
+	this->addChild(carrotLogo, 1);
+
+	//logo变大变小
+	ScaleBy* logoScale = ScaleBy::create(.8f, .5f);
+	ScaleBy* logoReturnScale = ScaleBy::create(.8f, 2.f);
+	Sequence* LogoSeq = Sequence::create(logoReturnScale, logoScale, nullptr);
+	RepeatForever* logoRepeat = RepeatForever::create(LogoSeq);
+	carrotLogo->runAction(logoRepeat->clone());
+
 
 	return true;
 }
