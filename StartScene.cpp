@@ -32,6 +32,10 @@ bool StartScene::init()
 	this->addChild(mainbg, 0);
 
 	// 创建开始界面——中心萝卜
+
+	// 萝卜叶子旋转间隔时间
+	DelayTime* leafDealyTime = DelayTime::create(2.5f);
+
 	// 萝卜叶子1
 	Sprite* mainCarrotLeaf_1 = Sprite::create("leaf-1.png");
 	mainCarrotLeaf_1->setPosition(Vec2(420, 455));
@@ -39,13 +43,29 @@ bool StartScene::init()
 
 	// 萝卜叶子3
 	Sprite* mainCarrotLeaf_3 = Sprite::create("leaf-3.png");
-	mainCarrotLeaf_3->setPosition(Vec2(560, 455));
+	mainCarrotLeaf_3->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+	mainCarrotLeaf_3->setPosition(Vec2(560, 395));
 	this->addChild(mainCarrotLeaf_3, 1);
+
+	// 萝卜叶子3旋转
+	RotateBy* leaf3Rotate = RotateBy::create(.06f, 30);
+	RotateBy* leaf3ReturnRotate = RotateBy::create(.06f, -30);
+	Sequence* Leaf3Seq = Sequence::create(leafDealyTime, leaf3Rotate, leaf3ReturnRotate, leaf3Rotate, leaf3ReturnRotate, nullptr);
+	Repeat* leaf3Repeat = Repeat::create(Leaf3Seq, 20);
+	mainCarrotLeaf_3->runAction(leaf3Repeat->clone());
 
 	// 萝卜叶子2
 	Sprite* mainCarrotLeaf_2 = Sprite::create("leaf-2.png");
-	mainCarrotLeaf_2->setPosition(Vec2(490, 470));
+	mainCarrotLeaf_2->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+	mainCarrotLeaf_2->setPosition(Vec2(490, 400));
 	this->addChild(mainCarrotLeaf_2, 1);
+
+	// 萝卜叶子2旋转
+	RotateBy* leaf2Rotate = RotateBy::create(.06f, 30);
+	RotateBy* leaf2ReturnRotate = RotateBy::create(.06f, -30);
+	Sequence* Leaf2Seq = Sequence::create(leaf2Rotate, leaf2ReturnRotate, leaf2Rotate, leaf2ReturnRotate, leafDealyTime, nullptr);
+	Repeat* leaf2Repeat = Repeat::create(Leaf2Seq, 20);
+	mainCarrotLeaf_2->runAction(leaf2Repeat->clone());
 
 	// 萝卜身体
 	Sprite* mainCarrot = Sprite::create("carrot.png");
@@ -61,6 +81,13 @@ bool StartScene::init()
 	Sprite* mainBird = Sprite::create("bird.png");
 	mainBird->setPosition(Vec2(180, 520));
 	this->addChild(mainBird, 3);
+
+	// 精灵上下移动
+	MoveBy* birdMove = MoveBy::create(.8f, Vec2(0, -90));
+	MoveBy* birdRetrunMove = MoveBy::create(.8f, Vec2(0, 90));
+	Sequence* birdSeq = Sequence::create(birdMove, birdRetrunMove, nullptr);
+	Repeat* birdRepeat = Repeat::create(birdSeq, 30);
+	mainBird->runAction(birdRepeat->clone());
 
 	// 创建开始界面——免费宝石
 	Sprite* freeStone = Sprite::create("btn_freestone.png");

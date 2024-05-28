@@ -38,7 +38,7 @@ bool LogoScene::init()
 		StartScene* startScene = StartScene::create();
 		TransitionCrossFade* cross = TransitionCrossFade::create(1.f, startScene);
 		director->replaceScene(cross);
-	}, 2.f, "start");
+	}, 0.f, "start");
 
     return true;
 }
