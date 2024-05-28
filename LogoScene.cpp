@@ -24,24 +24,20 @@ bool LogoScene::init()
     }
     // 创建白色背景
     LayerColor* layerColor = LayerColor::create(Color4B::WHITE);
-    this->addChild(layerColor);
+    this->addChild(layerColor, 0);
     
     // 创建Logo图片背景
     Sprite* logo = Sprite::create("fslogo.png");
     logo->setPosition(Vec2(480,320));
-    this->addChild(logo);
+    this->addChild(logo, 1);
 
-
-	scheduleOnce([&](float dt)
-	{
+	//切换到下一场景
+	scheduleOnce([&](float dt){
 		Director* director = Director::getInstance();
-		StartScene* startscene = StartScene::create();
-		TransitionCrossFade* cross = TransitionCrossFade::create(1.f, startscene);
+		StartScene* startScene = StartScene::create();
+		TransitionCrossFade* cross = TransitionCrossFade::create(1.f, startScene);
 		director->replaceScene(cross);
-	}, 1.f, "Start"
-	);
-	
-
+	}, 2.f, "start");
 
     return true;
 }
