@@ -76,19 +76,16 @@ bool GameScene::init()
 
 	Button* btn_speed = Button::create("speed11.png", "speed12.png");
 	btn_speed->setPosition(Vec2(725, 605));
-	btn_speed->setPressedActionEnabled(true);
 	this->addChild(btn_speed, 2);
 	btn_speed->addClickEventListener([&](Ref* ref) {});
 
 	Button* btn_pause = Button::create("pause01.png", "pause02.png");
 	btn_pause->setPosition(Vec2(825, 605));
-	btn_pause->setPressedActionEnabled(true);
 	this->addChild(btn_pause, 2);
 	btn_pause->addClickEventListener([&](Ref* ref) {});
 
 	Button* btn_menu = Button::create("menu01.png", "menu02.png");
 	btn_menu->setPosition(Vec2(890, 605));
-	btn_menu->setPressedActionEnabled(true);
 	this->addChild(btn_menu, 2);
 	btn_menu->addClickEventListener([&](Ref* ref) {});
 
