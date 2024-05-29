@@ -23,7 +23,7 @@ bool Gamepause::init()
 
 	//继续游戏
 	Button* ContinueGame = Button::create("menu_resume_normal_CN.png","menu_resume_pressed_CN");
-	ContinueGame->setPosition(Vec2(470, 424));
+	ContinueGame->setPosition(Vec2(468, 422));
 	this->addChild(ContinueGame, 0);
 	ContinueGame->addClickEventListener([&](Ref* ref){
 		Director* director = Director::getInstance();
@@ -33,7 +33,7 @@ bool Gamepause::init()
 	
 	//重新开始
 	Button* RestartGame = Button::create("menu_restart_normal_CN.png","menu_restart_pressed_CN");
-	RestartGame->setPosition(Vec2(470, 324));
+	RestartGame->setPosition(Vec2(468, 328));
 	this->addChild(RestartGame, 1);
 	RestartGame->addClickEventListener([&](Ref* ref){
 		Director* director = Director::getInstance();
@@ -45,7 +45,7 @@ bool Gamepause::init()
 
 	//选择关卡
 	Button* SelectGame = Button::create("menu_quit_normal_CN.png","menu_quit_pressed_CN");
-	SelectGame->setPosition(Vec2(470, 224));
+	SelectGame->setPosition(Vec2(468, 234));
 	this->addChild(SelectGame, 1);
 	SelectGame->addClickEventListener([&](Ref* ref){
 		Director* director = Director::getInstance();
