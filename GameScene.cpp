@@ -35,7 +35,7 @@ bool GameScene::init()
 	FileUtils::getInstance()->addSearchPath("Themes\\Items");
 	FileUtils::getInstance()->addSearchPath("Themes\\Items\\Items01-hd");
 	
-
+	// 生成背景图
 	if (index == 3 || index == 4 || index == 7)
 	{
 		Sprite* levelBG = Sprite::create("BG0\\BG2-hd\\BG2.png");
@@ -49,6 +49,7 @@ bool GameScene::init()
 		this->addChild(levelBG, 0);
 	}
 
+	// 生成关卡图
 	if (index < 4)
 	{
 		__String* path_str = __String::createWithFormat("BG%d\\BG-hd\\Path.png", index);
@@ -66,17 +67,32 @@ bool GameScene::init()
 		this->addChild(levelPath, 0);
 	}
 
-	Sprite* menuBar = Sprite::create("MenuBG.png");
-	menuBar->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
-	menuBar->setPosition(Vec2(480, 640));
-	this->addChild(menuBar, 1);
+	// 菜单栏背景
+	Sprite* menuBG = Sprite::create("touming-hd/MenuBG.png");
+	menuBG->setAnchorPoint(Vec2(0.5, 1));
+	menuBG->setPosition(Vec2(480, 640));
+	this->addChild(menuBG, 1);
 
-	// 20 40 .
-	// 44 40 .
+	// 金币数量
 	__String* str = __String::createWithFormat("%d", money);
 	CCLabelAtlas* moneyLabel = CCLabelAtlas::create(str->getCString(), "numwhite-hd.png", 20, 40, '.');
 	moneyLabel->setPosition(Vec2(100, 590));
 	this->addChild(moneyLabel, 2);
+
+	// 显示当前波数和总波数精灵
+	Sprite* menuCenter = Sprite::create("Items02-hd/MenuCenter_01_CN.png");
+	menuCenter->setPosition(Vec2(463, 45));
+	menuBG->addChild(menuCenter, 1);
+
+	//当前波数
+	TextAtlas*curWaveText = TextAtlas::create("01", "numyellow-hd.png", 44, 40, ".");
+	curWaveText->setPosition(Vec2(390, 45));
+	menuBG->addChild(curWaveText, 2);
+
+	//总波数
+	TextAtlas*totalWaveText = TextAtlas::create("15", "numwhite-hd.png", 20, 40, ".");
+	totalWaveText->setPosition(Vec2(480, 45));
+	menuBG->addChild(totalWaveText, 2);
 
 	// 全局速度变量
 	CCScheduler* pScheduler = CCDirector::sharedDirector()->getScheduler();
@@ -104,59 +120,42 @@ bool GameScene::init()
 		btn_speed_two->setVisible(false);
 	});
 
+	// 暂停按钮
 	Button* btn_pause = Button::create("pause11.png", "pause12.png");
 	btn_pause->setPosition(Vec2(825, 605));
 	btn_pause->setVisible(false);
 	this->addChild(btn_pause, 2);
 
+	// 开始按钮
 	Button* btn_go = Button::create("pause01.png", "pause02.png");
 	btn_go->setPosition(Vec2(825, 605));
 	btn_go->setVisible(true);
 	this->addChild(btn_go, 2);
+
+	// 暂停、开始点击事件
+	btn_pause->addClickEventListener([this, btn_go, btn_pause](Ref* ref) {
+		btn_go->setVisible(true);
+		btn_pause->setVisible(false);
+		Director::getInstance()->startAnimation();
+	});
 	btn_go->addClickEventListener([this, btn_go, btn_pause](Ref* ref) {
-		
 		btn_go->setVisible(false);
 		btn_pause->setVisible(true);
 		Director::getInstance()->stopAnimation();
 	});
 
-	btn_pause->addClickEventListener([this, btn_go, btn_pause](Ref* ref) {
-		btn_go->setVisible(true);
-		btn_pause->setVisible(false);
-
-		Director::getInstance()->startAnimation();
-	});
-
+	// 菜单按钮
 	Button* btn_menu = Button::create("menu01.png", "menu02.png");
 	btn_menu->setPosition(Vec2(890, 605));
 	this->addChild(btn_menu, 2);
 	btn_menu->addClickEventListener([&](Ref* ref) {});
 
-	Sprite* menuBG = Sprite::create("touming-hd/MenuBG.png");
-	menuBG->setAnchorPoint(Vec2(0.5, 1));
-	menuBG->setPosition(Vec2(480, 640));
-	this->addChild(menuBG, 1);
-
-	// 显示当前波数和总波数精灵
-	Sprite* menuCenter = Sprite::create("Items02-hd/MenuCenter_01_CN.png");
-	menuCenter->setPosition(Vec2(463, 45));
-	menuBG->addChild(menuCenter, 1);
-
-
-	//当前波数
-	TextAtlas*curWaveText = TextAtlas::create("01", "numyellow-hd.png", 44, 40, ".");
-	curWaveText->setPosition(Vec2(390, 45));
-	menuBG->addChild(curWaveText, 2);
-
-	//总波数
-	TextAtlas*totalWaveText = TextAtlas::create("15", "numwhite-hd.png", 20, 40, ".");
-	totalWaveText->setPosition(Vec2(480, 45));
-	menuBG->addChild(totalWaveText, 2);
-
+	// 萝卜图像
 	Sprite* ca = Sprite::create("hlb10.png");
 	ca->setPosition(Vec2(480, 320));
 	this->addChild(ca, 5);
 
+	// 萝卜抖动动画
 	Animation* carrotAnimation = Animation::create();
 	carrotAnimation->addSpriteFrameWithFile("hlb11.png");
 	carrotAnimation->addSpriteFrameWithFile("hlb12.png");
@@ -170,8 +169,6 @@ bool GameScene::init()
 	carrotAnimation->setDelayPerUnit(0.1f);
 	Animate* pAnimate = Animate::create(carrotAnimation);
 	ca->runAction(pAnimate);
-
-
 
 	return true;
 }
