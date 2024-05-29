@@ -3,6 +3,7 @@
 #include "GameScene.h"
 #include "ui\CocosGUI.h"
 #include "AdventureScene.h"
+#include "Gamepause.h"
 using namespace cocos2d::ui;
 
 GameScene* GameScene::create(int i)
@@ -36,6 +37,12 @@ bool GameScene::init()
 	FileUtils::getInstance()->addSearchPath("Themes\\Items\\Items01-hd");
 	FileUtils::getInstance()->addSearchPath("Themes\\Items\\Items02-hd");
 	
+	//ÔÝÍ£²Ëµ¥
+	Gamepause* gamepause = Gamepause::create();
+	this->addChild(gamepause, 5);
+	gamepause->index = this->index;
+	gamepause->setVisible(false);
+
 	// Éú³É±³¾°Í¼
 	if (index == 3 || index == 4 || index == 7)
 	{
@@ -157,7 +164,12 @@ bool GameScene::init()
 	Button* btn_menu = Button::create("menu01.png", "menu02.png");
 	btn_menu->setPosition(Vec2(890, 605));
 	this->addChild(btn_menu, 2);
-	btn_menu->addClickEventListener([&](Ref* ref) {});
+	btn_menu->addClickEventListener([gamepause](Ref* ref) 
+	{
+		Director* director = Director::getInstance();
+		gamepause->setVisible(true);
+		director->stopAnimation();
+	});
 
 	// ÂÜ²·Í¼Ïñ
 	Sprite* ca = Sprite::create("hlb10.png");
