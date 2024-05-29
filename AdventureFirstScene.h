@@ -9,6 +9,10 @@ class AdventureFirstScene : public Scene
 public:
 	CREATE_FUNC(AdventureFirstScene);
 	bool init() override;
+	static int a;
+	const int MAX = 12;
+private:
+	
 };
 
 #endif
