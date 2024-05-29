@@ -9,6 +9,9 @@ class AdventureScene : public Scene
 public:
 	CREATE_FUNC(AdventureScene);
 	bool init() override;
+
+	static int n;
+
 };
 
 #endif
