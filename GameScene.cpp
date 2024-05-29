@@ -34,6 +34,7 @@ bool GameScene::init()
 	FileUtils::getInstance()->addSearchPath("Themes\\Theme1");
 	FileUtils::getInstance()->addSearchPath("Themes\\Items");
 	FileUtils::getInstance()->addSearchPath("Themes\\Items\\Items01-hd");
+	FileUtils::getInstance()->addSearchPath("Themes\\Items\\Items02-hd");
 	
 	// 生成背景图
 	if (index == 3 || index == 4 || index == 7)
@@ -68,7 +69,7 @@ bool GameScene::init()
 	}
 
 	// 菜单栏背景
-	Sprite* menuBG = Sprite::create("touming-hd/MenuBG.png");
+	Sprite* menuBG = Sprite::create("MenuBG.png");
 	menuBG->setAnchorPoint(Vec2(0.5, 1));
 	menuBG->setPosition(Vec2(480, 640));
 	this->addChild(menuBG, 1);
@@ -80,7 +81,7 @@ bool GameScene::init()
 	this->addChild(moneyLabel, 2);
 
 	// 显示当前波数和总波数精灵
-	Sprite* menuCenter = Sprite::create("Items02-hd/MenuCenter_01_CN.png");
+	Sprite* menuCenter = Sprite::create("MenuCenter_01_CN.png");
 	menuCenter->setPosition(Vec2(463, 45));
 	menuBG->addChild(menuCenter, 1);
 
@@ -120,16 +121,17 @@ bool GameScene::init()
 		btn_speed_two->setVisible(false);
 	});
 
+	//暂停中
+	Sprite* btn_stop = Sprite::create("MenuCenter_02_CN.png");
+	btn_stop->setPosition(Vec2(480, 320));
+	btn_stop->setVisible(false);
+	this->addChild(btn_stop, 2);
+
 	// 暂停按钮
 	Button* btn_pause = Button::create("pause11.png", "pause12.png");
 	btn_pause->setPosition(Vec2(825, 605));
 	btn_pause->setVisible(false);
 	this->addChild(btn_pause, 2);
-	//暂停中
-	Button* btn_stop = Button::create( "MenuCenter_02_CN.png");
-	btn_stop->setPosition(Vec2(480, 320));
-	btn_stop->setVisible(false);
-	this->addChild(btn_stop, 2);
 
 	// 开始按钮
 	Button* btn_go = Button::create("pause01.png", "pause02.png");
@@ -138,8 +140,9 @@ bool GameScene::init()
 	this->addChild(btn_go, 2);
 
 	// 暂停、开始点击事件
-	btn_pause->addClickEventListener([this, btn_go, btn_pause](Ref* ref) {
+	btn_pause->addClickEventListener([this, btn_go, btn_pause, btn_stop](Ref* ref) {
 		btn_go->setVisible(true);
+		btn_stop->setVisible(false);
 		btn_pause->setVisible(false);
 		Director::getInstance()->startAnimation();
 	});
