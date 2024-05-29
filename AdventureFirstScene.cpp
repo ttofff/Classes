@@ -3,6 +3,7 @@
 #include "StartScene.h"
 #include "AdventureScene.h"
 #include "GameScene.h"
+
 using namespace cocos2d::ui;
 
 int AdventureFirstScene::a = 1;
@@ -125,6 +126,9 @@ bool AdventureFirstScene::init()
 		GameScene* gameScene = GameScene::create(a);
 		director->replaceScene(gameScene);
 	});
+
+	
+
 
 	return true;
 }

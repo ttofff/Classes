@@ -2,6 +2,7 @@
 #include "ui\CocosGUI.h"
 #include "AdventureScene.h"
 #include "GameScene.h"
+#include"AboutScene.h"
 using namespace cocos2d::ui;
 
 StartScene* StartScene::create()
@@ -140,6 +141,19 @@ bool StartScene::init()
 
 	});
 
+	//µ÷×ªµ½about
+	Button* about = Button::create("91-logo.png");
+	about->setPosition(Vec2(80, 550));
+	about->setPressedActionEnabled(true);
+	this->addChild(about);
+	about->addClickEventListener([&](Ref* ref) {
+		Director* director = Director::getInstance();
+		AboutScene* aboutScene = AboutScene::create();
+		director->replaceScene(aboutScene);
+
+		/*GameScene* gameScene = GameScene::create();
+		director->replaceScene(gameScene);*/
+	});
 
 	return true;
 }
