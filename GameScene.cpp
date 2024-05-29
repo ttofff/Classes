@@ -79,10 +79,29 @@ bool GameScene::init()
 	this->addChild(btn_speed, 2);
 	btn_speed->addClickEventListener([&](Ref* ref) {});
 
-	Button* btn_pause = Button::create("pause01.png", "pause02.png");
+	Button* btn_pause = Button::create("pause11.png", "pause12.png");
 	btn_pause->setPosition(Vec2(825, 605));
+	btn_pause->setVisible(false);
 	this->addChild(btn_pause, 2);
-	btn_pause->addClickEventListener([&](Ref* ref) {});
+	
+
+	Button* btn_go = Button::create("pause01.png", "pause02.png");
+	btn_go->setPosition(Vec2(825, 605));
+	btn_go->setVisible(true);
+	this->addChild(btn_go, 2);
+	btn_go->addClickEventListener([this, btn_go, btn_pause](Ref* ref) {
+		
+		btn_go->setVisible(false);
+		btn_pause->setVisible(true);
+		Director::getInstance()->stopAnimation();
+	});
+
+	btn_pause->addClickEventListener([this, btn_go, btn_pause](Ref* ref) {
+		btn_go->setVisible(true);
+		btn_pause->setVisible(false);
+
+		Director::getInstance()->startAnimation();
+	});
 
 	Button* btn_menu = Button::create("menu01.png", "menu02.png");
 	btn_menu->setPosition(Vec2(890, 605));
