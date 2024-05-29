@@ -69,21 +69,43 @@ bool GameScene::init()
 	menuBar->setPosition(Vec2(480, 640));
 	this->addChild(menuBar, 1);
 
+	// 20 40 .
+	// 44 40 .
 	__String* str = __String::createWithFormat("%d", money);
-	CCLabelAtlas* moneyLabel = CCLabelAtlas::create(str->getCString(), "numText.png", 24, 32, '0');
+	CCLabelAtlas* moneyLabel = CCLabelAtlas::create(str->getCString(), "numwhite-hd.png", 20, 40, '.');
 	moneyLabel->setPosition(Vec2(100, 594));
 	this->addChild(moneyLabel, 2);
 
+	// 全局速度变量
+	CCScheduler* pScheduler = CCDirector::sharedDirector()->getScheduler();
+
+	// 1倍速按钮
 	Button* btn_speed = Button::create("speed11.png", "speed12.png");
 	btn_speed->setPosition(Vec2(725, 605));
 	this->addChild(btn_speed, 2);
-	btn_speed->addClickEventListener([&](Ref* ref) {});
+
+	// 2倍速按钮
+	Button* btn_speed_two = Button::create("speed21.png", "speed22.png");
+	btn_speed_two->setPosition(Vec2(725, 605));
+	this->addChild(btn_speed_two, 2);
+	btn_speed_two->setVisible(false);
+
+	// 倍速按钮点击事件
+	btn_speed->addClickEventListener([pScheduler, btn_speed, btn_speed_two](Ref* ref) {
+		pScheduler->setTimeScale(2.f);
+		btn_speed->setVisible(false);
+		btn_speed_two->setVisible(true);
+	});
+	btn_speed_two->addClickEventListener([pScheduler, btn_speed, btn_speed_two](Ref* ref) {
+		pScheduler->setTimeScale(1.f);
+		btn_speed->setVisible(true);
+		btn_speed_two->setVisible(false);
+	});
 
 	Button* btn_pause = Button::create("pause11.png", "pause12.png");
 	btn_pause->setPosition(Vec2(825, 605));
 	btn_pause->setVisible(false);
 	this->addChild(btn_pause, 2);
-	
 
 	Button* btn_go = Button::create("pause01.png", "pause02.png");
 	btn_go->setPosition(Vec2(825, 605));
