@@ -12,6 +12,8 @@ public:
 
 	static int n;
 
+	const int Max = 7;
+
 };
 
 #endif

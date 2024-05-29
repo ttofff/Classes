@@ -2,6 +2,7 @@
 #include"ui\CocosGUI.h"
 #include "StartScene.h"
 #include "AdventureScene.h"
+#include "GameScene.h"
 using namespace cocos2d::ui;
 
 int AdventureFirstScene::a = 1;
@@ -36,7 +37,11 @@ bool AdventureFirstScene::init()
 	ss_map01->setPosition(Vec2(480, 320));
 	ss_map01->setPressedActionEnabled(true);
 	this->addChild(ss_map01,2);
-	ss_map01->addClickEventListener([&](Ref* ref){});
+	ss_map01->addClickEventListener([&](Ref* ref){
+		Director* director = Director::getInstance();
+		GameScene* gameScene = GameScene::create();
+		director->replaceScene(gameScene);
+	});
 
 	//关卡可用的炮塔
 	__String* s1 = __String::createWithFormat("ss_towers_%02d.png", a);
@@ -116,7 +121,9 @@ bool AdventureFirstScene::init()
 	ss_begin_normal->setPressedActionEnabled(true);
 	this->addChild(ss_begin_normal, 3);
 	ss_begin_normal->addClickEventListener([&](Ref* ref){
-		
+		Director* director = Director::getInstance();
+		GameScene* gameScene = GameScene::create();
+		director->replaceScene(gameScene);
 	});
 
 	return true;
