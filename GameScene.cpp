@@ -5,10 +5,11 @@
 #include "AdventureScene.h"
 using namespace cocos2d::ui;
 
-GameScene* GameScene::create()
+GameScene* GameScene::create(int i)
 {
 	GameScene* ret = new GameScene();
-	(*ret).money = 300;
+	ret->money = 300;
+	ret->index = i;
 	if (ret && ret->init())
 	{
 		ret->autorelease();
@@ -30,10 +31,38 @@ bool GameScene::init()
 	}
 
 	FileUtils::getInstance()->addSearchPath("Themes\\Items\\touming-hd");
+	FileUtils::getInstance()->addSearchPath("Themes\\Theme1");
 	FileUtils::getInstance()->addSearchPath("Themes\\Items");
 
-	LayerColor* layerColor = LayerColor::create(Color4B::BLACK);
-	this->addChild(layerColor, 0);
+	if (index == 3 || index == 4 || index == 7)
+	{
+		Sprite* levelBG = Sprite::create("BG0\\BG2-hd\\BG2.png");
+		levelBG->setAnchorPoint(Vec2(0, 0));
+		this->addChild(levelBG, 0);
+	}
+	else
+	{
+		Sprite* levelBG = Sprite::create("BG0\\BG1-hd\\BG1.png");
+		levelBG->setAnchorPoint(Vec2(0, 0));
+		this->addChild(levelBG, 0);
+	}
+
+	if (index < 4)
+	{
+		__String* path_str = __String::createWithFormat("BG%d\\BG-hd\\Path.png", index);
+		Sprite* levelPath = Sprite::create(path_str->getCString());
+		levelPath->setAnchorPoint(Vec2(1, 0));
+		levelPath->setPosition(Vec2(960, 0));
+		this->addChild(levelPath, 0);
+	}
+	else
+	{
+		__String* path_str = __String::createWithFormat("BG%d\\.BG-hd_PList.Dir\\Path.png", index);
+		Sprite* levelPath = Sprite::create(path_str->getCString());
+		levelPath->setAnchorPoint(Vec2(1, 0));
+		levelPath->setPosition(Vec2(960, 0));
+		this->addChild(levelPath, 0);
+	}
 
 	Sprite* menuBar = Sprite::create("MenuBG.png");
 	menuBar->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);

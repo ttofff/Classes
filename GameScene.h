@@ -7,10 +7,12 @@ using namespace cocos2d;
 class GameScene : public Scene
 {
 public:
-	static GameScene* create();
+	static GameScene* create(int i);
 	bool init() override;
 public:
 	int money;
+	
+	int index;
 };
 
 #endif

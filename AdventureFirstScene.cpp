@@ -39,7 +39,7 @@ bool AdventureFirstScene::init()
 	this->addChild(ss_map01,2);
 	ss_map01->addClickEventListener([&](Ref* ref){
 		Director* director = Director::getInstance();
-		GameScene* gameScene = GameScene::create();
+		GameScene* gameScene = GameScene::create(a);
 		director->replaceScene(gameScene);
 	});
 
@@ -122,7 +122,7 @@ bool AdventureFirstScene::init()
 	this->addChild(ss_begin_normal, 3);
 	ss_begin_normal->addClickEventListener([&](Ref* ref){
 		Director* director = Director::getInstance();
-		GameScene* gameScene = GameScene::create();
+		GameScene* gameScene = GameScene::create(a);
 		director->replaceScene(gameScene);
 	});
 
