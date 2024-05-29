@@ -132,6 +132,27 @@ bool GameScene::init()
 	this->addChild(btn_menu, 2);
 	btn_menu->addClickEventListener([&](Ref* ref) {});
 
+	Sprite* menuBG = Sprite::create("touming-hd/MenuBG.png");
+	menuBG->setAnchorPoint(Vec2(0.5, 1));
+	menuBG->setPosition(Vec2(480, 640));
+	this->addChild(menuBG, 1);
+
+	// 显示当前波数和总波数精灵
+	Sprite* menuCenter = Sprite::create("Items02-hd/MenuCenter_01_CN.png");
+	menuCenter->setPosition(Vec2(463, 45));
+	menuBG->addChild(menuCenter, 1);
+
+
+	//当前波数
+	TextAtlas*curWaveText = TextAtlas::create("01", "numyellow-hd.png", 44, 40, ".");
+	curWaveText->setPosition(Vec2(390, 45));
+	menuBG->addChild(curWaveText, 2);
+
+	//总波数
+	TextAtlas*totalWaveText = TextAtlas::create("15", "numwhite-hd.png", 20, 40, ".");
+	totalWaveText->setPosition(Vec2(480, 45));
+	menuBG->addChild(totalWaveText, 2);
+
 	Sprite* ca = Sprite::create("hlb10.png");
 	ca->setPosition(Vec2(480, 320));
 	this->addChild(ca, 5);
@@ -149,6 +170,8 @@ bool GameScene::init()
 	carrotAnimation->setDelayPerUnit(0.1f);
 	Animate* pAnimate = Animate::create(carrotAnimation);
 	ca->runAction(pAnimate);
+
+
 
 	return true;
 }
