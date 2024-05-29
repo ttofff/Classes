@@ -1,6 +1,7 @@
 #include "StartScene.h"
 #include "ui\CocosGUI.h"
 #include "AdventureScene.h"
+#include "GameScene.h"
 using namespace cocos2d::ui;
 
 StartScene* StartScene::create()
@@ -116,6 +117,9 @@ bool StartScene::init()
 		Director* director = Director::getInstance();
 		AdventureScene* adventureScene = AdventureScene::create();
 		director->replaceScene(adventureScene);
+
+		/*GameScene* gameScene = GameScene::create();
+		director->replaceScene(gameScene);*/
 	});
 
 	//开始界面的按钮--boss模式
