@@ -54,7 +54,7 @@ bool AdventureFirstScene::init()
 	
 	
 	//×óÒÆ°´Å¥
-	if ((this->a - 1) > 1){
+	if ((this->a) > 1){
 		Button* theme_pointleft_normal = Button::create("theme_pointleft_normal.png", "theme_pointleft_pressed.png");
 		theme_pointleft_normal->setPosition(Vec2(100, 320));
 		theme_pointleft_normal->setPressedActionEnabled(true);
@@ -71,7 +71,7 @@ bool AdventureFirstScene::init()
 	}
 
 	//ÓÒÒÆ°´Å¥
-	if ((this->a + 1) < MAX){
+	if ((this->a ) < MAX){
 		Button* theme_pointright_normal = Button::create("theme_pointright_normal.png", "theme_pointright_pressed.png");
 		theme_pointright_normal->setPosition(Vec2(860, 320));
 		theme_pointright_normal->setPressedActionEnabled(true);
