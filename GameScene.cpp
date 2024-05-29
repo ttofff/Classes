@@ -33,6 +33,8 @@ bool GameScene::init()
 	FileUtils::getInstance()->addSearchPath("Themes\\Items\\touming-hd");
 	FileUtils::getInstance()->addSearchPath("Themes\\Theme1");
 	FileUtils::getInstance()->addSearchPath("Themes\\Items");
+	FileUtils::getInstance()->addSearchPath("Themes\\Items\\Items01-hd");
+	
 
 	if (index == 3 || index == 4 || index == 7)
 	{
@@ -129,6 +131,24 @@ bool GameScene::init()
 	btn_menu->setPosition(Vec2(890, 605));
 	this->addChild(btn_menu, 2);
 	btn_menu->addClickEventListener([&](Ref* ref) {});
+
+	Sprite* ca = Sprite::create("hlb10.png");
+	ca->setPosition(Vec2(480, 320));
+	this->addChild(ca, 5);
+
+	Animation* carrotAnimation = Animation::create();
+	carrotAnimation->addSpriteFrameWithFile("hlb11.png");
+	carrotAnimation->addSpriteFrameWithFile("hlb12.png");
+	carrotAnimation->addSpriteFrameWithFile("hlb13.png");
+	carrotAnimation->addSpriteFrameWithFile("hlb14.png");
+	carrotAnimation->addSpriteFrameWithFile("hlb15.png");
+	carrotAnimation->addSpriteFrameWithFile("hlb16.png");
+	carrotAnimation->addSpriteFrameWithFile("hlb17.png");
+	carrotAnimation->addSpriteFrameWithFile("hlb18.png");
+	carrotAnimation->setLoops(CC_REPEAT_FOREVER);
+	carrotAnimation->setDelayPerUnit(0.1f);
+	Animate* pAnimate = Animate::create(carrotAnimation);
+	ca->runAction(pAnimate);
 
 	return true;
 }
