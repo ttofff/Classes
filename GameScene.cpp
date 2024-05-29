@@ -125,6 +125,11 @@ bool GameScene::init()
 	btn_pause->setPosition(Vec2(825, 605));
 	btn_pause->setVisible(false);
 	this->addChild(btn_pause, 2);
+	//暂停中
+	Button* btn_stop = Button::create( "MenuCenter_02_CN.png");
+	btn_stop->setPosition(Vec2(480, 320));
+	btn_stop->setVisible(false);
+	this->addChild(btn_stop, 2);
 
 	// 开始按钮
 	Button* btn_go = Button::create("pause01.png", "pause02.png");
@@ -138,8 +143,9 @@ bool GameScene::init()
 		btn_pause->setVisible(false);
 		Director::getInstance()->startAnimation();
 	});
-	btn_go->addClickEventListener([this, btn_go, btn_pause](Ref* ref) {
+	btn_go->addClickEventListener([this, btn_go, btn_pause, btn_stop](Ref* ref) {
 		btn_go->setVisible(false);
+		btn_stop->setVisible(true);
 		btn_pause->setVisible(true);
 		Director::getInstance()->stopAnimation();
 	});
@@ -152,7 +158,7 @@ bool GameScene::init()
 
 	// 萝卜图像
 	Sprite* ca = Sprite::create("hlb10.png");
-	ca->setPosition(Vec2(480, 320));
+	ca->setPosition(Vec2(830, 480));
 	this->addChild(ca, 5);
 
 	// 萝卜抖动动画
