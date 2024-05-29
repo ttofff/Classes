@@ -73,7 +73,7 @@ bool GameScene::init()
 	// 44 40 .
 	__String* str = __String::createWithFormat("%d", money);
 	CCLabelAtlas* moneyLabel = CCLabelAtlas::create(str->getCString(), "numwhite-hd.png", 20, 40, '.');
-	moneyLabel->setPosition(Vec2(100, 594));
+	moneyLabel->setPosition(Vec2(100, 590));
 	this->addChild(moneyLabel, 2);
 
 	// 全局速度变量
