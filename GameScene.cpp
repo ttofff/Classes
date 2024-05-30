@@ -147,21 +147,23 @@ bool GameScene::init()
 	btn_go->setVisible(true);
 	this->addChild(btn_go, 2);
 
-	
 
 	// 菜单按钮
 	Button* btn_menu = Button::create("menu01.png", "menu02.png");
 	btn_menu->setPosition(Vec2(890, 605));
 	this->addChild(btn_menu, 2);
-	btn_menu->addClickEventListener([gamepause](Ref* ref) 
+	btn_menu->addClickEventListener([this,gamepause, btn_speed,btn_menu](Ref* ref) 
 	{
 		Director* director = Director::getInstance();
 		gamepause->setVisible(true);
-		director->stopAnimation();
+		this->scheduleOnce([director](float dt){
+			director->stopAnimation();
+		}, 0.2f, "delayed_key");
+		
 	});
 
 	// 暂停、开始点击事件
-	btn_pause->addClickEventListener([this, btn_go, btn_pause, btn_stop, btn_speed, btn_menu](Ref* ref) {
+	btn_pause->addClickEventListener([ btn_go, btn_pause, btn_stop, btn_speed, btn_menu](Ref* ref) {
 		btn_go->setVisible(true);
 		btn_stop->setVisible(false);
 		btn_pause->setVisible(false);
@@ -170,7 +172,7 @@ bool GameScene::init()
 		btn_speed->setTouchEnabled(true);
 		btn_menu->setTouchEnabled(true);
 	});
-	btn_go->addClickEventListener([this, btn_go, btn_pause, btn_stop, btn_speed, btn_menu](Ref* ref) {
+	btn_go->addClickEventListener([btn_go, btn_pause, btn_stop, btn_speed, btn_menu](Ref* ref) {
 		btn_go->setVisible(false);
 		btn_stop->setVisible(true);
 		btn_pause->setVisible(true);

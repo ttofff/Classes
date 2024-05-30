@@ -15,16 +15,25 @@ bool Gamepause::init()
 	}
 	
 	FileUtils::getInstance()->addSearchPath("Themes\\scene\\gamemenu-hd");
+	//±³¾°Í¼
+	Button* BK = Button::create("empty.png", "empty.png");
+	BK->setPosition(Vec2(480, 320));
+	this->addChild(BK, 0);
+	BK->addClickEventListener([&](Ref* ref){
+		Director* director = Director::getInstance();
+	});
+
+
 
 	//±³¾°Í¼
 	Sprite* MenuBk = Sprite::create("menu_bg.png");
 	MenuBk->setPosition(Vec2(480, 320));
-	this->addChild(MenuBk, 0);
+	this->addChild(MenuBk, 1);
 
 	//¼ÌÐøÓÎÏ·
 	Button* ContinueGame = Button::create("menu_resume_normal_CN.png","menu_resume_pressed_CN");
 	ContinueGame->setPosition(Vec2(468, 422));
-	this->addChild(ContinueGame, 0);
+	this->addChild(ContinueGame, 1);
 	ContinueGame->addClickEventListener([&](Ref* ref){
 		Director* director = Director::getInstance();
 		this->setVisible(false);
