@@ -3,6 +3,7 @@
 #include "AdventureScene.h"
 #include "GameScene.h"
 #include"AboutScene.h"
+#include"HelpScene.h"
 using namespace cocos2d::ui;
 
 StartScene* StartScene::create()
@@ -151,9 +152,18 @@ bool StartScene::init()
 		AboutScene* aboutScene = AboutScene::create();
 		director->replaceScene(aboutScene);
 
-		/*GameScene* gameScene = GameScene::create();
-		director->replaceScene(gameScene);*/
+
 	});
+
+	//°ïÖú°´Å¥
+	Button* help = Button::create("btn_help_normal.png", "btn_help_pressed.png");
+	help->setPosition(Vec2(700, 200));
+	help->setPressedActionEnabled(true);
+	this->addChild(help);
+	help->addClickEventListener([&](Ref* ref) {
+		Director* director = Director::getInstance();
+		HelpScene* heleScene = HelpScene::create();
+		director->replaceScene(heleScene); });
 
 	return true;
 }

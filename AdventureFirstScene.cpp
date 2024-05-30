@@ -3,6 +3,7 @@
 #include "StartScene.h"
 #include "AdventureScene.h"
 #include "GameScene.h"
+#include"HelpScene.h"
 
 using namespace cocos2d::ui;
 
@@ -106,7 +107,11 @@ bool AdventureFirstScene::init()
 	ss_help_normal->setPosition(Vec2(930, 610));
 	ss_help_normal->setPressedActionEnabled(true);
 	this->addChild(ss_help_normal, 3);
-	ss_help_normal->addClickEventListener([&](Ref* ref){});
+	ss_help_normal->addClickEventListener([&](Ref* ref) {
+		Director* director = Director::getInstance();
+		HelpScene* heleScene = HelpScene::create();
+		director->replaceScene(heleScene); });
+
 
 	
 
