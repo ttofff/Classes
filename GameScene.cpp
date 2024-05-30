@@ -72,7 +72,7 @@ bool GameScene::init()
 	
 
 	// Éú³É¹Ø¿¨Í¼
-	tiledMap = TMXTiledMap::create("Map\\First Kind\\Environment\\Level07\\Level.tmx");
+	tiledMap = TMXTiledMap::create("Map\\FirstKind\\Environment\\Level07\\Level.tmx");
 	tiledMap->setPosition(Vec2::ZERO);
 	this->addChild(tiledMap, 0);
 	
