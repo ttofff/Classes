@@ -104,6 +104,7 @@ bool GameScene::init()
 
 	// 全局速度变量
 	CCScheduler* pScheduler = CCDirector::sharedDirector()->getScheduler();
+	pScheduler->setTimeScale(1.f);
 
 	// 1倍速按钮
 	Button* btn_speed = Button::create("speed11.png", "speed12.png");
