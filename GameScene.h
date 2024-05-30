@@ -11,8 +11,10 @@ public:
 	bool init() override;
 public:
 	int money;
-	
+
 	int index;
+
+	TMXTiledMap* tileMap;
 };
 
 #endif

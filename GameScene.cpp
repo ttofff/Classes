@@ -43,6 +43,13 @@ bool GameScene::init()
 	gamepause->index = this->index;
 	gamepause->setVisible(false);
 
+	__String* path_str = __String::createWithFormat("Map//FirstKind//Environment//Level%02d//Level.tmx", index);
+	tileMap = TMXTiledMap::create(path_str->getCString());
+	tileMap->setPosition(Vec2::ZERO);
+	this->addChild(tileMap,0);
+
+
+	/*
 	// Éú³É±³¾°Í¼
 	if (index == 3 || index == 4 || index == 7)
 	{
@@ -74,7 +81,7 @@ bool GameScene::init()
 		levelPath->setPosition(Vec2(960, 0));
 		this->addChild(levelPath, 0);
 	}
-
+	*/
 	// ²Ëµ¥À¸±³¾°
 	Sprite* menuBG = Sprite::create("MenuBG.png");
 	menuBG->setAnchorPoint(Vec2(0.5, 1));
