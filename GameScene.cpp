@@ -146,19 +146,7 @@ bool GameScene::init()
 	btn_go->setVisible(true);
 	this->addChild(btn_go, 2);
 
-	// 暂停、开始点击事件
-	btn_pause->addClickEventListener([this, btn_go, btn_pause, btn_stop](Ref* ref) {
-		btn_go->setVisible(true);
-		btn_stop->setVisible(false);
-		btn_pause->setVisible(false);
-		Director::getInstance()->startAnimation();
-	});
-	btn_go->addClickEventListener([this, btn_go, btn_pause, btn_stop](Ref* ref) {
-		btn_go->setVisible(false);
-		btn_stop->setVisible(true);
-		btn_pause->setVisible(true);
-		Director::getInstance()->stopAnimation();
-	});
+	
 
 	// 菜单按钮
 	Button* btn_menu = Button::create("menu01.png", "menu02.png");
@@ -169,6 +157,26 @@ bool GameScene::init()
 		Director* director = Director::getInstance();
 		gamepause->setVisible(true);
 		director->stopAnimation();
+	});
+
+	// 暂停、开始点击事件
+	btn_pause->addClickEventListener([this, btn_go, btn_pause, btn_stop, btn_speed, btn_menu](Ref* ref) {
+		btn_go->setVisible(true);
+		btn_stop->setVisible(false);
+		btn_pause->setVisible(false);
+		Director::getInstance()->startAnimation();
+
+		btn_speed->setTouchEnabled(true);
+		btn_menu->setTouchEnabled(true);
+	});
+	btn_go->addClickEventListener([this, btn_go, btn_pause, btn_stop, btn_speed, btn_menu](Ref* ref) {
+		btn_go->setVisible(false);
+		btn_stop->setVisible(true);
+		btn_pause->setVisible(true);
+		Director::getInstance()->stopAnimation();
+
+		btn_speed->setTouchEnabled(false);
+		btn_menu->setTouchEnabled(false);
 	});
 
 	// 萝卜图像
