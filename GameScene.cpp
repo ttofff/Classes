@@ -1,5 +1,5 @@
 #pragma warning(disable:4996)
-
+#include"Monster.h"
 #include "GameScene.h"
 #include "ui\CocosGUI.h"
 #include "AdventureScene.h"
@@ -10,7 +10,7 @@ GameScene* GameScene::create(int i)
 {
 	GameScene* ret = new GameScene();
 	ret->money = 300;
-	ret->index = i;
+	
 	if (ret && ret->init())
 	{
 		ret->autorelease();
@@ -22,6 +22,33 @@ GameScene* GameScene::create(int i)
 	}
 
 	return ret;
+}
+
+
+// 通过瓦片地图获取怪物行走路径
+void GameScene::getWayPoints()
+{
+	// 获取PATH对象层
+	TMXObjectGroup* group = tiledMap->getObjectGroup("PATH");
+	// 获取对象层上所有对象
+	ValueVector valueVector = group->getObjects();
+	// 遍历所有对象
+	for (Value value : valueVector)
+	{
+		// 将Value转换为ValueMap
+		ValueMap valueMap = value.asValueMap();
+		// 获取对应的x和y属性
+		float x = valueMap["x"].asFloat();
+		float y = valueMap["y"].asFloat();
+		// 将对应的x和y组成的向量添加到vector中
+		// 注意:瓦片地图坐标建在左上角，转换到中心点各减格子大小一半
+		wayPoints.push_back(Vec2(x + 40, y - 40));
+	}
+}
+
+void GameScene::update(float dt)
+{
+	monster->onMonsterUpdate(0.01);
 }
 
 bool GameScene::init()
@@ -40,40 +67,32 @@ bool GameScene::init()
 	//暂停菜单
 	Gamepause* gamepause = Gamepause::create();
 	this->addChild(gamepause, 5);
-	gamepause->index = this->index;
 	gamepause->setVisible(false);
 
-	// 生成背景图
-	if (index == 3 || index == 4 || index == 7)
-	{
-		Sprite* levelBG = Sprite::create("BG0\\BG2-hd\\BG2.png");
-		levelBG->setAnchorPoint(Vec2(0, 0));
-		this->addChild(levelBG, 0);
-	}
-	else
-	{
-		Sprite* levelBG = Sprite::create("BG0\\BG1-hd\\BG1.png");
-		levelBG->setAnchorPoint(Vec2(0, 0));
-		this->addChild(levelBG, 0);
-	}
+	
 
 	// 生成关卡图
-	if (index < 4)
-	{
-		__String* path_str = __String::createWithFormat("BG%d\\BG-hd\\Path.png", index);
-		Sprite* levelPath = Sprite::create(path_str->getCString());
-		levelPath->setAnchorPoint(Vec2(1, 0));
-		levelPath->setPosition(Vec2(960, 0));
-		this->addChild(levelPath, 0);
-	}
-	else
-	{
-		__String* path_str = __String::createWithFormat("BG%d\\.BG-hd_PList.Dir\\Path.png", index);
-		Sprite* levelPath = Sprite::create(path_str->getCString());
-		levelPath->setAnchorPoint(Vec2(1, 0));
-		levelPath->setPosition(Vec2(960, 0));
-		this->addChild(levelPath, 0);
-	}
+	tiledMap = TMXTiledMap::create("Map\\First Kind\\Environment\\Level07\\Level.tmx");
+	tiledMap->setPosition(Vec2::ZERO);
+	this->addChild(tiledMap, 0);
+	
+	//怪物
+	getWayPoints(); //获取诖误移动路径
+
+	Button* createMonster = Button::create("Themes\\Items\\Items11-hd\\warning_1.png", "Themes\\Items\\Items11-hd\\warning_2.png");
+	createMonster->setPosition(Vec2(800,500));
+	this->addChild(createMonster,5);
+	createMonster->addClickEventListener([&](Ref*){
+
+		monster = Monster::create(MonsterType::fly_yellow);
+
+		monster->onMonsterInit(wayPoints);
+
+		this->addChild(monster);
+
+		scheduleUpdate();
+	});
+
 
 	// 菜单栏背景
 	Sprite* menuBG = Sprite::create("MenuBG.png");
@@ -181,6 +200,11 @@ bool GameScene::init()
 		btn_speed->setTouchEnabled(false);
 		btn_menu->setTouchEnabled(false);
 	});
+
+	
+
+
+
 
 	// 萝卜图像
 	Sprite* ca = Sprite::create("hlb10.png");
