@@ -1,0 +1,31 @@
+#ifndef Monster_h
+#define Monster_h
+
+#include "cocos2d.h"
+#include <vector>
+// 怪物类型
+enum MonsterType
+{
+	fly_yellow,
+	fly_blue
+};
+
+// 怪物类
+class Monster : public cocos2d::Sprite
+{
+public:
+	Monster(MonsterType type);
+	static Monster* create(MonsterType type);
+	bool init() override;
+	void onMonsterInit(std::vector<cocos2d::Vec2> wayPoints);// 怪物初始化
+	bool onMonsterUpdate(float dt);// 怪物更新（移动）
+	std::vector<cocos2d::Vec2> wayPoints; //移动路径点
+private:
+	
+	int curIndex;// 目前所在的路径点下标
+	MonsterType type;
+public:
+	int hp;// 怪物血量
+};
+
+#endif
