@@ -8,6 +8,7 @@ class Gamepause : public cocos2d::Scene
 public:
 	virtual bool init();
 	CREATE_FUNC(Gamepause);
+	void RestartMap(int index);
 	
 public:
 	int index;

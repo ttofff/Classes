@@ -4,6 +4,7 @@
 #include "ui\CocosGUI.h"
 #include "AdventureScene.h"
 #include "Gamepause.h"
+#include "GameEnd.h"
 using namespace cocos2d::ui;
 
 GameScene* GameScene::create(int i)
@@ -12,6 +13,7 @@ GameScene* GameScene::create(int i)
 	ret->money = 300;
 	ret->index = i;
 	ret->hp = 10;
+	ret->Wave_Number = 1;
 	if (ret && ret->init())
 	{
 		ret->autorelease();
@@ -26,7 +28,7 @@ GameScene* GameScene::create(int i)
 }
 
 
-
+//出现怪物
 void GameScene::update(float dt)
 {
 	static float waittime= 1.0f;
@@ -56,6 +58,7 @@ void GameScene::update(float dt)
 			this->removeChild(pm); 
 			monster.erase(monster.begin()+i);
 			hp--;
+			//判断是否死亡
 			if (hp >= 1)
 			{
 				__String* carrotlj = __String::createWithFormat("hlb%d.png",hp);
@@ -63,9 +66,27 @@ void GameScene::update(float dt)
 				ca->setTexture(carrotlj->getCString());
 				
 			}
+			else if (hp <= 0)
+			{
+				CarrotDead();
+			}
 		}
 	}
 
+
+}
+
+//萝卜死亡
+void GameScene::CarrotDead()
+{
+	Director* director = Director::getInstance();
+	gameEnd->SetWave(Wave_Number);
+	gameEnd->SetMapIndex(index);
+	gameEnd->setVisible(true);
+
+	this->scheduleOnce([director](float dt){
+		director->stopAnimation();
+	}, 0.1f, "delayed_key");
 
 }
 
@@ -90,7 +111,10 @@ bool GameScene::init()
 	this->addChild(gamepause, 5);
 	gamepause->setVisible(false);
 
-	
+	//失败界面
+	gameEnd = GameEnd::create();
+	this->addChild(gameEnd, 5);
+	gameEnd->setVisible(false);
 
 	// 生成关卡图
 
@@ -113,24 +137,6 @@ bool GameScene::init()
 
 
 	scheduleUpdate();
-	
-
-	/*
-	Button* createMonster = Button::create("Themes\\Items\\Items11-hd\\warning_1.png", "Themes\\Items\\Items11-hd\\warning_2.png");
-	createMonster->setPosition(Vec2(800,500));
-	this->addChild(createMonster,5);
-	createMonster->addClickEventListener([&](Ref*){
-
-		Monster* newmonster = Monster::create(MonsterType::fly_yellow);
-		newmonster->onMonsterInit(tiledMap->wayPoints);
-		monster.push_back(newmonster);
-		
-
-		this->addChild(monster.front());
-		
-		
-	});
-	*/
 
 
 	// 菜单栏背景
@@ -151,7 +157,8 @@ bool GameScene::init()
 	menuBG->addChild(menuCenter, 1);
 
 	//当前波数
-	TextAtlas*curWaveText = TextAtlas::create("01", "numyellow-hd.png", 44, 40, ".");
+	__String* SWaveNumber = __String::createWithFormat("%02d", Wave_Number);
+	TextAtlas*curWaveText = TextAtlas::create(SWaveNumber->getCString(), "numyellow-hd.png", 44, 40, ".");
 	curWaveText->setPosition(Vec2(390, 45));
 	menuBG->addChild(curWaveText, 2);
 
@@ -214,9 +221,10 @@ bool GameScene::init()
 	{
 		Director* director = Director::getInstance();
 		gamepause->setVisible(true);
+		gamepause->RestartMap(index);
 		this->scheduleOnce([director](float dt){
 			director->stopAnimation();
-		}, 0.2f, "delayed_key");
+		}, 0.1f, "delayed_key");
 		
 	});
 

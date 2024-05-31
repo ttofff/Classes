@@ -40,17 +40,6 @@ bool Gamepause::init()
 		Director::getInstance()->startAnimation();
 	});
 	
-	//重新开始
-	Button* RestartGame = Button::create("menu_restart_normal_CN.png","menu_restart_pressed_CN");
-	RestartGame->setPosition(Vec2(468, 328));
-	this->addChild(RestartGame, 1);
-	RestartGame->addClickEventListener([&](Ref* ref){
-		Director* director = Director::getInstance();
-		this->setVisible(false);
-		Director::getInstance()->startAnimation();
-		GameScene* gameScene = GameScene::create(this->index);
-		director->replaceScene(gameScene);
-	});
 
 	//选择关卡
 	Button* SelectGame = Button::create("menu_quit_normal_CN.png","menu_quit_pressed_CN");
@@ -65,4 +54,20 @@ bool Gamepause::init()
 	});
 
 	return true;
+}
+
+void Gamepause::RestartMap(int index)
+{
+	//重新开始
+	Button* RestartGame = Button::create("menu_restart_normal_CN.png", "menu_restart_pressed_CN.png");
+	RestartGame->setPosition(Vec2(468, 328));
+	this->addChild(RestartGame, 1);
+	RestartGame->addClickEventListener([this, index](Ref* ref){
+		Director* director = Director::getInstance();
+		this->setVisible(false);
+		Director::getInstance()->startAnimation();
+		GameScene* gameScene = GameScene::create(index);
+		director->replaceScene(gameScene);
+	});
+
 }
