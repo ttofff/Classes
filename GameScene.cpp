@@ -11,6 +11,7 @@ GameScene* GameScene::create(int i)
 	GameScene* ret = new GameScene();
 	ret->money = 300;
 	ret->index = i;
+	ret->hp = 10;
 	if (ret && ret->init())
 	{
 		ret->autorelease();
@@ -25,30 +26,47 @@ GameScene* GameScene::create(int i)
 }
 
 
-// 通过瓦片地图获取怪物行走路径
-void GameScene::getWayPoints()
-{
-	// 获取PATH对象层
-	TMXObjectGroup* group = tiledMap->getObjectGroup("PATH");
-	// 获取对象层上所有对象
-	ValueVector valueVector = group->getObjects();
-	// 遍历所有对象
-	for (Value value : valueVector)
-	{
-		// 将Value转换为ValueMap
-		ValueMap valueMap = value.asValueMap();
-		// 获取对应的x和y属性
-		float x = valueMap["x"].asFloat();
-		float y = valueMap["y"].asFloat();
-		// 将对应的x和y组成的向量添加到vector中
-		// 注意:瓦片地图坐标建在左上角，转换到中心点各减格子大小一半
-		wayPoints.push_back(Vec2(x + 40, y - 40));
-	}
-}
 
 void GameScene::update(float dt)
 {
-	monster->onMonsterUpdate(0.01);
+	static float waittime= 1.0f;
+	waittime = waittime - dt;
+	if (waittime <= 0.f){
+		waittime = 1.0f;
+		Monster* newmonster = Monster::create((MonsterType)(rand() % 2));
+		newmonster->onMonsterInit(tiledMap->wayPoints);
+		monster.push_back(newmonster);
+		this->addChild(monster.back());
+	}
+	for (int i = 0; i < monster.size(); i++){
+		Monster* pm = monster.at(i);
+		if (!pm->onMonsterUpdate(dt)){
+			Sprite* spBoom = Sprite::create();
+			this->addChild(spBoom,3);
+			spBoom->setPosition(pm->getPosition());
+			Animation* ani = Animation::create();
+			ani->addSpriteFrameWithFile("air01.png");
+			ani->addSpriteFrameWithFile("air02.png");
+			ani->addSpriteFrameWithFile("air03.png");
+			ani->addSpriteFrameWithFile("air04.png");
+			ani->addSpriteFrameWithFile("air05.png");
+			ani->setLoops(1);
+			ani->setDelayPerUnit(0.1f);
+			spBoom->runAction(Sequence::create(Animate::create(ani),RemoveSelf::create(), nullptr));
+			this->removeChild(pm); 
+			monster.erase(monster.begin()+i);
+			hp--;
+			if (hp >= 1)
+			{
+				__String* carrotlj = __String::createWithFormat("hlb%d.png",hp);
+				
+				ca->setTexture(carrotlj->getCString());
+				
+			}
+		}
+	}
+
+
 }
 
 bool GameScene::init()
@@ -65,6 +83,8 @@ bool GameScene::init()
 	FileUtils::getInstance()->addSearchPath("Themes\\Items\\Items02-hd");
 	FileUtils::getInstance()->addSearchPath("Map\\FirstKind\\Environment");
 	
+	
+
 	//暂停菜单
 	Gamepause* gamepause = Gamepause::create();
 	this->addChild(gamepause, 5);
@@ -75,26 +95,42 @@ bool GameScene::init()
 	// 生成关卡图
 
 	__String *str = __String::createWithFormat("Level%02d\\Level.tmx",index);
-	tiledMap = TMXTiledMap::create(str->getCString());
+	tiledMap = GameMap::create(str->getCString());
 	tiledMap->setPosition(Vec2::ZERO);
 	this->addChild(tiledMap, 0);
 	
-	//怪物
-	getWayPoints(); //获取诖误移动路径
+	
 
+	//怪物
+	tiledMap->getWayPoints("PATH"); //获取怪物移动路径
+	tiledMap->getTowerArea("OBJ");		//获取炮塔生成区域
+
+	//萝卜
+	ca = Sprite::create("hlb10.png");
+	
+	ca->setPosition(tiledMap->wayPoints.back());
+	this->addChild(ca, 2);
+
+
+	scheduleUpdate();
+	
+
+	/*
 	Button* createMonster = Button::create("Themes\\Items\\Items11-hd\\warning_1.png", "Themes\\Items\\Items11-hd\\warning_2.png");
 	createMonster->setPosition(Vec2(800,500));
 	this->addChild(createMonster,5);
 	createMonster->addClickEventListener([&](Ref*){
 
-		monster = Monster::create(MonsterType::fly_yellow);
+		Monster* newmonster = Monster::create(MonsterType::fly_yellow);
+		newmonster->onMonsterInit(tiledMap->wayPoints);
+		monster.push_back(newmonster);
+		
 
-		monster->onMonsterInit(wayPoints);
-
-		this->addChild(monster);
-
-		scheduleUpdate();
+		this->addChild(monster.front());
+		
+		
 	});
+	*/
 
 
 	// 菜单栏背景
@@ -206,15 +242,14 @@ bool GameScene::init()
 
 	
 
-
-
-
+	
+	
+	
 	// 萝卜图像
-	Sprite* ca = Sprite::create("hlb10.png");
-	ca->setPosition(wayPoints.back());
-	this->addChild(ca, 5);
-
+	
+	
 	// 萝卜抖动动画
+	/*
 	Animation* carrotAnimation = Animation::create();
 	carrotAnimation->addSpriteFrameWithFile("hlb11.png");
 	carrotAnimation->addSpriteFrameWithFile("hlb12.png");
@@ -228,6 +263,6 @@ bool GameScene::init()
 	carrotAnimation->setDelayPerUnit(0.1f);
 	Animate* pAnimate = Animate::create(carrotAnimation);
 	ca->runAction(pAnimate);
-
+	*/
 	return true;
 }
