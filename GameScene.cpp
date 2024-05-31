@@ -63,6 +63,7 @@ bool GameScene::init()
 	FileUtils::getInstance()->addSearchPath("Themes\\Items");
 	FileUtils::getInstance()->addSearchPath("Themes\\Items\\Items01-hd");
 	FileUtils::getInstance()->addSearchPath("Themes\\Items\\Items02-hd");
+	FileUtils::getInstance()->addSearchPath("Map\\FirstKind\\Environment");
 	
 	//暂停菜单
 	Gamepause* gamepause = Gamepause::create();
@@ -73,7 +74,7 @@ bool GameScene::init()
 
 	// 生成关卡图
 
-	__String *str = __String::createWithFormat("Map\\FirstKind\\Environment\\Level%02d\\Level.tmx",index);
+	__String *str = __String::createWithFormat("Level%02d\\Level.tmx",index);
 	tiledMap = TMXTiledMap::create(str->getCString());
 	tiledMap->setPosition(Vec2::ZERO);
 	this->addChild(tiledMap, 0);
