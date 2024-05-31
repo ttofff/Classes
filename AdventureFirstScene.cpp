@@ -21,6 +21,7 @@ bool AdventureFirstScene::init()
 	FileUtils::getInstance()->addSearchPath("Themes\\scene\\stages_theme1-hd");
 	FileUtils::getInstance()->addSearchPath("Themes\\scene\\themescene1-hd");
 	FileUtils::getInstance()->addSearchPath("Themes\\scene\\themescene2-hd");
+	FileUtils::getInstance()->addSearchPath("Map\\First Kind\\Environment");
 
 	//±³¾°
 	Sprite* mainbg = Sprite::create("ss_bg.png");
@@ -34,9 +35,10 @@ bool AdventureFirstScene::init()
 
 	
 	//¹Ø¿¨1
-	__String* s = __String::createWithFormat("ss_map%02d.png", a );
+	__String* s = __String::createWithFormat("Level%02d\\Level.png", a);
 	Button* ss_map01 = Button::create(s->getCString());
 	ss_map01->setPosition(Vec2(480, 320));
+	ss_map01->setScale(0.6f);
 	ss_map01->setPressedActionEnabled(true);
 	this->addChild(ss_map01,2);
 	ss_map01->addClickEventListener([&](Ref* ref){
