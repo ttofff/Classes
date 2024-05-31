@@ -10,7 +10,7 @@ public:
 	CREATE_FUNC(AdventureFirstScene);
 	bool init() override;
 	static int a;
-	const int MAX = 12;
+	const int MAX = 7;
 private:
 	
 };
