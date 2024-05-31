@@ -12,6 +12,7 @@ public:
 	bool init() override;
 	void getWayPoints();
 	void update(float dt);
+	int index;
 public:
 	int money;			//Ç®
 	TMXTiledMap* tiledMap;			//µØÍ¼

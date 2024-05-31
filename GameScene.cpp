@@ -10,7 +10,7 @@ GameScene* GameScene::create(int i)
 {
 	GameScene* ret = new GameScene();
 	ret->money = 300;
-	
+	ret->index = i;
 	if (ret && ret->init())
 	{
 		ret->autorelease();
@@ -72,7 +72,9 @@ bool GameScene::init()
 	
 
 	// 生成关卡图
-	tiledMap = TMXTiledMap::create("Map\\FirstKind\\Environment\\Level07\\Level.tmx");
+
+	__String *str = __String::createWithFormat("Map\\FirstKind\\Environment\\Level%02d\\Level.tmx",index);
+	tiledMap = TMXTiledMap::create(str->getCString());
 	tiledMap->setPosition(Vec2::ZERO);
 	this->addChild(tiledMap, 0);
 	
@@ -101,8 +103,8 @@ bool GameScene::init()
 	this->addChild(menuBG, 1);
 
 	// 金币数量
-	__String* str = __String::createWithFormat("%d", money);
-	CCLabelAtlas* moneyLabel = CCLabelAtlas::create(str->getCString(), "numwhite-hd.png", 20, 40, '.');
+	__String* s = __String::createWithFormat("%d", money);
+	CCLabelAtlas* moneyLabel = CCLabelAtlas::create(s->getCString(), "numwhite-hd.png", 20, 40, '.');
 	moneyLabel->setPosition(Vec2(100, 590));
 	this->addChild(moneyLabel, 2);
 
