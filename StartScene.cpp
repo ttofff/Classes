@@ -4,6 +4,7 @@
 #include "GameScene.h"
 #include"AboutScene.h"
 #include"HelpScene.h"
+#include "SimpleAudioEngine.h"
 using namespace cocos2d::ui;
 
 StartScene* StartScene::create()
@@ -31,6 +32,9 @@ bool StartScene::init()
 
 	// 增加资源搜索路径
 	FileUtils::getInstance()->addSearchPath("\\Themes\\scene\\mainscene1-hd");
+
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("Music\\Main\\BGMusic.mp3",true);
+
 
 	// 创建背景图
 	Sprite* mainbg = Sprite::create("mainbg.png");

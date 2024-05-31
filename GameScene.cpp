@@ -5,6 +5,7 @@
 #include "AdventureScene.h"
 #include "Gamepause.h"
 #include "GameEnd.h"
+#include "SimpleAudioEngine.h"
 using namespace cocos2d::ui;
 
 GameScene* GameScene::create(int i)
@@ -35,6 +36,7 @@ void GameScene::update(float dt)
 	waittime = waittime - dt;
 	if (waittime <= 0.f){
 		waittime = 1.0f;
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("Music\\Items\\GO.mp3");
 		Monster* newmonster = Monster::create((MonsterType)(rand() % 2));
 		newmonster->onMonsterInit(tiledMap->wayPoints);
 		monster.push_back(newmonster);
