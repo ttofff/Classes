@@ -21,7 +21,7 @@ bool AdventureFirstScene::init()
 	FileUtils::getInstance()->addSearchPath("Themes\\scene\\stages_theme1-hd");
 	FileUtils::getInstance()->addSearchPath("Themes\\scene\\themescene1-hd");
 	FileUtils::getInstance()->addSearchPath("Themes\\scene\\themescene2-hd");
-	FileUtils::getInstance()->addSearchPath("Map\\First Kind\\Environment");
+	FileUtils::getInstance()->addSearchPath("Map\\FirstKind\\Environment");
 
 	//±³¾°
 	Sprite* mainbg = Sprite::create("ss_bg.png");

@@ -210,7 +210,7 @@ bool GameScene::init()
 
 	// ÂÜ²·Í¼Ïñ
 	Sprite* ca = Sprite::create("hlb10.png");
-	ca->setPosition(Vec2(830, 480));
+	ca->setPosition(wayPoints.back());
 	this->addChild(ca, 5);
 
 	// ÂÜ²·¶¶¶¯¶¯»­
