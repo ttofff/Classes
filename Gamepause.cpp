@@ -14,7 +14,6 @@ bool Gamepause::init()
 		return false;
 	}
 	
-	FileUtils::getInstance()->addSearchPath("Themes\\scene\\gamemenu-hd");
 	//背景图
 	Button* BK = Button::create("empty.png", "empty.png");
 	BK->setPosition(Vec2(480, 320));
@@ -26,12 +25,12 @@ bool Gamepause::init()
 
 
 	//背景图
-	Sprite* MenuBk = Sprite::create("menu_bg.png");
+	Sprite* MenuBk = Sprite::create("Themes\\scene\\gamemenu-hd\\menu_bg.png");
 	MenuBk->setPosition(Vec2(480, 320));
 	this->addChild(MenuBk, 1);
 
 	//继续游戏
-	Button* ContinueGame = Button::create("menu_resume_normal_CN.png","menu_resume_pressed_CN");
+	Button* ContinueGame = Button::create("Themes\\scene\\gamemenu-hd\\menu_resume_normal_CN.png","Themes\\scene\\gamemenu-hd\\menu_resume_pressed_CN");
 	ContinueGame->setPosition(Vec2(468, 422));
 	this->addChild(ContinueGame, 1);
 	ContinueGame->addClickEventListener([&](Ref* ref){
@@ -42,7 +41,7 @@ bool Gamepause::init()
 	
 
 	//选择关卡
-	Button* SelectGame = Button::create("menu_quit_normal_CN.png","menu_quit_pressed_CN");
+	Button* SelectGame = Button::create("Themes\\scene\\gamemenu-hd\\menu_quit_normal_CN.png","Themes\\scene\\gamemenu-hd\\menu_quit_pressed_CN");
 	SelectGame->setPosition(Vec2(468, 234));
 	this->addChild(SelectGame, 1);
 	SelectGame->addClickEventListener([&](Ref* ref){
@@ -59,7 +58,7 @@ bool Gamepause::init()
 void Gamepause::RestartMap(int index)
 {
 	//重新开始
-	Button* RestartGame = Button::create("menu_restart_normal_CN.png", "menu_restart_pressed_CN.png");
+	Button* RestartGame = Button::create("Themes\\scene\\gamemenu-hd\\menu_restart_normal_CN.png", "Themes\\scene\\gamemenu-hd\\menu_restart_pressed_CN.png");
 	RestartGame->setPosition(Vec2(468, 328));
 	this->addChild(RestartGame, 1);
 	RestartGame->addClickEventListener([this, index](Ref* ref){

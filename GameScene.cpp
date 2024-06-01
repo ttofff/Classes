@@ -49,11 +49,11 @@ void GameScene::update(float dt)
 			this->addChild(spBoom,3);
 			spBoom->setPosition(pm->getPosition());
 			Animation* ani = Animation::create();
-			ani->addSpriteFrameWithFile("air01.png");
-			ani->addSpriteFrameWithFile("air02.png");
-			ani->addSpriteFrameWithFile("air03.png");
-			ani->addSpriteFrameWithFile("air04.png");
-			ani->addSpriteFrameWithFile("air05.png");
+			ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air01.png");
+			ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air02.png");
+			ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air03.png");
+			ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air04.png");
+			ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air05.png");
 			ani->setLoops(1);
 			ani->setDelayPerUnit(0.1f);
 			spBoom->runAction(Sequence::create(Animate::create(ani),RemoveSelf::create(), nullptr));
@@ -63,7 +63,7 @@ void GameScene::update(float dt)
 			//判断是否死亡
 			if (hp >= 1)
 			{
-				__String* carrotlj = __String::createWithFormat("hlb%d.png",hp);
+				__String* carrotlj = __String::createWithFormat("Themes\\Items\\Items01-hd\\hlb%d.png",hp);
 				
 				ca->setTexture(carrotlj->getCString());
 				
@@ -99,14 +99,6 @@ bool GameScene::init()
 		return false;
 	}
 
-	FileUtils::getInstance()->addSearchPath("Themes\\Items\\touming-hd");
-	FileUtils::getInstance()->addSearchPath("Themes\\Theme1");
-	FileUtils::getInstance()->addSearchPath("Themes\\Items");
-	FileUtils::getInstance()->addSearchPath("Themes\\Items\\Items01-hd");
-	FileUtils::getInstance()->addSearchPath("Themes\\Items\\Items02-hd");
-	FileUtils::getInstance()->addSearchPath("Map\\FirstKind\\Environment");
-	
-	
 
 	//暂停菜单
 	Gamepause* gamepause = Gamepause::create();
@@ -120,7 +112,7 @@ bool GameScene::init()
 
 	// 生成关卡图
 
-	__String *str = __String::createWithFormat("Level%02d\\Level.tmx",index);
+	__String *str = __String::createWithFormat("Map\\FirstKind\\Environment\\Level%02d\\Level.tmx",index);
 	tiledMap = GameMap::create(str->getCString());
 	tiledMap->setPosition(Vec2::ZERO);
 	this->addChild(tiledMap, 0);
@@ -132,7 +124,7 @@ bool GameScene::init()
 	tiledMap->getTowerArea("OBJ");		//获取炮塔生成区域
 
 	//萝卜
-	ca = Sprite::create("hlb10.png");
+	ca = Sprite::create("Themes\\Items\\Items01-hd\\hlb10.png");
 	
 	ca->setPosition(tiledMap->wayPoints.back());
 	this->addChild(ca, 2);
@@ -142,30 +134,30 @@ bool GameScene::init()
 
 
 	// 菜单栏背景
-	Sprite* menuBG = Sprite::create("MenuBG.png");
+	Sprite* menuBG = Sprite::create("Themes\\Items\\touming-hd\\MenuBG.png");
 	menuBG->setAnchorPoint(Vec2(0.5, 1));
 	menuBG->setPosition(Vec2(480, 640));
 	this->addChild(menuBG, 1);
 
 	// 金币数量
 	__String* s = __String::createWithFormat("%d", money);
-	CCLabelAtlas* moneyLabel = CCLabelAtlas::create(s->getCString(), "numwhite-hd.png", 20, 40, '.');
+	CCLabelAtlas* moneyLabel = CCLabelAtlas::create(s->getCString(), "Themes\\Items\\numwhite-hd.png", 20, 40, '.');
 	moneyLabel->setPosition(Vec2(100, 590));
 	this->addChild(moneyLabel, 2);
 
 	// 显示当前波数和总波数精灵
-	Sprite* menuCenter = Sprite::create("MenuCenter_01_CN.png");
+	Sprite* menuCenter = Sprite::create("Themes\\Items\\Items02-hd\\MenuCenter_01_CN.png");
 	menuCenter->setPosition(Vec2(463, 45));
 	menuBG->addChild(menuCenter, 1);
 
 	//当前波数
 	__String* SWaveNumber = __String::createWithFormat("%02d", Wave_Number);
-	TextAtlas*curWaveText = TextAtlas::create(SWaveNumber->getCString(), "numyellow-hd.png", 44, 40, ".");
+	TextAtlas*curWaveText = TextAtlas::create(SWaveNumber->getCString(), "Themes\\Items\\numyellow-hd.png", 44, 40, ".");
 	curWaveText->setPosition(Vec2(390, 45));
 	menuBG->addChild(curWaveText, 2);
 
 	//总波数
-	TextAtlas*totalWaveText = TextAtlas::create("15", "numwhite-hd.png", 20, 40, ".");
+	TextAtlas*totalWaveText = TextAtlas::create("15", "Themes\\Items\\numwhite-hd.png", 20, 40, ".");
 	totalWaveText->setPosition(Vec2(480, 45));
 	menuBG->addChild(totalWaveText, 2);
 
@@ -174,12 +166,12 @@ bool GameScene::init()
 	pScheduler->setTimeScale(1.f);
 
 	// 1倍速按钮
-	Button* btn_speed = Button::create("speed11.png", "speed12.png");
+	Button* btn_speed = Button::create("Themes\\Items\\touming-hd\\speed11.png", "Themes\\Items\\touming-hd\\speed12.png");
 	btn_speed->setPosition(Vec2(725, 605));
 	this->addChild(btn_speed, 2);
 
 	// 2倍速按钮
-	Button* btn_speed_two = Button::create("speed21.png", "speed22.png");
+	Button* btn_speed_two = Button::create("Themes\\Items\\touming-hd\\speed21.png", "Themes\\Items\\touming-hd\\speed22.png");
 	btn_speed_two->setPosition(Vec2(725, 605));
 	this->addChild(btn_speed_two, 2);
 	btn_speed_two->setVisible(false);
@@ -197,26 +189,26 @@ bool GameScene::init()
 	});
 
 	//暂停中
-	Sprite* btn_stop = Sprite::create("MenuCenter_02_CN.png");
+	Sprite* btn_stop = Sprite::create("Themes\\Items\\Items02-hd\\MenuCenter_02_CN.png");
 	btn_stop->setPosition(Vec2(480, 320));
 	btn_stop->setVisible(false);
 	this->addChild(btn_stop, 2);
 
 	// 暂停按钮
-	Button* btn_pause = Button::create("pause11.png", "pause12.png");
+	Button* btn_pause = Button::create("Themes\\Items\\touming-hd\\pause11.png", "Themes\\Items\\touming-hd\\pause12.png");
 	btn_pause->setPosition(Vec2(825, 605));
 	btn_pause->setVisible(false);
 	this->addChild(btn_pause, 2);
 
 	// 开始按钮
-	Button* btn_go = Button::create("pause01.png", "pause02.png");
+	Button* btn_go = Button::create("Themes\\Items\\touming-hd\\pause01.png", "Themes\\Items\\touming-hd\\pause02.png");
 	btn_go->setPosition(Vec2(825, 605));
 	btn_go->setVisible(true);
 	this->addChild(btn_go, 2);
 
 
 	// 菜单按钮
-	Button* btn_menu = Button::create("menu01.png", "menu02.png");
+	Button* btn_menu = Button::create("Themes\\Items\\touming-hd\\menu01.png", "Themes\\Items\\touming-hd\\menu02.png");
 	btn_menu->setPosition(Vec2(890, 605));
 	this->addChild(btn_menu, 2);
 	btn_menu->addClickEventListener([this,gamepause, btn_speed,btn_menu](Ref* ref) 

@@ -31,28 +31,28 @@ bool StartScene::init()
 	}
 
 	// 增加资源搜索路径
-	FileUtils::getInstance()->addSearchPath("\\Themes\\scene\\mainscene1-hd");
+	
 
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("Music\\Main\\BGMusic.mp3",true);
 
 
 	// 创建背景图
-	Sprite* mainbg = Sprite::create("mainbg.png");
+	Sprite* mainbg = Sprite::create("Themes\\scene\\mainscene1-hd\\mainbg.png");
 	mainbg->setPosition(Vec2(480, 320));
 	this->addChild(mainbg, 0);
 
 	// 创建开始界面——中心萝卜
 
-	// 萝卜叶子旋转间隔时间
+	// 萝卜叶子旋转间隔时间 
 	DelayTime* leafDealyTime = DelayTime::create(2.5f);
 
 	// 萝卜叶子1
-	Sprite* mainCarrotLeaf_1 = Sprite::create("leaf-1.png");
+	Sprite* mainCarrotLeaf_1 = Sprite::create("Themes\\scene\\mainscene1-hd\\leaf-1.png");
 	mainCarrotLeaf_1->setPosition(Vec2(420, 455));
 	this->addChild(mainCarrotLeaf_1, 1);
 
 	// 萝卜叶子3
-	Sprite* mainCarrotLeaf_3 = Sprite::create("leaf-3.png");
+	Sprite* mainCarrotLeaf_3 = Sprite::create("Themes\\scene\\mainscene1-hd\\leaf-3.png");
 	mainCarrotLeaf_3->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
 	mainCarrotLeaf_3->setPosition(Vec2(560, 395));
 	this->addChild(mainCarrotLeaf_3, 1);
@@ -65,7 +65,7 @@ bool StartScene::init()
 	mainCarrotLeaf_3->runAction(leaf3RF->clone());
 
 	// 萝卜叶子2
-	Sprite* mainCarrotLeaf_2 = Sprite::create("leaf-2.png");
+	Sprite* mainCarrotLeaf_2 = Sprite::create("Themes\\scene\\mainscene1-hd\\leaf-2.png");
 	mainCarrotLeaf_2->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
 	mainCarrotLeaf_2->setPosition(Vec2(490, 400));
 	this->addChild(mainCarrotLeaf_2, 1);
@@ -78,17 +78,17 @@ bool StartScene::init()
 	mainCarrotLeaf_2->runAction(leaf2RF->clone());
 
 	// 萝卜身体
-	Sprite* mainCarrot = Sprite::create("carrot.png");
+	Sprite* mainCarrot = Sprite::create("Themes\\scene\\mainscene1-hd\\carrot.png");
 	mainCarrot->setPosition(Vec2(480, 360));
 	this->addChild(mainCarrot, 1);
 
 	// 创建开始界面——标题
-	Sprite* mainTitle = Sprite::create("mainbg_CN.png");
+	Sprite* mainTitle = Sprite::create("Themes\\scene\\mainscene1-hd\\mainbg_CN.png");
 	mainTitle->setPosition(Vec2(465, 265));
 	this->addChild(mainTitle, 2);
 
 	// 创建开始界面——精灵
-	Sprite* mainBird = Sprite::create("bird.png");
+	Sprite* mainBird = Sprite::create("Themes\\scene\\mainscene1-hd\\bird.png");
 	mainBird->setPosition(Vec2(180, 520));
 	this->addChild(mainBird, 3);
 
@@ -115,7 +115,7 @@ bool StartScene::init()
 	carrotLogo->runAction(logoRF->clone());
 
 	//开始界面的按钮--冒险模式
-	Button* btn_Adventure = Button::create("btn_adventure_normal_CN.png", "btn_adventure_pressed_CN.png");
+	Button* btn_Adventure = Button::create("Themes\\scene\\mainscene1-hd\\btn_adventure_normal_CN.png", "Themes\\scene\\mainscene1-hd\\btn_adventure_pressed_CN.png");
 	btn_Adventure->setPosition(Vec2(200, 50));
 	btn_Adventure->setPressedActionEnabled(true);
 	this->addChild(btn_Adventure);
@@ -129,7 +129,7 @@ bool StartScene::init()
 	});
 
 	//开始界面的按钮--boss模式
-	Button* btn_Boss = Button::create("btn_boss_normal_CN.png", "btn_boss_pressed_CN.png");
+	Button* btn_Boss = Button::create("Themes\\scene\\mainscene1-hd\\btn_boss_normal_CN.png", "Themes\\scene\\mainscene1-hd\\btn_boss_pressed_CN.png");
 	btn_Boss->setPosition(Vec2(480, 60));
 	btn_Boss->setPressedActionEnabled(true);
 	this->addChild(btn_Boss);
@@ -138,7 +138,7 @@ bool StartScene::init()
 	});
 
 	//开始界面的按钮--怪兽窝
-	Button* btn_Monster = Button::create("btn_nest_normal_CN.png", "btn_nest_pressed_CN.png");
+	Button* btn_Monster = Button::create("Themes\\scene\\mainscene1-hd\\btn_nest_normal_CN.png", "Themes\\scene\\mainscene1-hd\\btn_nest_pressed_CN.png");
 	btn_Monster->setPosition(Vec2(760, 50));
 	btn_Monster->setPressedActionEnabled(true);
 	this->addChild(btn_Monster);
@@ -147,7 +147,7 @@ bool StartScene::init()
 	});
 
 	//调转到about
-	Button* about = Button::create("91-logo.png");
+	Button* about = Button::create("Themes\\scene\\mainscene1-hd\\91-logo.png");
 	about->setPosition(Vec2(80, 550));
 	about->setPressedActionEnabled(true);
 	this->addChild(about);
@@ -160,7 +160,7 @@ bool StartScene::init()
 	});
 
 	//帮助按钮
-	Button* help = Button::create("btn_help_normal.png", "btn_help_pressed.png");
+	Button* help = Button::create("Themes\\scene\\mainscene1-hd\\btn_help_normal.png", "Themes\\scene\\mainscene1-hd\\btn_help_pressed.png");
 	help->setPosition(Vec2(700, 200));
 	help->setPressedActionEnabled(true);
 	this->addChild(help);

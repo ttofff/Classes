@@ -39,10 +39,10 @@ bool Monster::init()
 	switch (type)
 	{
 	case fly_yellow:
-		strcpy(filename, "Items/Monsters01-hd/fly_yellow01.png");
+		strcpy(filename, "Themes\\Theme1\\Items\\Monsters01-hd\\fly_yellow01.png");
 		break;
 	case fly_blue:
-		strcpy(filename, "Items/Monsters01-hd/fly_blue01.png");
+		strcpy(filename, "Themes\\Theme1\\Items\\Monsters01-hd\\fly_blue01.png");
 		break;
 	}
 
@@ -59,7 +59,7 @@ bool Monster::init()
 		for (int i = 1; i <= 2; i++)
 		{
 			char file[50];
-			sprintf(file, "Items/Monsters01-hd/fly_yellow0%d.png", i);
+			sprintf(file, "Themes\\Theme1\\Items\\Monsters01-hd\\fly_yellow0%d.png", i);
 			ani->addSpriteFrameWithFile(file);
 		}
 		break;
@@ -67,7 +67,7 @@ bool Monster::init()
 		for (int i = 1; i <= 2; i++)
 		{
 			char file[50];
-			sprintf(file, "Items/Monsters01-hd/fly_blue0%d.png", i);
+			sprintf(file, "Themes\\Theme1\\Items\\Monsters01-hd\\fly_blue0%d.png", i);
 			ani->addSpriteFrameWithFile(file);
 		}
 		break;

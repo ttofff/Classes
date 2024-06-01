@@ -12,7 +12,7 @@ bool AboutScene::init()
 	{
 		return false;
 	}
-	FileUtils::getInstance()->addSearchPath("Themes\\scene\\themescene1-hd");
+
 	//±³¾°Í¼
 	Sprite* mainbg = Sprite::create("2.png");
 	mainbg->setPosition(Vec2(480, 320));
@@ -29,7 +29,7 @@ bool AboutScene::init()
 	//×óÒÆ°´Å¥
 	if (this->n > 1)
 	{
-		Button* theme_pointleft_normal = Button::create("theme_pointleft_normal.png", "theme_pointleft_pressed.png");
+		Button* theme_pointleft_normal = Button::create("Themes\\scene\\themescene1-hd\\theme_pointleft_normal.png", "Themes\\scene\\themescene1-hd\\theme_pointleft_pressed.png");
 		theme_pointleft_normal->setPosition(Vec2(100, 320));
 		theme_pointleft_normal->setPressedActionEnabled(true);
 		this->addChild(theme_pointleft_normal, 3);
@@ -46,7 +46,7 @@ bool AboutScene::init()
 	//ÓÒÒÆ°´Å¥
 	if (this->n < Max)
 	{
-		Button* theme_pointright_normal = Button::create("theme_pointright_normal.png", "theme_pointright_pressed.png");
+		Button* theme_pointright_normal = Button::create("Themes\\scene\\themescene1-hd\\theme_pointright_normal.png", "Themes\\scene\\themescene1-hd\\theme_pointright_pressed.png");
 		theme_pointright_normal->setPosition(Vec2(860, 320));
 		theme_pointright_normal->setPressedActionEnabled(true);
 		this->addChild(theme_pointright_normal, 3);
@@ -60,7 +60,7 @@ bool AboutScene::init()
 		});
 	}
 	//·µ»ØÖ÷Ò³°´Å¥
-	Button* theme_home_normal = Button::create("theme_home_normal.png", "theme_home_pressed.png");
+	Button* theme_home_normal = Button::create("Themes\\scene\\themescene1-hd\\theme_home_normal.png", "Themes\\scene\\themescene1-hd\\theme_home_pressed.png");
 	theme_home_normal->setPosition(Vec2(30, 610));
 	theme_home_normal->setPressedActionEnabled(true);
 	this->addChild(theme_home_normal, 3);
