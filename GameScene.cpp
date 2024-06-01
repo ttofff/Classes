@@ -36,7 +36,8 @@ void GameScene::update(float dt)
 	waittime = waittime - dt;
 	if (waittime <= 0.f){
 		waittime = 1.0f;
-		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("Music\\Items\\GO.mp3");
+
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("Music\\Items\\GO.mp3"); //²¥·ÅÒôÐ§
 		Monster* newmonster = Monster::create((MonsterType)(rand() % 2));
 		newmonster->onMonsterInit(tiledMap->wayPoints);
 		monster.push_back(newmonster);

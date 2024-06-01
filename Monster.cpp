@@ -34,7 +34,7 @@ Monster* Monster::create(MonsterType type)
 
 bool Monster::init()
 {
-	char filename[50];
+	char filename[100];
 	// 根据类型的到怪物图片路径
 	switch (type)
 	{
@@ -58,7 +58,7 @@ bool Monster::init()
 	case fly_yellow:
 		for (int i = 1; i <= 2; i++)
 		{
-			char file[50];
+			char file[100];
 			sprintf(file, "Themes\\Theme1\\Items\\Monsters01-hd\\fly_yellow0%d.png", i);
 			ani->addSpriteFrameWithFile(file);
 		}
@@ -66,7 +66,7 @@ bool Monster::init()
 	case fly_blue:
 		for (int i = 1; i <= 2; i++)
 		{
-			char file[50];
+			char file[100];
 			sprintf(file, "Themes\\Theme1\\Items\\Monsters01-hd\\fly_blue0%d.png", i);
 			ani->addSpriteFrameWithFile(file);
 		}

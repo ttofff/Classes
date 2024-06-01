@@ -32,8 +32,8 @@ bool StartScene::init()
 
 	// 增加资源搜索路径
 	
-
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("Music\\Main\\BGMusic.mp3",true);
+	//声音
+	//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("Music\\Main\\BGMusic.mp3",true);
 
 
 	// 创建背景图
