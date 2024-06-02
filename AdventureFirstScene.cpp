@@ -7,7 +7,25 @@
 
 using namespace cocos2d::ui;
 
-int AdventureFirstScene::a = 1;
+int AdventureFirstScene::smallcheck = 1;
+int AdventureFirstScene::bigcheck = 1;
+AdventureFirstScene* AdventureFirstScene::create(int i)
+{
+	AdventureFirstScene* ret = new AdventureFirstScene();
+	ret->bigcheck = i;
+	if (ret && ret->init())
+	{
+		ret->autorelease();
+	}
+	else
+	{
+		delete ret;
+		ret = nullptr;
+	}
+
+	return ret;
+}
+
 
 bool AdventureFirstScene::init()
 {
@@ -31,7 +49,11 @@ bool AdventureFirstScene::init()
 
 	
 	//关卡1
-	__String* s = __String::createWithFormat("Map\\FirstKind\\Environment\\Level%02d\\Level.png", a);
+	__String* s;
+	if (bigcheck==1)
+		 s = __String::createWithFormat("Map\\FirstKind\\Environment\\Level%02d\\Level.png", smallcheck);
+	else if (bigcheck==2)
+		s = __String::createWithFormat("Map\\SecondKind\\Environment\\Level%02d\\Level.png", smallcheck);
 	Button* ss_map01 = Button::create(s->getCString());
 	ss_map01->setPosition(Vec2(480, 320));
 	ss_map01->setScale(0.6f);
@@ -39,12 +61,12 @@ bool AdventureFirstScene::init()
 	this->addChild(ss_map01,2);
 	ss_map01->addClickEventListener([&](Ref* ref){
 		Director* director = Director::getInstance();
-		GameScene* gameScene = GameScene::create(a);
+		GameScene* gameScene = GameScene::create(smallcheck);
 		director->replaceScene(gameScene);
 	});
 
 	//关卡可用的炮塔
-	__String* s1 = __String::createWithFormat("Themes\\scene\\stages_theme1-hd\\ss_towers_%02d.png", a);
+	__String* s1 = __String::createWithFormat("Themes\\scene\\stages_theme1-hd\\ss_towers_%02d.png", smallcheck);
 	Sprite* ss_towers_01 = Sprite::create(s1->getCString());
 	ss_towers_01->setAnchorPoint(Vec2(0.5, 0));
 	ss_towers_01->setPosition(Vec2(480, 90));
@@ -54,16 +76,16 @@ bool AdventureFirstScene::init()
 	
 	
 	//左移按钮
-	if ((this->a) > 1){
+	if ((this->smallcheck) > 1){
 		Button* theme_pointleft_normal = Button::create("Themes\\scene\\themescene1-hd\\theme_pointleft_normal.png", "Themes\\scene\\themescene1-hd\\theme_pointleft_pressed.png");
 		theme_pointleft_normal->setPosition(Vec2(100, 320));
 		theme_pointleft_normal->setPressedActionEnabled(true);
 		this->addChild(theme_pointleft_normal, 3);
 		theme_pointleft_normal->addClickEventListener([&](Ref* ref){
 
-			this->a = this->a - 1;
+			this->smallcheck = this->smallcheck - 1;
 			Director* director = Director::getInstance();
-			AdventureFirstScene* adventureFirstScene = AdventureFirstScene::create();
+			AdventureFirstScene* adventureFirstScene = AdventureFirstScene::create(bigcheck);
 
 			TransitionCrossFade* cross = TransitionCrossFade::create(1.f, adventureFirstScene);
 			director->replaceScene(cross);
@@ -71,16 +93,16 @@ bool AdventureFirstScene::init()
 	}
 
 	//右移按钮
-	if ((this->a ) < MAX){
+	if ((this->smallcheck) < MAX){
 		Button* theme_pointright_normal = Button::create("Themes\\scene\\themescene1-hd\\theme_pointright_normal.png", "Themes\\scene\\themescene1-hd\\theme_pointright_pressed.png");
 		theme_pointright_normal->setPosition(Vec2(860, 320));
 		theme_pointright_normal->setPressedActionEnabled(true);
 		this->addChild(theme_pointright_normal, 3);
 		theme_pointright_normal->addClickEventListener([&](Ref* ref){
 
-			this->a = this->a + 1;
+			this->smallcheck = this->smallcheck + 1;
 			Director* director = Director::getInstance();
-			AdventureFirstScene* adventureFirstScene = AdventureFirstScene::create();
+			AdventureFirstScene* adventureFirstScene = AdventureFirstScene::create(bigcheck);
 
 			TransitionCrossFade* cross = TransitionCrossFade::create(1.f, adventureFirstScene);
 			director->replaceScene(cross);
@@ -126,7 +148,7 @@ bool AdventureFirstScene::init()
 	this->addChild(ss_begin_normal, 3);
 	ss_begin_normal->addClickEventListener([&](Ref* ref){
 		Director* director = Director::getInstance();
-		GameScene* gameScene = GameScene::create(a);
+		GameScene* gameScene = GameScene::create(smallcheck);
 		director->replaceScene(gameScene);
 	});
 

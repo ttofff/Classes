@@ -7,11 +7,29 @@ Monster::Monster(MonsterType type)
 	// 根据不同类型初始化血量
 	switch (type)
 	{
-	case fly_yellow:
+	case Monster1:
 		hp = 50;
 		break;
-	case fly_blue:
+	case Monster2:
 		hp = 100;
+		break;
+	case Monster3:
+		hp = 50;
+		break;
+	case Monster4:
+		hp = 50;
+		break;
+	case Monster5:
+		hp = 50;
+		break;
+	case Monster6:
+		hp = 50;
+		break;
+	case Monster7:
+		hp = 50;
+		break;
+	case Monster8:
+		hp = 50;
 		break;
 	}
 }
@@ -34,44 +52,27 @@ Monster* Monster::create(MonsterType type)
 
 bool Monster::init()
 {
-	char filename[100];
 	// 根据类型的到怪物图片路径
-	switch (type)
-	{
-	case fly_yellow:
-		strcpy(filename, "Themes\\Theme1\\Items\\Monsters01-hd\\fly_yellow01.png");
-		break;
-	case fly_blue:
-		strcpy(filename, "Themes\\Theme1\\Items\\Monsters01-hd\\fly_blue01.png");
-		break;
-	}
+	
+	__String* s =__String::createWithFormat("Map\\FirstKind\\FirstKind\\Monster\\%d\\1\\1.jpg",type);
+	
 
-	if (!Sprite::initWithFile(filename))
+	if (!Sprite::initWithFile(s->getCString()))
 	{
 		return false;
 	}
 
 	// 创建动画
 	Animation* ani = Animation::create();
-	switch (type)
+
+	for (int i = 1; i <= 4; i++)
 	{
-	case fly_yellow:
-		for (int i = 1; i <= 2; i++)
-		{
-			char file[100];
-			sprintf(file, "Themes\\Theme1\\Items\\Monsters01-hd\\fly_yellow0%d.png", i);
-			ani->addSpriteFrameWithFile(file);
-		}
-		break;
-	case fly_blue:
-		for (int i = 1; i <= 2; i++)
-		{
-			char file[100];
-			sprintf(file, "Themes\\Theme1\\Items\\Monsters01-hd\\fly_blue0%d.png", i);
-			ani->addSpriteFrameWithFile(file);
-		}
-		break;
+		char file[100];
+		sprintf(file, "Map\\FirstKind\\FirstKind\\Monster\\%d\\1\\%d.png",(int)type, i);
+		ani->addSpriteFrameWithFile(file);
 	}
+		
+	
 
 	ani->setLoops(-1);
 	ani->setDelayPerUnit(0.3);

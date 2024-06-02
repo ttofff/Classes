@@ -6,8 +6,14 @@
 // 怪物类型
 enum MonsterType
 {
-	fly_yellow,
-	fly_blue
+	Monster1=1,
+	Monster2,
+	Monster3,
+	Monster4,
+	Monster5,
+	Monster6,
+	Monster7,
+	Monster8
 };
 
 // 怪物类

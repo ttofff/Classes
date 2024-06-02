@@ -48,7 +48,7 @@ bool Gamepause::init()
 		Director* director = Director::getInstance();
 		this->setVisible(false);
 		Director::getInstance()->startAnimation();
-		AdventureFirstScene* adventureFirstScene = AdventureFirstScene::create();
+		AdventureFirstScene* adventureFirstScene = AdventureFirstScene::create(AdventureFirstScene::bigcheck);
 		director->replaceScene(adventureFirstScene);
 	});
 

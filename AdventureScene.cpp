@@ -35,7 +35,7 @@ bool AdventureScene::init()
 	this->addChild(theme_pack01, 1);
 	theme_pack01->addClickEventListener([&](Ref* ref){
 		Director* director = Director::getInstance();
-		AdventureFirstScene* adventureFirstScene = AdventureFirstScene::create();
+		AdventureFirstScene* adventureFirstScene = AdventureFirstScene::create(n);
 		director->replaceScene(adventureFirstScene);
 	});
 

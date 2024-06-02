@@ -7,9 +7,10 @@ using namespace cocos2d;
 class AdventureFirstScene : public Scene
 {
 public:
-	CREATE_FUNC(AdventureFirstScene);
+	static AdventureFirstScene* create(int i);
 	bool init() override;
-	static int a;
+	static int smallcheck;
+	static int bigcheck;
 	const int MAX = 7;
 private:
 	

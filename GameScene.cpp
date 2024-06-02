@@ -6,6 +6,8 @@
 #include "Gamepause.h"
 #include "GameEnd.h"
 #include "SimpleAudioEngine.h"
+#include "AdventureFirstScene.h"
+
 using namespace cocos2d::ui;
 
 GameScene* GameScene::create(int i)
@@ -36,18 +38,17 @@ void GameScene::update(float dt)
 	waittime = waittime - dt;
 	if (waittime <= 0.f){
 		waittime = 1.0f;
-
-		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("Music\\Items\\GO.mp3"); //播放音效
-		Monster* newmonster = Monster::create((MonsterType)(rand() % 2));
+		//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("Music\\Items\\GO.mp3"); //播放音效
+		Monster* newmonster = Monster::create((MonsterType)((rand() % 8)+1));		//创建新的怪物
 		newmonster->onMonsterInit(tiledMap->wayPoints);
-		monster.push_back(newmonster);
+		monster.push_back(newmonster);				//加入怪物容器中
 		this->addChild(monster.back());
 	}
 	for (int i = 0; i < monster.size(); i++){
 		Monster* pm = monster.at(i);
-		if (!pm->onMonsterUpdate(dt)){
-			Sprite* spBoom = Sprite::create();
-			this->addChild(spBoom,3);
+		if (!pm->onMonsterUpdate(dt)){					//怪物吃到萝卜
+			Sprite* spBoom = Sprite::create();			//怪物消失动画
+			this->addChild(spBoom,3);					
 			spBoom->setPosition(pm->getPosition());
 			Animation* ani = Animation::create();
 			ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air01.png");
@@ -112,8 +113,11 @@ bool GameScene::init()
 	gameEnd->setVisible(false);
 
 	// 生成关卡图
-
-	__String *str = __String::createWithFormat("Map\\FirstKind\\Environment\\Level%02d\\Level.tmx",index);
+	__String *str;
+	if (AdventureFirstScene::bigcheck==1)
+		str = __String::createWithFormat("Map\\FirstKind\\Environment\\Level%02d\\Level.tmx",index);
+	else if (AdventureFirstScene::bigcheck==2)
+		str = __String::createWithFormat("Map\\SecondKind\\Environment\\Level%02d\\Level.tmx", index);
 	tiledMap = GameMap::create(str->getCString());
 	tiledMap->setPosition(Vec2::ZERO);
 	this->addChild(tiledMap, 0);
