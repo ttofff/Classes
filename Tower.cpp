@@ -31,10 +31,10 @@ bool Tower::init()
     // 根据不同塔类型初始化不同图片
     switch (type) {
         case BOTTLE:
-            strcpy(filename, "tower/Bottle11.png");
+            strcpy(filename, "Themes\\Towers\\TBottle-hd\\Bottle11.png");
             break;
         case SHIT:
-            strcpy(filename, "tower/Shit11.png");
+            strcpy(filename, "Themes\\Towers\\TShit-hd\\Shit11.png");
             break;
     }
     // 初始化

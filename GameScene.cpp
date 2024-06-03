@@ -10,6 +10,8 @@
 
 using namespace cocos2d::ui;
 
+
+
 GameScene* GameScene::create(int i)
 {
 	GameScene* ret = new GameScene();
@@ -17,6 +19,7 @@ GameScene* GameScene::create(int i)
 	ret->index = i;
 	ret->hp = 10;
 	ret->Wave_Number = 1;
+	
 	if (ret && ret->init())
 	{
 		ret->autorelease();
@@ -125,6 +128,9 @@ bool GameScene::init()
 	
 	
 
+	
+
+
 	//怪物
 	tiledMap->getWayPoints("PATH"); //获取怪物移动路径
 	tiledMap->getTowerArea("OBJ");		//获取炮塔生成区域
@@ -147,9 +153,9 @@ bool GameScene::init()
 
 	// 金币数量
 	__String* s = __String::createWithFormat("%d", money);
-	CCLabelAtlas* moneyLabel = CCLabelAtlas::create(s->getCString(), "Themes\\Items\\numwhite-hd.png", 20, 40, '.');
-	moneyLabel->setPosition(Vec2(100, 590));
-	this->addChild(moneyLabel, 2);
+	moneyT = TextAtlas::create(s->getCString(), "Themes\\Items\\numwhite-hd.png", 20, 40, ".");
+	moneyT->setPosition(Vec2(120, 610));
+	this->addChild(moneyT, 2);
 
 	// 显示当前波数和总波数精灵
 	Sprite* menuCenter = Sprite::create("Themes\\Items\\Items02-hd\\MenuCenter_01_CN.png");
@@ -248,9 +254,45 @@ bool GameScene::init()
 		btn_menu->setTouchEnabled(false);
 	});
 
-	
+	createBuildTool();		//创建建塔工具
 
-	
+	EventListenerTouchOneByOne* eventListenerTouchOneByOne = EventListenerTouchOneByOne::create();
+	eventListenerTouchOneByOne->onTouchBegan = [this](Touch* touch,Event *event)
+	{
+		//建塔工具是否可见
+		if (select->isVisible())
+		{
+			select->setVisible(false);
+			return true;
+		}
+		//获取当前点击的路径点
+		Vec2 touchPoint = touch->getLocation();
+		float x = (int)touchPoint.x / 80 * 80 + 40;
+		float y = (int)touchPoint.y / 80 * 80 + 40;
+		//是否有塔
+		for (Tower* tower : towers)
+		{
+			if (fabs(tower->getPositionX() - x) < 0.000001 &&
+				fabs(tower->getPositionY() - y) < 0.000001)
+			{
+				return true;
+			}
+		}
+		//书否再=在建塔区域内
+		for (Rect rect : tiledMap->towerArea)
+		{
+			if (rect.containsPoint(touchPoint))
+			{
+				createBuildTool();
+				select->setVisible(true);
+				select->setPosition(Vec2(x, y));
+				return true;
+			}
+		}
+		return true;
+	};
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListenerTouchOneByOne, this);
+
 	
 	
 	// 萝卜图像
@@ -273,4 +315,83 @@ bool GameScene::init()
 	ca->runAction(pAnimate);
 	*/
 	return true;
+}
+
+
+
+
+// 创建建塔选择工具
+void GameScene::createBuildTool()
+{
+	// 创建选择工具,暂时隐藏
+	select = Sprite::create("Themes\\Items\\Items02-hd\\select_01.png");
+	select->setVisible(false);
+	this->addChild(select);
+	select->setLocalZOrder(2);// 设置zOrder
+
+	// 创建塔图标：如果在Tomer中，添加了新的塔的类型，在这里添加
+	Button* bottle;
+	if (money>=100)
+		bottle = Button::create("Themes\\Towers\\TBottle-hd\\Bottle01.png");
+	else  bottle = Button::create("Themes\\Towers\\TBottle-hd\\Bottle00.png");
+	bottle->setPosition(Vec2(-10, 110));
+	select->addChild(bottle);
+
+	Button* shit;
+	if (money>=120)
+		shit = Button::create("Themes\\Towers\\TShit-hd\\Shit01.png");
+	else  shit = Button::create("Themes\\Towers\\TShit-hd\\Shit00.png");
+	shit->setPosition(Vec2(82, 110));
+	select->addChild(shit);
+
+	// 点击不同的塔图标，创建不同的塔
+	bottle->addClickEventListener([this](Ref*)
+	{
+		// 如果金币不够，则不能建塔
+		if (money < 100)
+		{
+			select->setVisible(false);
+			return;
+		}
+		// 创建Bottle塔,并隐藏选择工具
+		Tower* bottle = Tower::create(BOTTLE);
+		bottle->setPosition(select->getPosition());
+		this->addChild(bottle);
+		select->setVisible(false);
+		// 调用init方法
+		bottle->onTowerInit();
+		// 将塔添加到链表中
+		towers.push_back(bottle);
+		// 建塔消耗金币
+		money -= 100;
+		// 修改金币文本
+		char text[10];
+		sprintf(text, "%d", money);
+		moneyT->setString(text);
+	});
+
+	shit->addClickEventListener([this](Ref*)
+	{
+		// 如果金币不够，则不能建塔
+		if (money < 120)
+		{
+			select->setVisible(false);
+			return;
+		}
+		// 创建Bottle塔,并隐藏选择工具
+		Tower* shit = Tower::create(SHIT);
+		shit->setPosition(select->getPosition());
+		this->addChild(shit);
+		select->setVisible(false);
+		// 调用init方法
+		shit->onTowerInit();
+		//// 将塔添加到链表中
+		towers.push_back(shit);
+		// 建塔消耗金币
+		money -= 120;
+		// 修改金币文本
+		char text[10];
+		sprintf(text, "%d", money);
+		moneyT->setString(text);
+	});
 }

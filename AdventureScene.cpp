@@ -28,7 +28,7 @@ bool AdventureScene::init()
 	this->addChild(ss_cloud, 0);
 
 	//进入选择关卡按钮
-	__String * str = __String::createWithFormat("Themes\\scene\\themescene2-hd\\theme_pack%02d.png", n);
+	__String * str = __String::createWithFormat("Themes\\scene\\themescene2-hd\\%d.png", n);
 	Button* theme_pack01 = Button::create(str->getCString());
 	theme_pack01->setPosition(Vec2(480, 320));
 	theme_pack01->setPressedActionEnabled(true);
