@@ -48,15 +48,27 @@ bool AdventureFirstScene::init()
 	this->addChild(ss_cloud, 0);
 
 	
-	//¹Ø¿¨1
+	//¹Ø¿¨
+	float size = 0.f;
 	__String* s;
-	if (bigcheck==1)
-		 s = __String::createWithFormat("Map\\FirstKind\\Environment\\Level%02d\\Level.png", smallcheck);
-	else if (bigcheck==2)
+	if (bigcheck == 1)
+	{
+		s = __String::createWithFormat("Map\\FirstKind\\Environment\\Level%02d\\Level.png", smallcheck);
+		size = 0.6f;
+	}
+	else if (bigcheck == 2)
+	{
 		s = __String::createWithFormat("Map\\SecondKind\\Environment\\Level%02d\\Level.png", smallcheck);
+		size = 0.6f;
+	}
+	else if (bigcheck == 3)
+	{
+		s = __String::createWithFormat("Map\\ThirdKind\\Environment\\Level%02d\\Level.png", smallcheck);
+		size = 0.9f;
+	}
 	Button* ss_map01 = Button::create(s->getCString());
 	ss_map01->setPosition(Vec2(480, 320));
-	ss_map01->setScale(0.6f);
+	ss_map01->setScale(size);
 	ss_map01->setPressedActionEnabled(true);
 	this->addChild(ss_map01,2);
 	ss_map01->addClickEventListener([&](Ref* ref){

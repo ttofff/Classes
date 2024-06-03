@@ -12,7 +12,7 @@ public:
 
 	static int n;
 
-	const int Max = 7;
+	const int Max = 3;
 
 };
 

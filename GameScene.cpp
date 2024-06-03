@@ -118,6 +118,7 @@ bool GameScene::init()
 		str = __String::createWithFormat("Map\\FirstKind\\Environment\\Level%02d\\Level.tmx",index);
 	else if (AdventureFirstScene::bigcheck==2)
 		str = __String::createWithFormat("Map\\SecondKind\\Environment\\Level%02d\\Level.tmx", index);
+	else str = __String::createWithFormat("Map\\ThirdKind\\Environment\\Level%02d\\Level.tmx", index);
 	tiledMap = GameMap::create(str->getCString());
 	tiledMap->setPosition(Vec2::ZERO);
 	this->addChild(tiledMap, 0);
