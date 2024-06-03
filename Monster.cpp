@@ -116,7 +116,7 @@ bool Monster::onMonsterUpdate(float dt)// 怪物更新（移动）
 	}
 	// 获取当前方向（单位向量）
 	Vec2 dir = (wayPoints[curIndex] - wayPoints[curIndex - 1]).getNormalized();
-	log("x=%f,y=%f", dir.x,dir.y);
+	//设置怪物转向
 	if (dir.x >0)
 		this->setRotationY(0);
 	else if(dir.x<0) this->setRotationY(180.f);
