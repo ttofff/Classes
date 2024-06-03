@@ -4,6 +4,7 @@
 #include "AdventureScene.h"
 #include "GameScene.h"
 #include"HelpScene.h"
+#include "LoadingScene.h"
 
 using namespace cocos2d::ui;
 
@@ -73,8 +74,8 @@ bool AdventureFirstScene::init()
 	this->addChild(ss_map01,2);
 	ss_map01->addClickEventListener([&](Ref* ref){
 		Director* director = Director::getInstance();
-		GameScene* gameScene = GameScene::create(smallcheck);
-		director->replaceScene(gameScene);
+		LoadingScene* loadingScene = LoadingScene::create(smallcheck);
+		director->replaceScene(loadingScene);
 	});
 
 	//关卡可用的炮塔
@@ -160,8 +161,8 @@ bool AdventureFirstScene::init()
 	this->addChild(ss_begin_normal, 3);
 	ss_begin_normal->addClickEventListener([&](Ref* ref){
 		Director* director = Director::getInstance();
-		GameScene* gameScene = GameScene::create(smallcheck);
-		director->replaceScene(gameScene);
+		LoadingScene* loadingScene = LoadingScene::create(smallcheck);
+		director->replaceScene(loadingScene);
 	});
 
 	

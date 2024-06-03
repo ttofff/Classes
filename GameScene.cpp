@@ -76,8 +76,6 @@ void GameScene::update(float dt)
 			}
 		}
 	}
-
-
 }
 
 //ÂÜ²·ËÀÍö
@@ -130,7 +128,7 @@ bool GameScene::init()
 	tiledMap->getTowerArea("OBJ");		//»ñÈ¡ÅÚËþÉú³ÉÇøÓò
 
 	//ÂÜ²·
-	ca = Sprite::create("Themes\\Items\\Items01-hd\\hlb10.png");
+	ca = Sprite::create("wei.jpg");
 	
 	ca->setPosition(tiledMap->wayPoints.back());
 	this->addChild(ca, 2);
