@@ -54,7 +54,7 @@ bool Monster::init()
 {
 	// 根据类型的到怪物图片路径
 	
-	__String* s =__String::createWithFormat("Map\\FirstKind\\FirstKind\\Monster\\%d\\1\\1.png",type);
+	__String* s =__String::createWithFormat("Map\\FirstKind\\Monster\\%d\\1\\1.png",type);
 	
 
 	if (!Sprite::initWithFile(s->getCString()))
@@ -68,7 +68,7 @@ bool Monster::init()
 	for (int i = 1; i <= 4; i++)
 	{
 		char file[100];
-		sprintf(file, "Map\\FirstKind\\FirstKind\\Monster\\%d\\1\\%d.png",(int)type, i);
+		sprintf(file, "Map\\FirstKind\\Monster\\%d\\1\\%d.png",(int)type, i);
 		ani->addSpriteFrameWithFile(file);
 	}
 		

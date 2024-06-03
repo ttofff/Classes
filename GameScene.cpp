@@ -39,7 +39,7 @@ void GameScene::update(float dt)
 	if (waittime <= 0.f){
 		waittime = 1.0f;
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("Music\\Items\\GO.mp3"); //播放音效
-		Monster* newmonster = Monster::create((MonsterType)((rand() % 8)+2));		//创建新的怪物
+		Monster* newmonster = Monster::create((MonsterType)((rand() % 8)+1));		//创建新的怪物
 		newmonster->onMonsterInit(tiledMap->wayPoints);
 		monster.push_back(newmonster);				//加入怪物容器中
 		this->addChild(monster.back());
