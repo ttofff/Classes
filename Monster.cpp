@@ -54,7 +54,7 @@ bool Monster::init()
 {
 	// 根据类型的到怪物图片路径
 	
-	__String* s =__String::createWithFormat("Map\\FirstKind\\FirstKind\\Monster\\%d\\1\\1.jpg",type);
+	__String* s =__String::createWithFormat("Map\\FirstKind\\FirstKind\\Monster\\%d\\1\\1.png",type);
 	
 
 	if (!Sprite::initWithFile(s->getCString()))
