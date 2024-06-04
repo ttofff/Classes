@@ -31,7 +31,7 @@ public:
 
 private:
 	
-	int money;			//Ç®
+	int money;					//Ç®
 	GameMap* tiledMap;			//µØÍ¼
 	
 	std::vector<Vec2> wayPoints;

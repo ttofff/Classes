@@ -27,11 +27,13 @@ public:
 	bool onMonsterUpdate(float dt);// 怪物更新（移动）
 	std::vector<cocos2d::Vec2> wayPoints; //移动路径点
 private:
-	
+	float speed = 150.f;
 	int curIndex;// 目前所在的路径点下标
 	MonsterType type;
 public:
 	int hp;// 怪物血量
+	float GetSpeed()const { return speed; }
+	void SetSpeed(float s) { speed = s; }
 };
 
 #endif

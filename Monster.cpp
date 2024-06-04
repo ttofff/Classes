@@ -104,7 +104,7 @@ bool Monster::onMonsterUpdate(float dt)// 怪物更新（移动）
 	// 获取当前怪物的坐标
 	Vec2 pos = getPosition();
 	// 得到当前移动的距离
-	float moveDistance = dt * 150;// 速度假设为100
+	float moveDistance = dt * speed;// 速度假设为100
 	// 获取当前位置与目标点之间的距离
 	float maxDistance = pos.distance(wayPoints[curIndex]);
 	// 如果移动的距离大于最大距离，则直接放在路径点上

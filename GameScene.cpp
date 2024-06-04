@@ -84,7 +84,8 @@ void GameScene::update(float dt)
 			}
 		}
 
-		
+		float SlowSpeed = 150.f;
+		int Damage = 20;
 		// 遍历所有的塔：没有塔的时候，就不会发射子弹
 		for (Tower* tower : towers)
 		{
@@ -119,6 +120,17 @@ void GameScene::update(float dt)
 			Bullet* bullet = bullets.at(i);
 			Monster* Targetmonster = bullet->target;
 			bool IsHave = false;
+			switch (bullet->type)
+			{
+			case BOTTLE:
+				SlowSpeed = 150.f;
+				Damage = 20;
+				break;
+			case SHIT:
+				SlowSpeed = 50.f;
+				Damage = 10;
+				break;
+			}
 			for (auto monster : monster)
 			{
 				if (monster == bullet->target)
@@ -137,22 +149,22 @@ void GameScene::update(float dt)
 			if (isCrash)
 			{
 				// 怪物随机掉血
-				Targetmonster->hp -= 20;
+				Targetmonster->hp -= Damage;
+				Targetmonster->SetSpeed(SlowSpeed);
 				// 检测怪物是否被消灭
 				if (Targetmonster->hp <= 0)
 				{
 					Targetmonster->hp = 0;
 					// 创建新精灵来播放怪物死亡帧动画
-					Sprite* spBoom = Sprite::create("Themes\\Items\\Items02-hd\\air01.png");
+					Sprite* spBoom = Sprite::create("Map\\MonsterDead\\Dead_01.png");
 					this->addChild(spBoom);
 					// 设置位置（怪物的位置）
-					spBoom->setPosition(Targetmonster->getPosition());
+					spBoom->setPosition(Vec2(Targetmonster->getPositionX(), Targetmonster->getPositionY()+20.f));
 					Animation* monsterdead = Animation::create();
-					monsterdead->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air01.png");
-					monsterdead->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air02.png");
-					monsterdead->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air03.png");
-					monsterdead->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air04.png");
-					monsterdead->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air05.png");
+					for (int i = 1; i < 15; ++i) {
+						__String* str = __String::createWithFormat("Map\\MonsterDead\\Dead_%02d.png", i);
+						monsterdead->addSpriteFrameWithFile(str->getCString());
+					}
 					monsterdead->setDelayPerUnit(0.1f);
 					monsterdead->setLoops(1);
 					Animate* animate = Animate::create(monsterdead);
@@ -167,7 +179,7 @@ void GameScene::update(float dt)
 					// 怪物死亡数量+1(后续可以添加)
 
 					// 打怪随机获得金币
-					money += rand() % 51 + 30;// 80 - 180
+					money += rand() % 21 + 10;// 80 - 180
 					// 修改金币文本
 					char text[10];
 					sprintf(text, "%d", money);
