@@ -1,4 +1,4 @@
-#include "AdventureFirstScene.h"
+#include "Boss.h"
 #include"ui\CocosGUI.h"
 #include "StartScene.h"
 #include "AdventureScene.h"
@@ -8,12 +8,12 @@
 
 using namespace cocos2d::ui;
 
-int AdventureFirstScene::smallcheck = 1;
-int AdventureFirstScene::bigcheck = 1;
-AdventureFirstScene* AdventureFirstScene::create(int i)
+
+
+int Boss::smallcheck = 1;
+Boss* Boss::create()
 {
-	AdventureFirstScene* ret = new AdventureFirstScene();
-	ret->bigcheck = i;
+	Boss* ret = new Boss();
 	if (ret && ret->init())
 	{
 		ret->autorelease();
@@ -28,14 +28,14 @@ AdventureFirstScene* AdventureFirstScene::create(int i)
 }
 
 
-bool AdventureFirstScene::init()
+bool Boss::init()
 {
 	if (!Scene::init())
 	{
 		return false;
 	}
 
-
+	int Bloodnum[8] = {2,4,5,6,7,8,11,20};
 	
 
 	//背景
@@ -47,29 +47,15 @@ bool AdventureFirstScene::init()
 	ss_cloud->setAnchorPoint(Vec2(0.5,0));
 	ss_cloud->setPosition(Vec2(480, 0));
 	this->addChild(ss_cloud, 0);
-
+	//
 	
 	//关卡
-	float size = 0.f;
+
 	__String* s;
-	if (bigcheck == 1)
-	{
-		s = __String::createWithFormat("Map\\FirstKind\\Environment\\Level%02d\\Level.png", smallcheck);
-		size = 0.6f;
-	}
-	else if (bigcheck == 2)
-	{
-		s = __String::createWithFormat("Map\\SecondKind\\Environment\\Level%02d\\Level.png", smallcheck);
-		size = 0.9f;
-	}
-	else if (bigcheck == 3)
-	{
-		s = __String::createWithFormat("Map\\ThirdKind\\Environment\\Level%02d\\Level.png", smallcheck);
-		size = 0.7f;
-	}
+	s = __String::createWithFormat("Themes\\scene\\antiboss1-hd\\boss_%02d_locked.png",smallcheck+8);
 	Button* ss_map01 = Button::create(s->getCString());
-	ss_map01->setPosition(Vec2(480, 320));
-	ss_map01->setScale(size);
+	ss_map01->setPosition(Vec2(480, 380));
+	ss_map01->setScale(1.2f);
 	ss_map01->setPressedActionEnabled(true);
 	this->addChild(ss_map01,2);
 	ss_map01->addClickEventListener([&](Ref* ref){
@@ -79,17 +65,24 @@ bool AdventureFirstScene::init()
 		GameScene* game = GameScene::create(smallcheck);
 		director->replaceScene(game);
 	});
-
-	//关卡可用的炮塔
-	__String* s1 = __String::createWithFormat("Themes\\scene\\stages_theme1-hd\\ss_towers_%02d.png", smallcheck);
-	Sprite* ss_towers_01 = Sprite::create(s1->getCString());
-	ss_towers_01->setAnchorPoint(Vec2(0.5, 0));
-	ss_towers_01->setPosition(Vec2(480, 90));
-	this->addChild(ss_towers_01, 2);
-
-
+	//血条
+	Sprite* Blood_bg = Sprite::create("Themes\\scene\\antiboss1-hd\\blood_bg.png");
+	Blood_bg->setPosition(Vec2(480,150));
+	this->addChild(Blood_bg);
+	//血条数值
+	__String* s1;
+	s1 = __String::createWithFormat("Themes\\scene\\antiboss1-hd\\blood_%d0000.png",Bloodnum[smallcheck]);
+	Sprite* Bloodnumber = Sprite::create(s1->getCString());
+	Bloodnumber->setPosition(Vec2(480, 150));
+	this->addChild(Bloodnumber);
 	
-	
+	//限时背景指示精灵
+	Sprite* time_bg = Sprite::create("Themes\\scene\\antiboss2-hd\\timelimit_60_CN.png");
+	time_bg->setPosition(Vec2(370, 80));
+	this->addChild(time_bg);
+
+
+
 	//左移按钮
 	if ((this->smallcheck) > 1){
 		Button* theme_pointleft_normal = Button::create("Themes\\scene\\themescene1-hd\\theme_pointleft_normal.png", "Themes\\scene\\themescene1-hd\\theme_pointleft_pressed.png");
@@ -100,7 +93,7 @@ bool AdventureFirstScene::init()
 
 			this->smallcheck = this->smallcheck - 1;
 			Director* director = Director::getInstance();
-			AdventureFirstScene* adventureFirstScene = AdventureFirstScene::create(bigcheck);
+			Boss* adventureFirstScene = Boss::create();
 
 			TransitionCrossFade* cross = TransitionCrossFade::create(1.f, adventureFirstScene);
 			director->replaceScene(cross);
@@ -117,7 +110,7 @@ bool AdventureFirstScene::init()
 
 			this->smallcheck = this->smallcheck + 1;
 			Director* director = Director::getInstance();
-			AdventureFirstScene* adventureFirstScene = AdventureFirstScene::create(bigcheck);
+			Boss* adventureFirstScene = Boss::create();
 
 			TransitionCrossFade* cross = TransitionCrossFade::create(1.f, adventureFirstScene);
 			director->replaceScene(cross);
@@ -133,7 +126,7 @@ bool AdventureFirstScene::init()
 	theme_home_normal->addClickEventListener([&](Ref* ref)
 	{
 		Director* director = Director::getInstance();
-		AdventureScene* adventureScene = AdventureScene::create();
+		StartScene* adventureScene = StartScene::create();
 		director->replaceScene(adventureScene);
 	});
 
@@ -156,9 +149,10 @@ bool AdventureFirstScene::init()
 	theme_bg_CN->setPosition(Vec2(480, 610));
 	this->addChild(theme_bg_CN, 1);
 	
+	
 	//开始游戏按钮
-	Button* ss_begin_normal = Button::create("Themes\\scene\\themescene1-hd\\theme_play_pressed.png");
-	ss_begin_normal->setPosition(Vec2(480, 60));
+	Button* ss_begin_normal = Button::create("Themes\\scene\\antiboss2-hd\\theme_play_normal_CN.png");
+	ss_begin_normal->setPosition(Vec2(600, 80));
 	ss_begin_normal->setPressedActionEnabled(true);
 	this->addChild(ss_begin_normal, 3);
 	ss_begin_normal->addClickEventListener([&](Ref* ref){
@@ -168,7 +162,7 @@ bool AdventureFirstScene::init()
 		//director->replaceScene(loadingScene);
 		director->replaceScene(game);
 	});
-
+	
 	
 
 

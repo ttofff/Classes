@@ -5,6 +5,7 @@
 #include"AboutScene.h"
 #include"HelpScene.h"
 #include "SimpleAudioEngine.h"
+#include "Boss.h"
 using namespace cocos2d::ui;
 
 StartScene* StartScene::create()
@@ -134,7 +135,9 @@ bool StartScene::init()
 	btn_Boss->setPressedActionEnabled(true);
 	this->addChild(btn_Boss);
 	btn_Boss->addClickEventListener([&](Ref* ref) {
-
+		Director* director = Director::getInstance();
+		Boss* boss = Boss::create();
+		director->replaceScene(boss);
 	});
 
 	//开始界面的按钮--怪兽窝
