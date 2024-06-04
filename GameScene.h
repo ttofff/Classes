@@ -7,6 +7,7 @@
 #include "Tower.h"
 #include "ui\CocosGUI.h"
 #include "SimpleAudioEngine.h"
+#include "Bullet.h"
 
 using namespace cocos2d;
 using namespace cocos2d::ui;
@@ -21,8 +22,9 @@ public:
 	int Wave_Number;	//²¨Êı
 	GameEnd* gameEnd;		//ÓÎÏ·½áÊø½çÃæ
 
-	std::vector<Monster*> monster; //¹ÖÎïÈİÆ÷
+	Vector<Monster*> monster; //¹ÖÎïÈİÆ÷
 	std::vector<Tower*> towers;	//ÅÚËşÈİÆ÷
+	Vector<Bullet*> bullets;	//ÅÚËşÈİÆ÷
 	void createBuildTool();
 	TextAtlas* moneyT;
 	
@@ -37,6 +39,7 @@ private:
 	Sprite* ca;			//ÂÜ²·
 	Sprite *select;
 	void CarrotDead();		//ÂÜ²·ËÀÍöº¯Êı
+	void SetTowerAnim(Tower* tower);
 	
 };
 

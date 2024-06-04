@@ -55,7 +55,7 @@ bool LoadingScene::init()
 
 void LoadingScene::onScheduleCallBack(float dt)
 {
-	loadingBar->setPercentage(loadingBar->getPercentage() + 2.f);
+	loadingBar->setPercentage(loadingBar->getPercentage() + 10.f);
 
 	if (loadingBar->getPercentage() >= 100.f)
 	{

@@ -7,6 +7,8 @@
 #include "GameEnd.h"
 #include "SimpleAudioEngine.h"
 #include "AdventureFirstScene.h"
+#include "Tower.h"
+#include "Bullet.h"
 
 using namespace cocos2d::ui;
 
@@ -37,49 +39,170 @@ GameScene* GameScene::create(int i)
 //出现怪物
 void GameScene::update(float dt)
 {
-	static float waittime= 1.0f;
+	static float waittime = 1.0f;
 	waittime = waittime - dt;
 	if (waittime <= 0.f){
 		waittime = 1.0f;
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("Music\\Items\\GO.mp3"); //播放音效
-		Monster* newmonster = Monster::create((MonsterType)((rand() % 8)+1));		//创建新的怪物
+		Monster* newmonster = Monster::create((MonsterType)((rand() % 8) + 1));		//创建新的怪物
 		newmonster->onMonsterInit(tiledMap->wayPoints);
-		monster.push_back(newmonster);				//加入怪物容器中
+		monster.pushBack(newmonster);				//加入怪物容器中
 		this->addChild(monster.back());
 	}
-	for (int i = 0; i < monster.size(); i++){
-		Monster* pm = monster.at(i);
-		if (!pm->onMonsterUpdate(dt)){					//怪物吃到萝卜
-			Sprite* spBoom = Sprite::create();			//怪物消失动画
-			this->addChild(spBoom,3);					
-			spBoom->setPosition(pm->getPosition());
-			Animation* ani = Animation::create();
-			ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air01.png");
-			ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air02.png");
-			ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air03.png");
-			ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air04.png");
-			ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air05.png");
-			ani->setLoops(1);
-			ani->setDelayPerUnit(0.1f);
-			spBoom->runAction(Sequence::create(Animate::create(ani),RemoveSelf::create(), nullptr));
-			this->removeChild(pm); 
-			monster.erase(monster.begin()+i);
-			hp--;
-			//判断是否死亡
-			if (hp >= 1)
-			{
-				__String* carrotlj = __String::createWithFormat("Themes\\Items\\Items01-hd\\hlb%d.png",hp);
-				
-				ca->setTexture(carrotlj->getCString());
-				
-			}
-			else if (hp <= 0)
-			{
-				CarrotDead();
+
+		for (int i = 0; i < monster.size(); i++)
+		{
+			Monster* pm = monster.at(i);
+			if (!pm->onMonsterUpdate(dt)){					//怪物吃到萝卜
+				Sprite* spBoom = Sprite::create();			//怪物消失动画
+				this->addChild(spBoom, 3);
+				spBoom->setPosition(pm->getPosition());
+				Animation* ani = Animation::create();
+				ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air01.png");
+				ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air02.png");
+				ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air03.png");
+				ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air04.png");
+				ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air05.png");
+				ani->setLoops(1);
+				ani->setDelayPerUnit(0.1f);
+				spBoom->runAction(Sequence::create(Animate::create(ani), RemoveSelf::create(), nullptr));
+				this->removeChild(pm);
+				monster.erase(monster.begin() + i);
+				hp--;
+				//判断是否死亡
+				if (hp >= 1)
+				{
+					__String* carrotlj = __String::createWithFormat("Themes\\Items\\Items01-hd\\hlb%d.png", hp);
+
+					ca->setTexture(carrotlj->getCString());
+
+				}
+				else if (hp <= 0)
+				{
+					CarrotDead();
+				}
 			}
 		}
-	}
+
+		
+		// 遍历所有的塔：没有塔的时候，就不会发射子弹
+		for (Tower* tower : towers)
+		{
+			// 判断射击的时间是否满足条件
+			if (tower->onTowerUpdate(dt))
+			{
+				for (Monster* monster : monster)
+				{
+					// 如果在范围之内，产生子弹
+					if (tower->shoot(monster))
+					{
+						SetTowerAnim(tower);
+						// 创建子弹
+						Bullet* bullet = Bullet::create(tower->type);
+						// 设置子弹位置与 当前 塔坐标相同
+						bullet->setPosition(tower->getPosition());
+						// 初始化子弹
+						bullet->onBulletInit(monster);
+						// 将子弹添加到层上
+						this->addChild(bullet);
+						// 将子弹添加到子弹链表中
+						bullets.pushBack(bullet);
+						
+						break;    // 很重要
+					}
+				}
+				
+			}
+		}
+		for (int i = 0; i < bullets.size(); i++)
+		{
+			Bullet* bullet = bullets.at(i);
+			Monster* Targetmonster = bullet->target;
+			bool IsHave = false;
+			for (auto monster : monster)
+			{
+				if (monster == bullet->target)
+				{
+					IsHave = true;
+					break;
+				}
+			}
+			if (!IsHave)
+			{
+				bullets.eraseObject(bullet); // 内存：从容器移除
+				bullet->removeFromParent();        // 图层：从场景移除
+				continue;
+			}
+			bool isCrash = Targetmonster->getBoundingBox().containsPoint(bullet->getPosition());
+			if (isCrash)
+			{
+				// 怪物随机掉血
+				Targetmonster->hp -= 20;
+				// 检测怪物是否被消灭
+				if (Targetmonster->hp <= 0)
+				{
+					Targetmonster->hp = 0;
+					// 创建新精灵来播放怪物死亡帧动画
+					Sprite* spBoom = Sprite::create("Themes\\Items\\Items02-hd\\air01.png");
+					this->addChild(spBoom);
+					// 设置位置（怪物的位置）
+					spBoom->setPosition(Targetmonster->getPosition());
+					Animation* monsterdead = Animation::create();
+					monsterdead->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air01.png");
+					monsterdead->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air02.png");
+					monsterdead->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air03.png");
+					monsterdead->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air04.png");
+					monsterdead->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air05.png");
+					monsterdead->setDelayPerUnit(0.1f);
+					monsterdead->setLoops(1);
+					Animate* animate = Animate::create(monsterdead);
+					// 移除动作
+					RemoveSelf* removeSelf = RemoveSelf::create();
+					// 序列动作
+					Sequence* seq = Sequence::create(animate, removeSelf, nullptr);
+					spBoom->runAction(seq);
+					// 移除怪物
+					monster.eraseObject(Targetmonster);
+					this->removeChild(Targetmonster);
+					// 怪物死亡数量+1(后续可以添加)
+
+					// 打怪随机获得金币
+					money += rand() % 51 + 30;// 80 - 180
+					// 修改金币文本
+					char text[10];
+					sprintf(text, "%d", money);
+					moneyT->setString(text);
+				}
+				// 将子弹容器中和场景中移除
+				bullets.eraseObject(bullet);
+				bullet->removeFromParent();
+			}
+		}
+
+		for (int i = 0; i < bullets.size(); i++)
+		{
+			Bullet* bullet = bullets.at(i);
+			bool isDie = true;    // 当前子弹 的 攻击目标 的 存活状态
+			// 遍历怪物链表，如果没有找到该子弹的攻击目标，表示怪物已经死亡
+			for (Monster* monster : monster)
+			{
+				if (monster == bullet->target)
+				{
+					isDie = false;
+					break;
+				}
+			}
+			// 如果攻击目标死亡,则将子弹从容器中和层上移除
+			if (isDie)
+			{
+				bullets.eraseObject(bullet); // 内存：从容器移除
+				bullet->removeFromParent();        // 图层：从场景移除
+				continue;
+			}
+			bullet->onBulletUpdate(dt);// 控制子弹移动
+		}
 }
+
 
 //萝卜死亡
 void GameScene::CarrotDead()
@@ -138,7 +261,7 @@ bool GameScene::init()
 	
 	ca->setPosition(tiledMap->wayPoints.back());
 	this->addChild(ca, 2);
-
+	ca->getPosition();
 
 	scheduleUpdate();
 
@@ -392,4 +515,31 @@ void GameScene::createBuildTool()
 		sprintf(text, "%d", money);
 		moneyT->setString(text);
 	});
+}
+void GameScene::SetTowerAnim(Tower* tower)
+{
+	//射击动画
+	Sprite* shootsp = Sprite::create();
+	this->addChild(shootsp);
+	shootsp->setRotation(tower->getRotation());
+	shootsp->setPosition(tower->getPosition());
+	Animation* pAnimation = Animation::create();
+	__String* TowerAnim;
+	switch (tower->type)
+	{
+	case BOTTLE:
+		TowerAnim = __String::createWithFormat("Themes\\Towers\\TBottle-hd\\Bottle1");
+		break;
+	case SHIT:
+		TowerAnim = __String::createWithFormat("Themes\\Towers\\TShit-hd\\Shit1");
+		break;
+	}
+	for (int i = 1; i < 4; ++i) {
+		__String* str = __String::createWithFormat("%s%d.png", TowerAnim->getCString(), i);
+		pAnimation->addSpriteFrameWithFile(str->getCString());
+	}
+	pAnimation->setLoops(1);
+	pAnimation->setDelayPerUnit(0.1f);
+	shootsp->runAction(Sequence::create(Animate::create(pAnimation), RemoveSelf::create(), nullptr));
+
 }
