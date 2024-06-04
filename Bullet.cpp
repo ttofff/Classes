@@ -77,5 +77,5 @@ void Bullet::onBulletUpdate(float dt)// 子弹移动
 	// 设置旋转方向
 	updateDirection();
 	// 移动增量 = 方向 * 速度 * 时间
-	setPosition(getPosition() + dir * 800 * dt);
+	setPosition(getPosition() + dir * 1000 * dt);
 }

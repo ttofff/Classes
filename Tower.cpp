@@ -86,7 +86,7 @@ bool Tower::shoot(Monster* monster)
 void Tower::updateDirection(Monster* monster)
 {
 	if (!IsRotator) return;
-	Vec2 targetPos = Vec2(monster->getPositionX() + 40, monster->getPositionY() + 40);
+	Vec2 targetPos = Vec2(monster->getPositionX(), monster->getPositionY());
 	Vec2 offset = targetPos - getPosition();
 	float radian = Vec2::angle(offset, Vec2(0, 1));
 	float angle = radian * 180 / PI;

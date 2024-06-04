@@ -101,7 +101,7 @@ void GameScene::update(float dt)
 						// 创建子弹
 						Bullet* bullet = Bullet::create(tower->type);
 						// 设置子弹位置与 当前 塔坐标相同
-						bullet->setPosition(tower->getPosition());
+						bullet->setPosition(Vec2(tower->getPositionX(), tower->getPositionY()+10));
 						// 初始化子弹
 						bullet->onBulletInit(monster);
 						// 将子弹添加到层上
