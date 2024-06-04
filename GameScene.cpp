@@ -185,6 +185,8 @@ void GameScene::update(float dt)
 					sprintf(text, "%d", money);
 					moneyT->setString(text);
 				}
+
+
 				// 将子弹容器中和场景中移除
 				bullets.eraseObject(bullet);
 				bullet->removeFromParent();
@@ -546,12 +548,12 @@ void GameScene::SetTowerAnim(Tower* tower)
 		TowerAnim = __String::createWithFormat("Themes\\Towers\\TShit-hd\\Shit1");
 		break;
 	}
-	for (int i = 1; i < 4; ++i) {
-		__String* str = __String::createWithFormat("%s%d.png", TowerAnim->getCString(), i);
+	for (int i = 0; i < 4; ++i) {
+		__String* str = __String::createWithFormat("%s%d.png", TowerAnim->getCString(), i%3 + 1);
 		pAnimation->addSpriteFrameWithFile(str->getCString());
 	}
 	pAnimation->setLoops(1);
 	pAnimation->setDelayPerUnit(0.1f);
-	shootsp->runAction(Sequence::create(Animate::create(pAnimation), RemoveSelf::create(), nullptr));
+	tower->runAction(Sequence::create(Animate::create(pAnimation), nullptr));
 
 }

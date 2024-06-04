@@ -50,7 +50,7 @@ void Bullet::updateDirection()
 {
 	// 朝向Monster
 	// 得到怪物的坐标
-	Vec2 targetPos = Vec2(target->getPositionX() + 40, target->getPositionY() + 40);
+	Vec2 targetPos = target->getPosition();
 	// 得到与当前子弹的向量差
 	Vec2 offset = targetPos - getPosition();
 	// 得到子弹移动方向（单位向量）
@@ -77,5 +77,5 @@ void Bullet::onBulletUpdate(float dt)// 子弹移动
 	// 设置旋转方向
 	updateDirection();
 	// 移动增量 = 方向 * 速度 * 时间
-	setPosition(getPosition() + dir * 500 * dt);
+	setPosition(getPosition() + dir * 800 * dt);
 }
