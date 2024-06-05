@@ -49,6 +49,10 @@ public:
 	void CarrotWin();
 	void CarrotDead();		//ÂÜ²·ËÀÍöº¯Êı
 	void SetTowerAnim(Tower* tower);
+
+
+	Monster* monsterselect; 
+	bool isselect;
 };
 
 #endif
