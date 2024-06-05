@@ -14,13 +14,14 @@ using namespace cocos2d::ui;
 
 
 
-GameScene* GameScene::create(int i)
+GameScene* GameScene::create(int i, int size)
 {
 	GameScene* ret = new GameScene();
 	ret->money = 300;
 	ret->index = i;
 	ret->hp = 10;
 	ret->Wave_Number = 1;
+	ret->blockSize = size;
 	
 	if (ret && ret->init())
 	{
@@ -243,12 +244,14 @@ bool GameScene::init()
 
 
 	//ÔÝÍ£²Ëµ¥
-	Gamepause* gamepause = Gamepause::create();
+	gamepause = Gamepause::create();
+	gamepause->SetBlockSize(blockSize);
 	this->addChild(gamepause, 5);
 	gamepause->setVisible(false);
 
 	//Ê§°Ü½çÃæ
 	gameEnd = GameEnd::create();
+	gameEnd->SetBlockSize(blockSize);
 	this->addChild(gameEnd, 5);
 	gameEnd->setVisible(false);
 
@@ -355,7 +358,7 @@ bool GameScene::init()
 	Button* btn_menu = Button::create("Themes\\Items\\touming-hd\\menu01.png", "Themes\\Items\\touming-hd\\menu02.png");
 	btn_menu->setPosition(Vec2(890, 605));
 	this->addChild(btn_menu, 2);
-	btn_menu->addClickEventListener([this,gamepause, btn_speed,btn_menu](Ref* ref) 
+	btn_menu->addClickEventListener([this, btn_speed, btn_menu](Ref* ref) 
 	{
 		Director* director = Director::getInstance();
 		gamepause->setVisible(true);
@@ -837,9 +840,4 @@ void GameScene::SetTowerAnim(Tower* tower)
 	pAnimation->setDelayPerUnit(0.1f);
 	tower->runAction(Sequence::create(Animate::create(pAnimation), nullptr));
 
-}
-
-void GameScene::SetBlockSize(int size)
-{
-	this->blockSize = size;
 }

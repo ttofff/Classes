@@ -3,6 +3,7 @@
 #include "cocos2d.h"
 #include "Monster.h"
 #include "GameMap.h"
+#include "Gamepause.h"
 #include "GameEnd.h"
 #include "Tower.h"
 #include "ui\CocosGUI.h"
@@ -15,11 +16,12 @@ using namespace cocos2d::ui;
 class GameScene : public Scene
 {
 public:
-	static GameScene* create(int i);
+	static GameScene* create(int i, int size);
 	bool init() override;
 	void update(float dt);			
 	int index;			//地图关卡数
 	int Wave_Number;	//波数
+	Gamepause* gamepause;
 	GameEnd* gameEnd;		//游戏结束界面
 
 	Vector<Monster*> monster; //怪物容器
@@ -30,8 +32,7 @@ public:
 	void create_UpTool(Tower* tower, int time);		//升级工具
 
 	void sc(Tower* t, Vector<Tower*> towers);
-private:
-	
+	int blockSize; // 像素方块大小
 	int money;					//钱
 	GameMap* tiledMap;			//地图
 	
