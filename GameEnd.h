@@ -9,9 +9,13 @@ class GameEnd : public Scene
 public:
 	CREATE_FUNC(GameEnd);
 	bool init() override;
+	void SetLoseInterface();
+	void SetWinInterface();
 	void SetWave(int SWaveNumber);
 	void SetTotalWave();
+	void SetCurrIndex(int index);
 	void SetMapIndex(int index);
+	void SetNextIndex(int index);
 
 	void SetBlockSize(int size);
 private:

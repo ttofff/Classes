@@ -4,7 +4,6 @@
 #include "Monster.h"
 #include "GameMap.h"
 #include "Gamepause.h"
-#include "GameWin.h"
 #include "GameEnd.h"
 #include "Tower.h"
 #include "ui\CocosGUI.h"
@@ -22,11 +21,11 @@ public:
 	void update(float dt);
 	Sprite* menuBG;
 	TextAtlas* curWaveText;
+	TextAtlas* totalWaveText;
+	int monsterNum;
 	int index;			//地图关卡数
 	int Wave_Number;	//波数
-	int monsterNum; // 怪物数量
 	Gamepause* gamepause;
-	GameWin* gameWin;
 	GameEnd* gameEnd;		//游戏结束界面
 
 	Vector<Monster*> monster; //怪物容器

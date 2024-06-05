@@ -20,9 +20,9 @@ GameScene* GameScene::create(int i, int size)
 	ret->money = 300;
 	ret->index = i;
 	ret->hp = 10;
-	ret->Wave_Number = 1;
+	ret->Wave_Number = 14;
 	ret->blockSize = size;
-	ret->monsterNum = (rand() % (15 + ret->index + ret->Wave_Number)) + (5 + ret->index + ret->Wave_Number); // 创建新的怪物数量
+	ret->monsterNum = (rand() % (15 + ret->index + ret->Wave_Number)) + (5 + ret->index + ret->Wave_Number);
 	
 	if (ret && ret->init())
 	{
@@ -43,7 +43,7 @@ void GameScene::update(float dt)
 {
 	static float waittime = 1.0f;
 	waittime = waittime - dt;
-	if (monsterNum > 0) 
+	if (monsterNum > 0)
 	{
 		if (waittime <= 0.f)
 		{
@@ -67,204 +67,229 @@ void GameScene::update(float dt)
 		{
 			CarrotWin();
 		}
-		monsterNum = (rand() % (15 + index + Wave_Number)) + (5 + index + Wave_Number); // 创建新的怪物数量
+		monsterNum = (rand() % (15 + index + Wave_Number)) + (5 + index + Wave_Number);
 
-		//当前波数
-		menuBG->removeChild(curWaveText, 1);
+		menuBG->removeChild(curWaveText, 0);
 		__String* SWaveNumber = __String::createWithFormat("%02d", Wave_Number);
 		curWaveText = TextAtlas::create(SWaveNumber->getCString(), "Themes\\Items\\numyellow-hd.png", 44, 40, ".");
 		curWaveText->setPosition(Vec2(390, 45));
 		menuBG->addChild(curWaveText, 2);
 	}
 
-	for (int i = 0; i < monster.size(); i++)
-	{
-		Monster* pm = monster.at(i);
-		if (!pm->onMonsterUpdate(dt)){					//怪物吃到萝卜
-			Sprite* spBoom = Sprite::create();			//怪物消失动画
-			this->addChild(spBoom, 3);
-			spBoom->setPosition(pm->getPosition());
-			Animation* ani = Animation::create();
-			ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air01.png");
-			ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air02.png");
-			ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air03.png");
-			ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air04.png");
-			ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air05.png");
-			ani->setLoops(1);
-			ani->setDelayPerUnit(0.1f);
-			spBoom->runAction(Sequence::create(Animate::create(ani), RemoveSelf::create(), nullptr));
-			this->removeChild(pm);
-			monster.erase(monster.begin() + i);
-			hp--;
-			//判断是否死亡
-			if (hp >= 1)
-			{
-				__String* carrotlj = __String::createWithFormat("Themes\\Items\\Items01-hd\\hlb%d.png", hp);
+		for (int i = 0; i < monster.size(); i++)
+		{
+			Monster* pm = monster.at(i);
+			if (!pm->onMonsterUpdate(dt)){					//怪物吃到萝卜
+				Sprite* spBoom = Sprite::create();			//怪物消失动画
+				this->addChild(spBoom, 3);
+				spBoom->setPosition(pm->getPosition());
+				Animation* ani = Animation::create();
+				ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air01.png");
+				ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air02.png");
+				ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air03.png");
+				ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air04.png");
+				ani->addSpriteFrameWithFile("Themes\\Items\\Items02-hd\\air05.png");
+				ani->setLoops(1);
+				ani->setDelayPerUnit(0.1f);
+				spBoom->runAction(Sequence::create(Animate::create(ani), RemoveSelf::create(), nullptr));
+				this->removeChild(pm);
+				monster.erase(monster.begin() + i);
+				hp--;
+				//判断是否死亡
+				if (hp >= 1)
+				{
+					__String* carrotlj = __String::createWithFormat("Themes\\Items\\Items01-hd\\hlb%d.png", hp);
 
-				ca->setTexture(carrotlj->getCString());
+					ca->setTexture(carrotlj->getCString());
 
-			}
-			else if (hp <= 0)
-			{
-				CarrotDead();
+				}
+				else if (hp <= 0)
+				{
+					CarrotDead();
+				}
 			}
 		}
-	}
 
-	float SlowSpeed = 150.f;
-	//int Damage = 20;
-	// 遍历所有的塔：没有塔的时候，就不会发射子弹
-	for (Tower* tower : towers)
-	{
-		// 判断射击的时间是否满足条件
-		if (tower->onTowerUpdate(dt))
+		float SlowSpeed = 150.f;
+		//int Damage = 20;
+		// 遍历所有的塔：没有塔的时候，就不会发射子弹
+		for (Tower* tower : towers)
 		{
+			// 判断射击的时间是否满足条件
+			if (tower->onTowerUpdate(dt))
+			{
+				if (!isselect)
+					for (Monster* monster : monster)
+					{
+					
+						// 如果在范围之内，产生子弹
+						if (tower->shoot(monster))
+						{
+							SetTowerAnim(tower);
+							// 创建子弹
+							Bullet* bullet = Bullet::create(tower->type,tower->Uptime);
+							// 设置子弹位置与 当前 塔坐标相同
+							bullet->setPosition(Vec2(tower->getPositionX(), tower->getPositionY()+10));
+							// 初始化子弹
+							bullet->onBulletInit(monster);
+							// 将子弹添加到层上
+							this->addChild(bullet);
+							// 将子弹添加到子弹链表中
+							bullets.pushBack(bullet);
+						
+							break;    // 很重要
+						}
+					}
+				else 
+					for (Monster* monster : monster)
+					{
+						if (monster == monsterselect)
+						// 如果在范围之内，产生子弹
+						if (tower->shoot(monster))
+						{
+							SetTowerAnim(tower);
+							// 创建子弹
+							Bullet* bullet = Bullet::create(tower->type, tower->Uptime);
+							// 设置子弹位置与 当前 塔坐标相同
+							bullet->setPosition(Vec2(tower->getPositionX(), tower->getPositionY() + 10));
+							// 初始化子弹
+							bullet->onBulletInit(monster);
+							// 将子弹添加到层上
+							this->addChild(bullet);
+							// 将子弹添加到子弹链表中
+							bullets.pushBack(bullet);
+
+							break;    // 很重要
+						}
+					}
+			}
+		}
+		for (int i = 0; i < bullets.size(); i++)
+		{
+			Bullet* bullet = bullets.at(i);
+			Monster* Targetmonster = bullet->target;
+			bool IsHave = false;
+			
+			switch (bullet->type)
+			{
+			case BOTTLE:
+				SlowSpeed = 150.f;
+				//Damage = 20;
+				break;
+			case SHIT:
+				SlowSpeed = 50.f;
+				//Damage = 10;
+				break;
+			}
+			
+			for (auto monster : monster)
+			{
+				if (monster == bullet->target)
+				{
+					IsHave = true;
+					break;
+				}
+			}
+			if (!IsHave)
+			{
+				bullets.eraseObject(bullet); // 内存：从容器移除
+				bullet->removeFromParent();        // 图层：从场景移除
+				continue;
+			}
+			bool isCrash = Targetmonster->getBoundingBox().containsPoint(bullet->getPosition());
+			if (isCrash)
+			{
+				// 怪物随机掉血
+				Targetmonster->hp -= bullet->damage;
+				Targetmonster->SetSpeed(SlowSpeed);
+				// 检测怪物是否被消灭
+				if (Targetmonster->hp <= 0)
+				{
+					Targetmonster->hp = 0;
+					// 创建新精灵来播放怪物死亡帧动画
+					if (monsterselect == Targetmonster)
+						isselect = false;
+					Sprite* spBoom = Sprite::create("Map\\MonsterDead\\Dead_01.png");
+					this->addChild(spBoom);
+					// 设置位置（怪物的位置）
+					spBoom->setPosition(Vec2(Targetmonster->getPositionX(), Targetmonster->getPositionY()+30.f));
+					Animation* monsterdead = Animation::create();
+					for (int i = 1; i < 15; ++i) {
+						__String* str = __String::createWithFormat("Map\\MonsterDead\\Dead_%02d.png", i);
+						monsterdead->addSpriteFrameWithFile(str->getCString());
+					}
+					monsterdead->setDelayPerUnit(0.1f);
+					monsterdead->setLoops(1);
+					Animate* animate = Animate::create(monsterdead);
+					// 移除动作
+					RemoveSelf* removeSelf = RemoveSelf::create();
+					// 序列动作
+					Sequence* seq = Sequence::create(animate, removeSelf, nullptr);
+					spBoom->runAction(seq);
+					// 移除怪物
+					monster.eraseObject(Targetmonster);
+					this->removeChild(Targetmonster);
+					// 怪物死亡数量+1(后续可以添加)
+
+					// 打怪随机获得金币
+					money += rand() % 21 + 10;// 80 - 180
+					// 修改金币文本
+					char text[10];
+					sprintf(text, "%d", money);
+					moneyT->setString(text);
+				}
+
+
+				// 将子弹容器中和场景中移除
+				bullets.eraseObject(bullet);
+				bullet->removeFromParent();
+			}
+		}
+
+		for (int i = 0; i < bullets.size(); i++)
+		{
+			Bullet* bullet = bullets.at(i);
+			bool isDie = true;    // 当前子弹 的 攻击目标 的 存活状态
+			// 遍历怪物链表，如果没有找到该子弹的攻击目标，表示怪物已经死亡
 			for (Monster* monster : monster)
 			{
-				// 如果在范围之内，产生子弹
-				if (tower->shoot(monster))
+				if (monster == bullet->target)
 				{
-					SetTowerAnim(tower);
-					// 创建子弹
-					Bullet* bullet = Bullet::create(tower->type,tower->Uptime);
-					// 设置子弹位置与 当前 塔坐标相同
-					bullet->setPosition(Vec2(tower->getPositionX(), tower->getPositionY()+10));
-					// 初始化子弹
-					bullet->onBulletInit(monster);
-					// 将子弹添加到层上
-					this->addChild(bullet);
-					// 将子弹添加到子弹链表中
-					bullets.pushBack(bullet);
-						
-					break;    // 很重要
+					isDie = false;
+					break;
 				}
 			}
-				
-		}
-	}
-	for (int i = 0; i < bullets.size(); i++)
-	{
-		Bullet* bullet = bullets.at(i);
-		Monster* Targetmonster = bullet->target;
-		bool IsHave = false;
-			
-		switch (bullet->type)
-		{
-		case BOTTLE:
-			SlowSpeed = 150.f;
-			//Damage = 20;
-			break;
-		case SHIT:
-			SlowSpeed = 50.f;
-			//Damage = 10;
-			break;
-		}
-			
-		for (auto monster : monster)
-		{
-			if (monster == bullet->target)
+			// 如果攻击目标死亡,则将子弹从容器中和层上移除
+			if (isDie)
 			{
-				IsHave = true;
-				break;
+				bullets.eraseObject(bullet); // 内存：从容器移除
+				bullet->removeFromParent();        // 图层：从场景移除
+				continue;
 			}
+			bullet->onBulletUpdate(dt);// 控制子弹移动
 		}
-		if (!IsHave)
-		{
-			bullets.eraseObject(bullet); // 内存：从容器移除
-			bullet->removeFromParent();        // 图层：从场景移除
-			continue;
-		}
-		bool isCrash = Targetmonster->getBoundingBox().containsPoint(bullet->getPosition());
-		if (isCrash)
-		{
-			// 怪物随机掉血
-			Targetmonster->hp -= bullet->damage;
-			Targetmonster->SetSpeed(SlowSpeed);
-			// 检测怪物是否被消灭
-			if (Targetmonster->hp <= 0)
-			{
-				Targetmonster->hp = 0;
-				// 创建新精灵来播放怪物死亡帧动画
-				Sprite* spBoom = Sprite::create("Map\\MonsterDead\\Dead_01.png");
-				this->addChild(spBoom);
-				// 设置位置（怪物的位置）
-				spBoom->setPosition(Vec2(Targetmonster->getPositionX(), Targetmonster->getPositionY()+30.f));
-				Animation* monsterdead = Animation::create();
-				for (int i = 1; i < 15; ++i) {
-					__String* str = __String::createWithFormat("Map\\MonsterDead\\Dead_%02d.png", i);
-					monsterdead->addSpriteFrameWithFile(str->getCString());
-				}
-				monsterdead->setDelayPerUnit(0.1f);
-				monsterdead->setLoops(1);
-				Animate* animate = Animate::create(monsterdead);
-				// 移除动作
-				RemoveSelf* removeSelf = RemoveSelf::create();
-				// 序列动作
-				Sequence* seq = Sequence::create(animate, removeSelf, nullptr);
-				spBoom->runAction(seq);
-				// 移除怪物
-				monster.eraseObject(Targetmonster);
-				this->removeChild(Targetmonster);
-				// 怪物死亡数量+1(后续可以添加)
-
-				// 打怪随机获得金币
-				money += rand() % 21 + 10;// 80 - 180
-				// 修改金币文本
-				char text[10];
-				sprintf(text, "%d", money);
-				moneyT->setString(text);
-			}
-
-
-			// 将子弹容器中和场景中移除
-			bullets.eraseObject(bullet);
-			bullet->removeFromParent();
-		}
-	}
-
-	for (int i = 0; i < bullets.size(); i++)
-	{
-		Bullet* bullet = bullets.at(i);
-		bool isDie = true;    // 当前子弹 的 攻击目标 的 存活状态
-		// 遍历怪物链表，如果没有找到该子弹的攻击目标，表示怪物已经死亡
-		for (Monster* monster : monster)
-		{
-			if (monster == bullet->target)
-			{
-				isDie = false;
-				break;
-			}
-		}
-		// 如果攻击目标死亡,则将子弹从容器中和层上移除
-		if (isDie)
-		{
-			bullets.eraseObject(bullet); // 内存：从容器移除
-			bullet->removeFromParent();        // 图层：从场景移除
-			continue;
-		}
-		bullet->onBulletUpdate(dt);// 控制子弹移动
-	}
 }
 
 void GameScene::CarrotWin()
 {
 	Director* director = Director::getInstance();
-	gameWin->SetWave(Wave_Number);
-	gameWin->SetTotalWave();
-	gameWin->SetMapIndex(index);
-	gameWin->setVisible(true);
+	gameEnd->SetWinInterface();
+	gameEnd->SetWave(Wave_Number);
+	gameEnd->SetNextIndex(index);
+	gameEnd->setVisible(true);
 
 	this->scheduleOnce([director](float dt){
 		director->stopAnimation();
 	}, 0.1f, "delayed_key");
+
 }
 
 //萝卜死亡
 void GameScene::CarrotDead()
 {
 	Director* director = Director::getInstance();
+	gameEnd->SetLoseInterface();
 	gameEnd->SetWave(Wave_Number);
-	gameEnd->SetTotalWave();
 	gameEnd->SetMapIndex(index);
 	gameEnd->setVisible(true);
 
@@ -288,16 +313,12 @@ bool GameScene::init()
 	this->addChild(gamepause, 5);
 	gamepause->setVisible(false);
 
-	//胜利界面
-	gameWin = GameWin::create();
-	gameWin->SetBlockSize(blockSize);
-	this->addChild(gameWin, 4);
-	gameWin->setVisible(false);
-
-	//失败界面
+	//结束界面
 	gameEnd = GameEnd::create();
 	gameEnd->SetBlockSize(blockSize);
-	this->addChild(gameEnd, 4);
+	gameEnd->SetTotalWave();
+	gameEnd->SetCurrIndex(index);
+	this->addChild(gameEnd, 5);
 	gameEnd->setVisible(false);
 
 	// 生成关卡图
@@ -334,7 +355,7 @@ bool GameScene::init()
 	// 金币数量
 	__String* s = __String::createWithFormat("%d", money);
 	moneyT = TextAtlas::create(s->getCString(), "Themes\\Items\\numwhite-hd.png", 20, 40, ".");
-	moneyT->setPosition(Vec2(120, 610));
+	moneyT->setPosition(Vec2(130, 610));
 	this->addChild(moneyT, 2);
 
 	// 显示当前波数和总波数精灵
@@ -349,7 +370,7 @@ bool GameScene::init()
 	menuBG->addChild(curWaveText, 2);
 
 	//总波数
-	TextAtlas*totalWaveText = TextAtlas::create("15", "Themes\\Items\\numwhite-hd.png", 20, 40, ".");
+	totalWaveText = TextAtlas::create("15", "Themes\\Items\\numwhite-hd.png", 20, 40, ".");
 	totalWaveText->setPosition(Vec2(480, 45));
 	menuBG->addChild(totalWaveText, 2);
 
@@ -443,7 +464,7 @@ bool GameScene::init()
 	EventListenerTouchOneByOne* eventListenerTouchOneByOne = EventListenerTouchOneByOne::create();
 	eventListenerTouchOneByOne->onTouchBegan = [this](Touch* touch,Event *event)
 	{
-		
+		isselect = false;
 		//建塔工具是否可见
 		if (select->isVisible())
 		{
@@ -459,10 +480,9 @@ bool GameScene::init()
 		Vec2 touchPoint = touch->getLocation();
 		float x = (int)touchPoint.x / blockSize * blockSize + blockSize / 2;
 		float y = (int)touchPoint.y / blockSize * blockSize + blockSize / 2;
+		float dx = (int)touchPoint.x / 80 * 80 + 80 / 2;
+		float dy = (int)touchPoint.y / 80 * 80 + 80 / 2;
 		//是否有塔
-		
-	
-
 		for (Tower* tower : towers)
 		{
 			if (fabs(tower->getPositionX() - x) < 0.000001 &&
@@ -485,11 +505,42 @@ bool GameScene::init()
 				return true;
 			}
 		}
-
+		for (Monster* m : monster)
+		{
+			bool is;
+			is=m->getBoundingBox().containsPoint(touch->getLocation());
+			if (is)
+			{
+				isselect = true;
+				monsterselect = m;
+				return true;
+			}
+		}
 		return true;
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListenerTouchOneByOne, this);
 
+	
+	
+	// 萝卜图像
+	
+	
+	// 萝卜抖动动画
+	/*
+	Animation* carrotAnimation = Animation::create();
+	carrotAnimation->addSpriteFrameWithFile("hlb11.png");
+	carrotAnimation->addSpriteFrameWithFile("hlb12.png");
+	carrotAnimation->addSpriteFrameWithFile("hlb13.png");
+	carrotAnimation->addSpriteFrameWithFile("hlb14.png");
+	carrotAnimation->addSpriteFrameWithFile("hlb15.png");
+	carrotAnimation->addSpriteFrameWithFile("hlb16.png");
+	carrotAnimation->addSpriteFrameWithFile("hlb17.png");
+	carrotAnimation->addSpriteFrameWithFile("hlb18.png");
+	carrotAnimation->setLoops(CC_REPEAT_FOREVER);
+	carrotAnimation->setDelayPerUnit(0.1f);
+	Animate* pAnimate = Animate::create(carrotAnimation);
+	ca->runAction(pAnimate);
+	*/
 	return true;
 }
 
@@ -770,7 +821,6 @@ void GameScene::createBuildTool()
 	// 创建选择工具,暂时隐藏
 	select = Sprite::create("Themes\\Items\\Items02-hd\\select_01.png");
 	select->setVisible(false);
-
 	this->addChild(select);
 	select->setLocalZOrder(2);// 设置zOrder,图层优先级
 
