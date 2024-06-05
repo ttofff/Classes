@@ -12,7 +12,8 @@ class Monster;
 enum TowerType
 {
 	BOTTLE,
-	SHIT
+	SHIT,
+	FAN
 };
 
 // 塔类

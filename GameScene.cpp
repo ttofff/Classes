@@ -21,6 +21,8 @@ GameScene* GameScene::create(int i, int size)
 	ret->index = i;
 	ret->hp = 10;
 	ret->Wave_Number = 14;
+	ret->TowerAllSelect = { { 1, 2 }, { 1, 2, 3 }, { 1, 2, 4 }, { 2, 5 }, { 2, 4 }, { 2, 3 }, { 1, 5 } };
+	ret->TowerSelect = ret->TowerAllSelect[ret->index - 1];
 	ret->blockSize = size;
 	ret->monsterNum = (rand() % (15 + ret->index + ret->Wave_Number)) + (5 + ret->index + ret->Wave_Number);
 	
@@ -129,14 +131,14 @@ void GameScene::update(float dt)
 							// 创建子弹
 							Bullet* bullet = Bullet::create(tower->type,tower->Uptime);
 							// 设置子弹位置与 当前 塔坐标相同
-							bullet->setPosition(Vec2(tower->getPositionX(), tower->getPositionY()+10));
+							bullet->setPosition(tower->getPosition());
 							// 初始化子弹
 							bullet->onBulletInit(monster);
 							// 将子弹添加到层上
 							this->addChild(bullet);
 							// 将子弹添加到子弹链表中
 							bullets.pushBack(bullet);
-						
+							this->schedule(schedule_selector(GameScene::RemoveFanbullet), 1.0f);
 							break;    // 很重要
 						}
 					}
@@ -158,12 +160,13 @@ void GameScene::update(float dt)
 							this->addChild(bullet);
 							// 将子弹添加到子弹链表中
 							bullets.pushBack(bullet);
-
+							this->schedule(schedule_selector(GameScene::RemoveFanbullet), 1.0f);
 							break;    // 很重要
 						}
 					}
 			}
 		}
+		
 		for (int i = 0; i < bullets.size(); i++)
 		{
 			Bullet* bullet = bullets.at(i);
@@ -192,16 +195,35 @@ void GameScene::update(float dt)
 			}
 			if (!IsHave)
 			{
-				bullets.eraseObject(bullet); // 内存：从容器移除
-				bullet->removeFromParent();        // 图层：从场景移除
+				switch (bullet->type)
+				{
+				case FAN:
+					break;
+				default:bullets.eraseObject(bullet);
+					bullet->removeFromParent();
+					break;
+				}    
 				continue;
 			}
+
 			bool isCrash = Targetmonster->getBoundingBox().containsPoint(bullet->getPosition());
 			if (isCrash)
 			{
-				// 怪物随机掉血
+				// 怪物掉血
+				if (bullet->damage)
+				{
+					SetHitAnim(Vec2(Targetmonster->getPositionX(), Targetmonster->getPositionY() + 20), bullet);
+				}
 				Targetmonster->hp -= bullet->damage;
 				Targetmonster->SetSpeed(SlowSpeed);
+				switch (bullet->type)
+				{
+				case FAN: bullet->damage = 0;
+					this->scheduleOnce([bullet](float dt){
+						bullet->damage = 15 * (bullet->bulletlevel + 1);
+					}, 0.05f, "delayed_key");
+					break;
+				}
 				// 检测怪物是否被消灭
 				if (Targetmonster->hp <= 0)
 				{
@@ -241,8 +263,15 @@ void GameScene::update(float dt)
 
 
 				// 将子弹容器中和场景中移除
-				bullets.eraseObject(bullet);
-				bullet->removeFromParent();
+				switch (bullet->type)
+				{
+				case FAN: 
+					break;
+				default:bullets.eraseObject(bullet);
+					bullet->removeFromParent();
+					break;
+				}
+				
 			}
 		}
 
@@ -262,9 +291,14 @@ void GameScene::update(float dt)
 			// 如果攻击目标死亡,则将子弹从容器中和层上移除
 			if (isDie)
 			{
-				bullets.eraseObject(bullet); // 内存：从容器移除
-				bullet->removeFromParent();        // 图层：从场景移除
-				continue;
+				switch (bullet->type)
+				{
+				case FAN: 
+					break;
+				default:bullets.eraseObject(bullet);
+					bullet->removeFromParent();
+					continue;
+				}
 			}
 			bullet->onBulletUpdate(dt);// 控制子弹移动
 		}
@@ -825,70 +859,132 @@ void GameScene::createBuildTool()
 	select->setLocalZOrder(2);// 设置zOrder,图层优先级
 
 	// 创建塔图标：如果在Tomer中，添加了新的塔的类型，在这里添加
+	// 创建塔图标：如果在Tomer中，添加了新的塔的类型，在这里添加
 	Button* bottle;
-	if (money>=100)
-		bottle = Button::create("Themes\\Towers\\TBottle-hd\\Bottle01.png");
-	else  bottle = Button::create("Themes\\Towers\\TBottle-hd\\Bottle00.png");
-	bottle->setPosition(Vec2(-10, 110));
-	select->addChild(bottle);
-
 	Button* shit;
-	if (money>=120)
-		shit = Button::create("Themes\\Towers\\TShit-hd\\Shit01.png");
-	else  shit = Button::create("Themes\\Towers\\TShit-hd\\Shit00.png");
-	shit->setPosition(Vec2(82, 110));
-	select->addChild(shit);
-
-	// 点击不同的塔图标，创建不同的塔
-	bottle->addClickEventListener([this](Ref*)
+	Button* fan;
+	Button* star;
+	Button* ball;
+	for (int i = 0; i < TowerSelect.size(); ++i)
 	{
-		// 如果金币不够，则不能建塔
-		if (money < 100)
+		
+		switch (TowerSelect[i])
 		{
-			select->setVisible(false);
-			return;
-		}
-		// 创建Bottle塔,并隐藏选择工具
-		Tower* bottle = Tower::create(BOTTLE);
-		bottle->setPosition(select->getPosition());
-		this->addChild(bottle);
-		select->setVisible(false);
-		// 调用init方法
-		bottle->onTowerInit();
-		// 将塔添加到链表中
-		towers.pushBack(bottle);
-		// 建塔消耗金币
-		money -= 100;
-		// 修改金币文本
-		char text[10];
-		sprintf(text, "%d", money);
-		moneyT->setString(text);
-	});
+		case 1:
+			if (money >= 100)
+				bottle = Button::create("Themes\\Towers\\TBottle-hd\\Bottle01.png");
+			else  bottle = Button::create("Themes\\Towers\\TBottle-hd\\Bottle00.png");
+			bottle->setPosition(Vec2(92 * i, 110));
+			select->addChild(bottle);
+			// 点击不同的塔图标，创建不同的塔
+			bottle->addClickEventListener([this](Ref*)
+			{
+				// 如果金币不够，则不能建塔
+				if (money < 100)
+				{
+					select->setVisible(false);
+					return;
+				}
+				// 创建Bottle塔,并隐藏选择工具
+				Tower* bottle = Tower::create(BOTTLE);
+				bottle->setPosition(select->getPosition());
+				this->addChild(bottle);
+				select->setVisible(false);
+				// 调用init方法
+				bottle->onTowerInit();
+				// 将塔添加到链表中
+				towers.pushBack(bottle);
+				// 建塔消耗金币
+				money -= 100;
+				// 修改金币文本
+				char text[10];
+				sprintf(text, "%d", money);
+				moneyT->setString(text);
+			});
+			break;
+		case 2:
+			if (money >= 120)
+				shit = Button::create("Themes\\Towers\\TShit-hd\\Shit01.png");
+			else  shit = Button::create("Themes\\Towers\\TShit-hd\\Shit00.png");
+			shit->setPosition(Vec2(92 * i, 110));
+			select->addChild(shit);
+			shit->addClickEventListener([this](Ref*)
+			{
+				// 如果金币不够，则不能建塔
+				if (money < 120)
+				{
+					select->setVisible(false);
+					return;
+				}
+				// 创建Bottle塔,并隐藏选择工具
+				Tower* shit = Tower::create(SHIT);
+				shit->setPosition(select->getPosition());
+				this->addChild(shit);
+				select->setVisible(false);
+				// 调用init方法
+				shit->onTowerInit();
+				//// 将塔添加到链表中
+				towers.pushBack(shit);
+				// 建塔消耗金币
+				money -= 120;
+				// 修改金币文本
+				char text[10];
+				sprintf(text, "%d", money);
+				moneyT->setString(text);
+			});
+			break;
+		case 3:
+			if (money >= 160)
+				fan = Button::create("Themes\\Towers\\TFan-hd\\Fan01.png");
+			else  fan = Button::create("Themes\\Towers\\TFan-hd\\Fan00.png");
+			fan->setPosition(Vec2(92 * i, 110));
+			select->addChild(fan);
+			fan->addClickEventListener([this](Ref*)
+			{
+				// 如果金币不够，则不能建塔
+				if (money < 160)
+				{
+					select->setVisible(false);
+					return;
+				}
+				// 创建Bottle塔,并隐藏选择工具
+				Tower* fan = Tower::create(FAN);
+				fan->setPosition(select->getPosition());
+				this->addChild(fan);
+				select->setVisible(false);
+				// 调用init方法
+				fan->onTowerInit();
+				//// 将塔添加到链表中
+				towers.pushBack(fan);
+				// 建塔消耗金币
+				money -= 120;
+				// 修改金币文本
+				char text[10];
+				sprintf(text, "%d", money);
+				moneyT->setString(text);
+			});
+			break;
+		case 4:
+			log("%d", TowerSelect[i]);
+			if (money >= 160)
+				star = Button::create("Themes\\Towers\\TStar-hd\\Star01.png");
+			else  star = Button::create("Themes\\Towers\\TStar-hd\\Star00.png");
+			star->setPosition(Vec2(92 * i, 110));
+			select->addChild(star);
+			break;
+		case 5:
+			log("%d", TowerSelect[i]);
+			if (money >= 160)
+				ball = Button::create("Themes\\Towers\\TBall-hd\\Ball01.png");
+			else  ball = Button::create("Themes\\Towers\\TBall-hd\\Ball00.png");
+			ball->setPosition(Vec2(92 * i, 110));
+			select->addChild(ball);
+			break;
 
-	shit->addClickEventListener([this](Ref*)
-	{
-		// 如果金币不够，则不能建塔
-		if (money < 120)
-		{
-			select->setVisible(false);
-			return;
 		}
-		// 创建Bottle塔,并隐藏选择工具
-		Tower* shit = Tower::create(SHIT);
-		shit->setPosition(select->getPosition());
-		this->addChild(shit);
-		select->setVisible(false);
-		// 调用init方法
-		shit->onTowerInit();
-		//// 将塔添加到链表中
-		towers.pushBack(shit);
-		// 建塔消耗金币
-		money -= 120;
-		// 修改金币文本
-		char text[10];
-		sprintf(text, "%d", money);
-		moneyT->setString(text);
-	});
+	}
+	
+	
 }
 void GameScene::SetTowerAnim(Tower* tower)
 {
@@ -908,6 +1004,8 @@ void GameScene::SetTowerAnim(Tower* tower)
 	case SHIT:
 		TowerAnim = __String::createWithFormat("Themes\\Towers\\TShit-hd\\Shit");
 		break;
+	case FAN:
+		TowerAnim = __String::createWithFormat("Themes\\Towers\\TFan-hd\\Fan");
 	}
 	
 	for (int i = 0; i < 4; ++i) {
@@ -918,4 +1016,40 @@ void GameScene::SetTowerAnim(Tower* tower)
 	pAnimation->setDelayPerUnit(0.1f);
 	tower->runAction(Sequence::create(Animate::create(pAnimation), nullptr));
 
+}
+void GameScene::SetHitAnim(Vec2 Position, Bullet* bullet)
+{
+	//射击动画
+	Sprite* hitsp = Sprite::create();
+	this->addChild(hitsp);
+	hitsp->setPosition(Position);
+	Animation* pAnimation = Animation::create();
+	__String* HitAnim;
+	switch (bullet->type)
+	{
+	case BOTTLE:
+		HitAnim = __String::createWithFormat("Themes\\Towers\\TBottle-hd\\PBottle0");
+		break;
+	case SHIT:
+		HitAnim = __String::createWithFormat("Themes\\Towers\\TShit-hd\\PShit0");
+		break;
+	case FAN:
+		HitAnim = __String::createWithFormat("Themes\\Towers\\TFan-hd\\PFan0");
+	}
+
+	for (int i = 1; i <3 ; ++i) {
+		__String* str = __String::createWithFormat("%s%d.png", HitAnim->getCString(), i);
+		pAnimation->addSpriteFrameWithFile(str->getCString());
+	}
+	pAnimation->setLoops(1);
+	pAnimation->setDelayPerUnit(0.1f);
+	hitsp->runAction(Sequence::create(Animate::create(pAnimation), RemoveSelf::create(), nullptr));
+}
+void GameScene::RemoveFanbullet(float dt)
+{
+	for (auto bullet : bullets)
+	{
+		/*bullet->removeFromParent();
+		bullets.eraseObject(bullet);*/
+	}
 }

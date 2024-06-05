@@ -58,6 +58,7 @@ bool Tower::init()
 			strcpy(filename, "Themes\\Towers\\TBottle-hd\\Bottle21.png");
 		else strcpy(filename, "Themes\\Towers\\TBottle-hd\\Bottle31.png");
 		IsRotator = true;
+		range = 150;
 		break;
 	case SHIT:
 		if (Uptime == 0)
@@ -66,7 +67,18 @@ bool Tower::init()
 			strcpy(filename, "Themes\\Towers\\TShit-hd\\Shit21.png");
 		else strcpy(filename, "Themes\\Towers\\TShit-hd\\Shit31.png");		
 		IsRotator = false;
+		range = 150;
 		break;
+	case FAN:
+		if (Uptime == 0)
+			strcpy(filename, "Themes\\Towers\\TFan-hd\\Fan11.png");
+		else if (Uptime == 1)
+			strcpy(filename, "Themes\\Towers\\TFan-hd\\Fan12.png");
+		else strcpy(filename, "Themes\\Towers\\TFan-hd\\Fan13.png");
+		IsRotator = false;
+		range = 200;
+		break;
+
 	}
 	// 初始化
 	if (!Sprite::initWithFile(filename))
@@ -79,12 +91,8 @@ bool Tower::init()
 
 void Tower::onTowerInit()// 塔初始化
 {
-	if (Uptime == 0)
-		range = 150;
-	else if (Uptime == 1)
-		range = 200;
-	else range = 250;
-		shootDeltaTime = 0;
+	range = range * (Uptime + 1);
+	shootDeltaTime = 0;
 }
 
 bool Tower::onTowerUpdate(float dt)// 塔更新

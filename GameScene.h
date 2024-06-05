@@ -48,10 +48,14 @@ public:
 	void CarrotWin();
 	void CarrotDead();		//ÂÜ²·ËÀÍöº¯Êý
 	void SetTowerAnim(Tower* tower);
+	void SetHitAnim(Vec2 Position,Bullet* bullet);
 
+	std::vector<std::vector<int>> TowerAllSelect;
+	std::vector<int> TowerSelect;
 
 	Monster* monsterselect; 
 	bool isselect;
+	void RemoveFanbullet(float dt);
 };
 
 #endif

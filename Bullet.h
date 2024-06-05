@@ -22,6 +22,8 @@ public:
 	int bulletlevel;
 private:
 	cocos2d::Vec2 dir;							// 子弹移动方向
+	Vec2 Lasttarget;
+	Vec2 LastBulletPosition;
 };
 
 #endif
