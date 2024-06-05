@@ -21,6 +21,7 @@ class Tower : public cocos2d::Sprite
 public:
 	Tower(TowerType type);
 	static Tower* create(TowerType type); // 通过类型创建不同的塔
+	static Tower* create(TowerType type,int i); // 通过类型创建不同的塔
 	bool init() override;
 	void onTowerInit();// 塔初始化
 	bool onTowerUpdate(float dt);// 塔更新
@@ -28,10 +29,12 @@ public:
 	void updateDirection(Monster* monster);
 	TowerType type;
 	__String* TowerAnim;
+	int Uptime;			//升级次数
 private:
 	float shootDeltaTime;// 射击的间隔时间
 	float range;// 攻击范围
-	bool IsRotator;
+	bool IsRotator;			//本体是否转动
+	
 };
 
 #endif

@@ -13,9 +13,47 @@ Bullet::Bullet(TowerType type)
 Bullet* Bullet::create(TowerType type)
 {
 	Bullet* ret = new Bullet(type);
+	if (type == TowerType::BOTTLE)
+	{
+		ret->damage = 20;
+		ret->bulletlevel = 0;
+	}
+	if (type == TowerType::SHIT)
+	{
+		ret->damage = 10;
+		ret->bulletlevel = 0;
+	}
 	if (ret && ret->init())
 	{
 		ret->autorelease();
+		
+	}
+	else
+	{
+		delete ret;
+		ret = nullptr;
+	}
+	return ret;
+}
+Bullet* Bullet::create(TowerType type, int time)
+{
+	Bullet* ret = new Bullet(type);
+	if (type == TowerType::BOTTLE)
+	{
+		ret->damage = 20*(time+1);
+		ret->bulletlevel = time;
+	}
+	if (type == TowerType::SHIT)
+	{
+		ret->damage = 10*(time+1);
+		ret->bulletlevel = time;
+	}
+	
+
+	if (ret && ret->init())
+	{
+		ret->autorelease();
+
 	}
 	else
 	{
@@ -25,20 +63,21 @@ Bullet* Bullet::create(TowerType type)
 	return ret;
 }
 
+
 bool Bullet::init()
 {
-	char filename[50];
+	__String* filename;
 	// 根据不同塔类型初始化不同子弹图片
 	switch (type) {
 	case BOTTLE:
-		strcpy(filename, "Themes\\Towers\\TBottle-hd\\PBottle11.png");
+		filename=__String::createWithFormat("Themes\\Towers\\TBottle-hd\\PBottle%d1.png",bulletlevel+1);
 		break;
 	case SHIT:
-		strcpy(filename, "Themes\\Towers\\TShit-hd\\PShit11.png");
+		filename = __String::createWithFormat("Themes\\Towers\\TShit-hd\\PShit%d1.png", bulletlevel+1);
 		break;
 	}
-
-	if (!Sprite::initWithFile(filename))
+	
+	if (!Sprite::initWithFile(filename->getCString()))
 	{
 		return false;
 	}
