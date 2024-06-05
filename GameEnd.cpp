@@ -71,8 +71,13 @@ void GameEnd::SetMapIndex(int index)
 		Director* director = Director::getInstance();
 		this->setVisible(false);
 		Director::getInstance()->startAnimation();
-		GameScene* gameScene = GameScene::create(index);
+		GameScene* gameScene = GameScene::create(index, blockSize);
 		director->replaceScene(gameScene);
 	});
 
+}
+
+void GameEnd::SetBlockSize(int size)
+{
+	this->blockSize = size;
 }

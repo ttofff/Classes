@@ -8,7 +8,7 @@ class LogoScene : public Scene
 {
 public:
     static LogoScene* create();
-    bool init() override;
+	bool init() override;
 };
 
 #endif

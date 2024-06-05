@@ -65,8 +65,13 @@ void Gamepause::RestartMap(int index)
 		Director* director = Director::getInstance();
 		this->setVisible(false);
 		Director::getInstance()->startAnimation();
-		GameScene* gameScene = GameScene::create(index);
+		GameScene* gameScene = GameScene::create(index, blockSize);
 		director->replaceScene(gameScene);
 	});
 
+}
+
+void Gamepause::SetBlockSize(int size)
+{
+	this->blockSize = size;
 }

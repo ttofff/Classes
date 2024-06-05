@@ -11,7 +11,10 @@ public:
 	bool init() override;
 	void SetWave(int SWaveNumber);
 	void SetMapIndex(int index);
+
+	void SetBlockSize(int size);
 private:
+	int blockSize; // ÏñËØ·½¿é´óĞ¡
 
 };
 

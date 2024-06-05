@@ -60,10 +60,9 @@ bool Boss::init()
 	this->addChild(ss_map01,2);
 	ss_map01->addClickEventListener([&](Ref* ref){
 		Director* director = Director::getInstance();
-		//LoadingScene* loadingScene = LoadingScene::create(smallcheck);
-		//director->replaceScene(loadingScene);
-		GameScene* game = GameScene::create(smallcheck);
-		director->replaceScene(game);
+		LoadingScene* loadingScene = LoadingScene::create(smallcheck);
+		loadingScene->SetBlockSize(blockSize);
+		director->replaceScene(loadingScene);
 	});
 	//ÑªÌõ
 	Sprite* Blood_bg = Sprite::create("Themes\\scene\\antiboss1-hd\\blood_bg.png");
@@ -157,14 +156,15 @@ bool Boss::init()
 	this->addChild(ss_begin_normal, 3);
 	ss_begin_normal->addClickEventListener([&](Ref* ref){
 		Director* director = Director::getInstance();
-		GameScene* game = GameScene::create(smallcheck);
-		//LoadingScene* loadingScene = LoadingScene::create(smallcheck);
-		//director->replaceScene(loadingScene);
-		director->replaceScene(game);
+		LoadingScene* loadingScene = LoadingScene::create(smallcheck);
+		loadingScene->SetBlockSize(blockSize);
+		director->replaceScene(loadingScene);
 	});
 	
-	
-
-
 	return true;
+}
+
+void Boss::SetBlockSize(int size)
+{
+	this->blockSize = size;
 }

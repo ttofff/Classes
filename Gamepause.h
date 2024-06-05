@@ -9,9 +9,12 @@ public:
 	virtual bool init();
 	CREATE_FUNC(Gamepause);
 	void RestartMap(int index);
-	
+
+	void SetBlockSize(int size);
+
 public:
 	int index;
+	int blockSize; // ÏñËØ·½¿é´óĞ¡
 
 };
 

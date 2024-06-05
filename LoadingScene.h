@@ -15,6 +15,10 @@ public:
 	void onScheduleCallBack(float dt);
 
 	ProgressTimer* loadingBar;
+
+	int blockSize; // ÏñËØ·½¿é´óÐ¡
+
+	void SetBlockSize(int size);
 };
 
 #endif

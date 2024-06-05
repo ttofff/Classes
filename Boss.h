@@ -14,7 +14,10 @@ public:
 	bool init() override;		
 	static int smallcheck;		//关卡数
 	const int MAX = 7;			//最大关卡数
-private:
+
+	int blockSize; // 像素方块大小
+
+	void SetBlockSize(int size);
 	
 };
 

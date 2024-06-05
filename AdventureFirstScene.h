@@ -12,7 +12,6 @@ public:
 	static int smallcheck;
 	static int bigcheck;
 	const int MAX = 7;
-private:
 
 	int blockSize;
 	
