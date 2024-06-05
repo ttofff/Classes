@@ -13,6 +13,24 @@ Tower::Tower(TowerType type)
 Tower* Tower::create(TowerType type)// 通过类型创建不同的塔
 {
 	Tower* ret = new Tower(type);
+	ret->Uptime = 0;
+	if (ret && ret->init())
+	{
+		ret->autorelease();
+	}
+	else
+	{
+		delete ret;
+		ret = nullptr;
+	}
+
+	return ret;
+}
+
+Tower* Tower::create(TowerType type,int i)// 通过类型创建不同的塔
+{
+	Tower* ret = new Tower(type);
+	ret->Uptime = i;
 	if (ret && ret->init())
 	{
 		ret->autorelease();
@@ -32,11 +50,19 @@ bool Tower::init()
 	// 根据不同塔类型初始化不同图片
 	switch (type) {
 	case BOTTLE:
-		strcpy(filename, "Themes\\Towers\\TBottle-hd\\Bottle11.png");
+		if (Uptime==0)
+			strcpy(filename, "Themes\\Towers\\TBottle-hd\\Bottle11.png");
+		else if (Uptime==1)
+			strcpy(filename, "Themes\\Towers\\TBottle-hd\\Bottle21.png");
+		else strcpy(filename, "Themes\\Towers\\TBottle-hd\\Bottle31.png");
 		IsRotator = true;
 		break;
 	case SHIT:
-		strcpy(filename, "Themes\\Towers\\TShit-hd\\Shit11.png");
+		if (Uptime == 0)
+			strcpy(filename, "Themes\\Towers\\TShit-hd\\Shit11.png");
+		else if (Uptime == 1)
+			strcpy(filename, "Themes\\Towers\\TShit-hd\\Shit21.png");
+		else strcpy(filename, "Themes\\Towers\\TShit-hd\\Shit31.png");		
 		IsRotator = false;
 		break;
 	}
@@ -51,8 +77,12 @@ bool Tower::init()
 
 void Tower::onTowerInit()// 塔初始化
 {
-	range = 150;
-	shootDeltaTime = 0;
+	if (Uptime == 0)
+		range = 150;
+	else if (Uptime == 1)
+		range = 200;
+	else range = 250;
+		shootDeltaTime = 0;
 }
 
 bool Tower::onTowerUpdate(float dt)// 塔更新

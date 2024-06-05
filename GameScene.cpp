@@ -85,7 +85,7 @@ void GameScene::update(float dt)
 		}
 
 		float SlowSpeed = 150.f;
-		int Damage = 20;
+		//int Damage = 20;
 		// 遍历所有的塔：没有塔的时候，就不会发射子弹
 		for (Tower* tower : towers)
 		{
@@ -99,7 +99,7 @@ void GameScene::update(float dt)
 					{
 						SetTowerAnim(tower);
 						// 创建子弹
-						Bullet* bullet = Bullet::create(tower->type);
+						Bullet* bullet = Bullet::create(tower->type,tower->Uptime);
 						// 设置子弹位置与 当前 塔坐标相同
 						bullet->setPosition(Vec2(tower->getPositionX(), tower->getPositionY()+10));
 						// 初始化子弹
@@ -120,17 +120,19 @@ void GameScene::update(float dt)
 			Bullet* bullet = bullets.at(i);
 			Monster* Targetmonster = bullet->target;
 			bool IsHave = false;
+			
 			switch (bullet->type)
 			{
 			case BOTTLE:
 				SlowSpeed = 150.f;
-				Damage = 20;
+				//Damage = 20;
 				break;
 			case SHIT:
 				SlowSpeed = 50.f;
-				Damage = 10;
+				//Damage = 10;
 				break;
 			}
+			
 			for (auto monster : monster)
 			{
 				if (monster == bullet->target)
@@ -149,7 +151,7 @@ void GameScene::update(float dt)
 			if (isCrash)
 			{
 				// 怪物随机掉血
-				Targetmonster->hp -= Damage;
+				Targetmonster->hp -= bullet->damage;
 				Targetmonster->SetSpeed(SlowSpeed);
 				// 检测怪物是否被消灭
 				if (Targetmonster->hp <= 0)
@@ -159,7 +161,7 @@ void GameScene::update(float dt)
 					Sprite* spBoom = Sprite::create("Map\\MonsterDead\\Dead_01.png");
 					this->addChild(spBoom);
 					// 设置位置（怪物的位置）
-					spBoom->setPosition(Vec2(Targetmonster->getPositionX(), Targetmonster->getPositionY()+20.f));
+					spBoom->setPosition(Vec2(Targetmonster->getPositionX(), Targetmonster->getPositionY()+30.f));
 					Animation* monsterdead = Animation::create();
 					for (int i = 1; i < 15; ++i) {
 						__String* str = __String::createWithFormat("Map\\MonsterDead\\Dead_%02d.png", i);
@@ -385,6 +387,10 @@ bool GameScene::init()
 	});
 
 	createBuildTool();		//创建建塔工具
+	Upselect = Sprite::create("Themes\\Items\\Items02-hd\\select_00.png");
+	Upselect->setVisible(false);
+	this->addChild(Upselect);
+
 
 	EventListenerTouchOneByOne* eventListenerTouchOneByOne = EventListenerTouchOneByOne::create();
 	eventListenerTouchOneByOne->onTouchBegan = [this](Touch* touch,Event *event)
@@ -393,6 +399,11 @@ bool GameScene::init()
 		if (select->isVisible())
 		{
 			select->setVisible(false);
+			return true;
+		}
+		if (Upselect->isVisible())
+		{
+			Upselect->setVisible(false);
 			return true;
 		}
 		//获取当前点击的路径点
@@ -407,6 +418,9 @@ bool GameScene::init()
 			if (fabs(tower->getPositionX() - x) < 0.000001 &&
 				fabs(tower->getPositionY() - y) < 0.000001)
 			{
+				create_UpTool(tower, tower->Uptime);
+				Upselect->setVisible(true);
+				Upselect->setPosition(Vec2(x, y));
 				return true;
 			}
 		}
@@ -449,7 +463,275 @@ bool GameScene::init()
 	return true;
 }
 
+void GameScene::create_UpTool(Tower* tower, int time)
+{
+	Upselect = Sprite::create("Themes\\Items\\Items02-hd\\select_00.png");
+	Upselect->setVisible(false);
+	this->addChild(Upselect);
+	Upselect->setLocalZOrder(2);// 设置zOrder,图层优先级
+	if (tower->type==TowerType::BOTTLE)
+	{
+		if (time == 0)  //瓶子升级次数为0
+		{
+			Button *bottle;
+			if (money >= 180)
+				bottle = Button::create("Themes\\Items\\Items02-hd\\upgrade_180.png");
+			else bottle = Button::create("Themes\\Items\\Items02-hd\\upgrade_-180.png");
+			bottle->setPosition(Vec2(-10, 110));
+			Upselect->addChild(bottle);
+			bottle->addClickEventListener([this, tower](Ref*)
+			{
 
+				// 如果金币不够，则不能建塔
+				if (money < 180)
+				{
+					Upselect->setVisible(false);
+					return;
+				}
+				// 创建Bottle塔,并隐藏选择工具
+				Tower* bottle = Tower::create(BOTTLE, 1);
+				bottle->setPosition(Upselect->getPosition());
+				this->addChild(bottle);
+				Upselect->setVisible(false);
+				// 调用init方法
+				bottle->onTowerInit();
+				// 将塔添加到链表中
+				towers.pushBack(bottle);
+				tower->removeFromParent();        // 图层：从场景移除
+				towers.eraseObject(tower);
+				// 建塔消耗金币
+				money -= 180;
+				// 修改金币文本
+				char text[10];
+				sprintf(text, "%d", money);
+				moneyT->setString(text);
+			});
+			//删除按钮
+			Button* deletetower = Button::create("Themes\\Items\\Items02-hd\\sell_80.png");
+			deletetower->setPosition(Vec2(82, 110));
+			Upselect->addChild(deletetower);
+			deletetower->addClickEventListener([this, tower](Ref*)
+			{
+				Upselect->setVisible(false);
+				tower->removeFromParent();        // 图层：从场景移除
+				towers.eraseObject(tower);
+				// 建塔消耗金币
+				money += 80;
+				// 修改金币文本
+				char text[10];
+				sprintf(text, "%d", money);
+				moneyT->setString(text);
+			});
+		}
+		else   if(time==1)//升级次数为1
+		{
+			Button *bottle;
+			if (money >= 320)
+				bottle = Button::create("Themes\\Items\\Items02-hd\\upgrade_320.png");
+			else bottle = Button::create("Themes\\Items\\Items02-hd\\upgrade_-320.png");
+			bottle->setPosition(Vec2(-10, 110));
+			Upselect->addChild(bottle);
+			bottle->addClickEventListener([this, tower](Ref*)
+			{
+
+				// 如果金币不够，则不能建塔
+				if (money < 320)
+				{
+					Upselect->setVisible(false);
+					return;
+				}
+				// 创建Bottle塔,并隐藏选择工具
+				Tower* bottle = Tower::create(BOTTLE, 2);
+				bottle->setPosition(Upselect->getPosition());
+				this->addChild(bottle);
+				Upselect->setVisible(false);
+				// 调用init方法
+				bottle->onTowerInit();
+				// 将塔添加到链表中
+				towers.pushBack(bottle);
+				tower->removeFromParent();        // 图层：从场景移除
+				towers.eraseObject(tower);
+				// 建塔消耗金币
+				money -= 320;
+				// 修改金币文本
+				char text[10];
+				sprintf(text, "%d", money);
+				moneyT->setString(text);
+			});
+			//删除按钮
+			Button* deletetower = Button::create("Themes\\Items\\Items02-hd\\sell_144.png");
+			deletetower->setPosition(Vec2(82, 110));
+			Upselect->addChild(deletetower);
+			deletetower->addClickEventListener([this, tower](Ref*)
+			{
+				Upselect->setVisible(false);
+				tower->removeFromParent();        // 图层：从场景移除
+				towers.eraseObject(tower);
+				// 建塔消耗金币
+				money += 144;
+				// 修改金币文本
+				char text[10];
+				sprintf(text, "%d", money);
+				moneyT->setString(text);
+			});
+		}
+		else   //升级次数为2
+		{
+			Sprite *bottle;
+			bottle = Sprite::create("Themes\\Items\\Items02-hd\\upgrade_0_CN.png");
+			bottle->setPosition(Vec2(-10, 110));
+			Upselect->addChild(bottle);
+			//删除按钮
+			Button* deletetower = Button::create("Themes\\Items\\Items02-hd\\sell_272.png");
+			deletetower->setPosition(Vec2(82, 110));
+			Upselect->addChild(deletetower);
+			deletetower->addClickEventListener([this, tower](Ref*)
+			{
+				Upselect->setVisible(false);
+				tower->removeFromParent();        // 图层：从场景移除
+				towers.eraseObject(tower);
+				// 建塔消耗金币
+				money += 272;
+				// 修改金币文本
+				char text[10];
+				sprintf(text, "%d", money);
+				moneyT->setString(text);
+			});
+		}
+	}
+	else
+	{
+		if (time == 0)  //shit升级次数为0
+		{
+			Button *shit;
+			if (money >= 220)
+				shit = Button::create("Themes\\Items\\Items02-hd\\upgrade_220.png");
+			else shit = Button::create("Themes\\Items\\Items02-hd\\upgrade_-220.png");
+			shit->setPosition(Vec2(-10, 110));
+			Upselect->addChild(shit);
+			shit->addClickEventListener([this, tower](Ref*)
+			{
+
+				// 如果金币不够，则不能建塔
+				if (money < 220)
+				{
+					Upselect->setVisible(false);
+					return;
+				}
+				// 创建Bottle塔,并隐藏选择工具
+				Tower* shit = Tower::create(SHIT, 1);
+				shit->setPosition(Upselect->getPosition());
+				this->addChild(shit);
+				Upselect->setVisible(false);
+				// 调用init方法
+				shit->onTowerInit();
+				// 将塔添加到链表中
+				towers.pushBack(shit);
+				tower->removeFromParent();        // 图层：从场景移除
+				towers.eraseObject(tower);
+				// 建塔消耗金币
+				money -= 220;
+				// 修改金币文本
+				char text[10];
+				sprintf(text, "%d", money);
+				moneyT->setString(text);
+			});
+			//删除按钮
+			Button* deletetower = Button::create("Themes\\Items\\Items02-hd\\sell_96.png");
+			deletetower->setPosition(Vec2(82, 110));
+			Upselect->addChild(deletetower);
+			deletetower->addClickEventListener([this, tower](Ref*)
+			{
+				Upselect->setVisible(false);
+				tower->removeFromParent();        // 图层：从场景移除
+				towers.eraseObject(tower);
+				// 建塔消耗金币
+				money += 96;
+				// 修改金币文本
+				char text[10];
+				sprintf(text, "%d", money);
+				moneyT->setString(text);
+			});
+		}
+		else   if (time == 1)//升级次数为1
+		{
+			Button *shit;
+			if (money >= 380)
+				shit = Button::create("Themes\\Items\\Items02-hd\\upgrade_380.png");
+			else shit = Button::create("Themes\\Items\\Items02-hd\\upgrade_-380.png");
+			shit->setPosition(Vec2(-10, 110));
+			Upselect->addChild(shit);
+			shit->addClickEventListener([this, tower](Ref*)
+			{
+
+				// 如果金币不够，则不能建塔
+				if (money < 380)
+				{
+					Upselect->setVisible(false);
+					return;
+				}
+				// 创建Bottle塔,并隐藏选择工具
+				Tower* shit = Tower::create(SHIT, 2);
+				shit->setPosition(Upselect->getPosition());
+				this->addChild(shit);
+				Upselect->setVisible(false);
+				// 调用init方法
+				shit->onTowerInit();
+				// 将塔添加到链表中
+				towers.pushBack(shit);
+				tower->removeFromParent();        // 图层：从场景移除
+				towers.eraseObject(tower);
+				// 建塔消耗金币
+				money -= 380;
+				// 修改金币文本
+				char text[10];
+				sprintf(text, "%d", money);
+				moneyT->setString(text);
+			});
+			//删除按钮
+			Button* deletetower = Button::create("Themes\\Items\\Items02-hd\\sell_176.png");
+			deletetower->setPosition(Vec2(82, 110));
+			Upselect->addChild(deletetower);
+			deletetower->addClickEventListener([this, tower](Ref*)
+			{
+				Upselect->setVisible(false);
+				tower->removeFromParent();        // 图层：从场景移除
+				towers.eraseObject(tower);
+				// 建塔消耗金币
+				money += 176;
+				// 修改金币文本
+				char text[10];
+				sprintf(text, "%d", money);
+				moneyT->setString(text);
+			});
+		}
+		else   //升级次数为2
+		{
+			Sprite *bottle;
+			bottle = Sprite::create("Themes\\Items\\Items02-hd\\upgrade_0_CN.png");
+			bottle->setPosition(Vec2(-10, 110));
+			Upselect->addChild(bottle);
+			//删除按钮
+			Button* deletetower = Button::create("Themes\\Items\\Items02-hd\\sell_304.png");
+			deletetower->setPosition(Vec2(82, 110));
+			Upselect->addChild(deletetower);
+			deletetower->addClickEventListener([this, tower](Ref*)
+			{
+				Upselect->setVisible(false);
+				tower->removeFromParent();        // 图层：从场景移除
+				towers.eraseObject(tower);
+				// 建塔消耗金币
+				money += 304;
+				// 修改金币文本
+				char text[10];
+				sprintf(text, "%d", money);
+				moneyT->setString(text);
+			});
+		}
+	}
+	//Button* 
+
+}
 
 
 // 创建建塔选择工具
@@ -459,7 +741,7 @@ void GameScene::createBuildTool()
 	select = Sprite::create("Themes\\Items\\Items02-hd\\select_01.png");
 	select->setVisible(false);
 	this->addChild(select);
-	select->setLocalZOrder(2);// 设置zOrder
+	select->setLocalZOrder(2);// 设置zOrder,图层优先级
 
 	// 创建塔图标：如果在Tomer中，添加了新的塔的类型，在这里添加
 	Button* bottle;
@@ -493,7 +775,7 @@ void GameScene::createBuildTool()
 		// 调用init方法
 		bottle->onTowerInit();
 		// 将塔添加到链表中
-		towers.push_back(bottle);
+		towers.pushBack(bottle);
 		// 建塔消耗金币
 		money -= 100;
 		// 修改金币文本
@@ -518,7 +800,7 @@ void GameScene::createBuildTool()
 		// 调用init方法
 		shit->onTowerInit();
 		//// 将塔添加到链表中
-		towers.push_back(shit);
+		towers.pushBack(shit);
 		// 建塔消耗金币
 		money -= 120;
 		// 修改金币文本
@@ -539,14 +821,16 @@ void GameScene::SetTowerAnim(Tower* tower)
 	switch (tower->type)
 	{
 	case BOTTLE:
-		TowerAnim = __String::createWithFormat("Themes\\Towers\\TBottle-hd\\Bottle1");
+
+		TowerAnim = __String::createWithFormat("Themes\\Towers\\TBottle-hd\\Bottle");
 		break;
 	case SHIT:
-		TowerAnim = __String::createWithFormat("Themes\\Towers\\TShit-hd\\Shit1");
+		TowerAnim = __String::createWithFormat("Themes\\Towers\\TShit-hd\\Shit");
 		break;
 	}
+	
 	for (int i = 0; i < 4; ++i) {
-		__String* str = __String::createWithFormat("%s%d.png", TowerAnim->getCString(), i%3 + 1);
+		__String* str = __String::createWithFormat("%s%d%d.png", TowerAnim->getCString(),tower->Uptime+1, i%3 + 1);
 		pAnimation->addSpriteFrameWithFile(str->getCString());
 	}
 	pAnimation->setLoops(1);

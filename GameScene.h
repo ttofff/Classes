@@ -23,10 +23,14 @@ public:
 	GameEnd* gameEnd;		//游戏结束界面
 
 	Vector<Monster*> monster; //怪物容器
-	std::vector<Tower*> towers;	//炮塔容器
-	Vector<Bullet*> bullets;	//炮塔容器
-	void createBuildTool();
+	Vector<Tower*> towers;	//炮塔容器
+	Vector<Bullet*> bullets;	//子弹容器
+	void createBuildTool();		//建塔工具
 	TextAtlas* moneyT;
+	void create_UpTool(Tower* tower, int time);		//升级工具
+
+	void sc(Tower* t, Vector<Tower*> towers);
+private:
 	
 	int money;					//钱
 	GameMap* tiledMap;			//地图
@@ -34,17 +38,10 @@ public:
 	std::vector<Vec2> wayPoints;
 	int hp;				//血量
 	Sprite* ca;			//萝卜
-	Sprite *select;
-	int blockSize; // 像素方块大小
-
-public:
-
+	Sprite *select;		//建塔选择精灵
+	Sprite* Upselect;		//升级精灵
 	void CarrotDead();		//萝卜死亡函数
-
 	void SetTowerAnim(Tower* tower);
-
-	void SetBlockSize(int size);
-	
 };
 
 #endif
