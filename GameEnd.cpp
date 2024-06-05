@@ -47,6 +47,7 @@ bool GameEnd::init()
 		director->replaceScene(adventureFirstScene);
 	});
 
+	return true;
 }
 
 //ÏÔÊ¾²¨Êı

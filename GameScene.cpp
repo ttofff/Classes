@@ -260,11 +260,6 @@ bool GameScene::init()
 	tiledMap = GameMap::create(str->getCString());
 	tiledMap->setPosition(Vec2::ZERO);
 	this->addChild(tiledMap, 0);
-	
-	
-
-	
-
 
 	//怪物
 	tiledMap->getWayPoints("PATH"); //获取怪物移动路径
@@ -402,8 +397,10 @@ bool GameScene::init()
 		}
 		//获取当前点击的路径点
 		Vec2 touchPoint = touch->getLocation();
-		float x = (int)touchPoint.x / 80 * 80 + 40;
-		float y = (int)touchPoint.y / 80 * 80 + 40;
+		float x = (int)touchPoint.x / blockSize * blockSize + blockSize / 2;
+		float y = (int)touchPoint.y / blockSize * blockSize + blockSize / 2;
+		float dx = (int)touchPoint.x / 80 * 80 + 80 / 2;
+		float dy = (int)touchPoint.y / 80 * 80 + 80 / 2;
 		//是否有塔
 		for (Tower* tower : towers)
 		{
@@ -556,4 +553,9 @@ void GameScene::SetTowerAnim(Tower* tower)
 	pAnimation->setDelayPerUnit(0.1f);
 	tower->runAction(Sequence::create(Animate::create(pAnimation), nullptr));
 
+}
+
+void GameScene::SetBlockSize(int size)
+{
+	this->blockSize = size;
 }

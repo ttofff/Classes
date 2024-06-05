@@ -28,9 +28,6 @@ public:
 	void createBuildTool();
 	TextAtlas* moneyT;
 	
-
-private:
-	
 	int money;					//钱
 	GameMap* tiledMap;			//地图
 	
@@ -38,8 +35,15 @@ private:
 	int hp;				//血量
 	Sprite* ca;			//萝卜
 	Sprite *select;
+	int blockSize; // 像素方块大小
+
+public:
+
 	void CarrotDead();		//萝卜死亡函数
+
 	void SetTowerAnim(Tower* tower);
+
+	void SetBlockSize(int size);
 	
 };
 

@@ -56,16 +56,19 @@ bool AdventureFirstScene::init()
 	{
 		s = __String::createWithFormat("Map\\FirstKind\\Environment\\Level%02d\\Level.png", smallcheck);
 		size = 0.6f;
+		blockSize = 80;
 	}
 	else if (bigcheck == 2)
 	{
 		s = __String::createWithFormat("Map\\SecondKind\\Environment\\Level%02d\\Level.png", smallcheck);
 		size = 0.9f;
+		blockSize = 64;
 	}
 	else if (bigcheck == 3)
 	{
 		s = __String::createWithFormat("Map\\ThirdKind\\Environment\\Level%02d\\Level.png", smallcheck);
 		size = 0.7f;
+		blockSize = 80;
 	}
 	Button* ss_map01 = Button::create(s->getCString());
 	ss_map01->setPosition(Vec2(480, 320));
@@ -77,6 +80,7 @@ bool AdventureFirstScene::init()
 		//LoadingScene* loadingScene = LoadingScene::create(smallcheck);
 		//director->replaceScene(loadingScene);
 		GameScene* game = GameScene::create(smallcheck);
+		game->SetBlockSize(blockSize);
 		director->replaceScene(game);
 	});
 
@@ -86,9 +90,6 @@ bool AdventureFirstScene::init()
 	ss_towers_01->setAnchorPoint(Vec2(0.5, 0));
 	ss_towers_01->setPosition(Vec2(480, 90));
 	this->addChild(ss_towers_01, 2);
-
-
-	
 	
 	//×óÒÆ°´Å¥
 	if ((this->smallcheck) > 1){
