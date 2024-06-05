@@ -14,6 +14,7 @@ Tower* Tower::create(TowerType type)// 通过类型创建不同的塔
 {
 	Tower* ret = new Tower(type);
 	ret->Uptime = 0;
+
 	if (ret && ret->init())
 	{
 		ret->autorelease();
@@ -46,6 +47,7 @@ Tower* Tower::create(TowerType type,int i)// 通过类型创建不同的塔
 
 bool Tower::init()
 {
+
 	char filename[50];
 	// 根据不同塔类型初始化不同图片
 	switch (type) {

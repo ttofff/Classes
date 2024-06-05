@@ -93,27 +93,50 @@ void GameScene::update(float dt)
 			// 判断射击的时间是否满足条件
 			if (tower->onTowerUpdate(dt))
 			{
-				for (Monster* monster : monster)
-				{
-					// 如果在范围之内，产生子弹
-					if (tower->shoot(monster))
+				if (!isselect)
+					for (Monster* monster : monster)
 					{
-						SetTowerAnim(tower);
-						// 创建子弹
-						Bullet* bullet = Bullet::create(tower->type,tower->Uptime);
-						// 设置子弹位置与 当前 塔坐标相同
-						bullet->setPosition(Vec2(tower->getPositionX(), tower->getPositionY()+10));
-						// 初始化子弹
-						bullet->onBulletInit(monster);
-						// 将子弹添加到层上
-						this->addChild(bullet);
-						// 将子弹添加到子弹链表中
-						bullets.pushBack(bullet);
+					
+						// 如果在范围之内，产生子弹
+						if (tower->shoot(monster))
+						{
+							SetTowerAnim(tower);
+							// 创建子弹
+							Bullet* bullet = Bullet::create(tower->type,tower->Uptime);
+							// 设置子弹位置与 当前 塔坐标相同
+							bullet->setPosition(Vec2(tower->getPositionX(), tower->getPositionY()+10));
+							// 初始化子弹
+							bullet->onBulletInit(monster);
+							// 将子弹添加到层上
+							this->addChild(bullet);
+							// 将子弹添加到子弹链表中
+							bullets.pushBack(bullet);
 						
-						break;    // 很重要
+							break;    // 很重要
+						}
 					}
-				}
-				
+				else 
+					for (Monster* monster : monster)
+					{
+						if (monster == monsterselect)
+						// 如果在范围之内，产生子弹
+						if (tower->shoot(monster))
+						{
+							SetTowerAnim(tower);
+							// 创建子弹
+							Bullet* bullet = Bullet::create(tower->type, tower->Uptime);
+							// 设置子弹位置与 当前 塔坐标相同
+							bullet->setPosition(Vec2(tower->getPositionX(), tower->getPositionY() + 10));
+							// 初始化子弹
+							bullet->onBulletInit(monster);
+							// 将子弹添加到层上
+							this->addChild(bullet);
+							// 将子弹添加到子弹链表中
+							bullets.pushBack(bullet);
+
+							break;    // 很重要
+						}
+					}
 			}
 		}
 		for (int i = 0; i < bullets.size(); i++)
@@ -159,6 +182,8 @@ void GameScene::update(float dt)
 				{
 					Targetmonster->hp = 0;
 					// 创建新精灵来播放怪物死亡帧动画
+					if (monsterselect == Targetmonster)
+						isselect = false;
 					Sprite* spBoom = Sprite::create("Map\\MonsterDead\\Dead_01.png");
 					this->addChild(spBoom);
 					// 设置位置（怪物的位置）
@@ -398,6 +423,7 @@ bool GameScene::init()
 	EventListenerTouchOneByOne* eventListenerTouchOneByOne = EventListenerTouchOneByOne::create();
 	eventListenerTouchOneByOne->onTouchBegan = [this](Touch* touch,Event *event)
 	{
+		isselect = false;
 		//建塔工具是否可见
 		if (select->isVisible())
 		{
@@ -435,6 +461,17 @@ bool GameScene::init()
 				createBuildTool();
 				select->setVisible(true);
 				select->setPosition(Vec2(x, y));
+				return true;
+			}
+		}
+		for (Monster* m : monster)
+		{
+			bool is;
+			is=m->getBoundingBox().containsPoint(touch->getLocation());
+			if (is)
+			{
+				isselect = true;
+				monsterselect = m;
 				return true;
 			}
 		}

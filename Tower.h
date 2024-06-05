@@ -34,6 +34,7 @@ private:
 	float shootDeltaTime;// 射击的间隔时间
 	float range;// 攻击范围
 	bool IsRotator;			//本体是否转动
+	Sprite* dz;
 	
 };
 

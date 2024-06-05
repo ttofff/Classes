@@ -43,6 +43,10 @@ public:
 	Sprite* Upselect;		//Éı¼¶¾«Áé
 	void CarrotDead();		//ÂÜ²·ËÀÍöº¯Êı
 	void SetTowerAnim(Tower* tower);
+
+
+	Monster* monsterselect; 
+	bool isselect;
 };
 
 #endif
