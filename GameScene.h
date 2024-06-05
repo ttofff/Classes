@@ -4,6 +4,7 @@
 #include "Monster.h"
 #include "GameMap.h"
 #include "Gamepause.h"
+#include "GameWin.h"
 #include "GameEnd.h"
 #include "Tower.h"
 #include "ui\CocosGUI.h"
@@ -18,10 +19,14 @@ class GameScene : public Scene
 public:
 	static GameScene* create(int i, int size);
 	bool init() override;
-	void update(float dt);			
+	void update(float dt);
+	Sprite* menuBG;
+	TextAtlas* curWaveText;
 	int index;			//地图关卡数
 	int Wave_Number;	//波数
+	int monsterNum; // 怪物数量
 	Gamepause* gamepause;
+	GameWin* gameWin;
 	GameEnd* gameEnd;		//游戏结束界面
 
 	Vector<Monster*> monster; //怪物容器
@@ -41,6 +46,7 @@ public:
 	Sprite* ca;			//萝卜
 	Sprite *select;		//建塔选择精灵
 	Sprite* Upselect;		//升级精灵
+	void CarrotWin();
 	void CarrotDead();		//萝卜死亡函数
 	void SetTowerAnim(Tower* tower);
 };

@@ -1,13 +1,13 @@
-#ifndef GameEnd_h
-#define GameEnd_h
+#ifndef GameWin_h
+#define GameWin_h
 
 #include "cocos2d.h"
 using namespace cocos2d;
 
-class GameEnd : public Scene
+class GameWin : public Scene
 {
 public:
-	CREATE_FUNC(GameEnd);
+	CREATE_FUNC(GameWin);
 	bool init() override;
 	void SetWave(int SWaveNumber);
 	void SetTotalWave();
