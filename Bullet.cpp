@@ -119,7 +119,9 @@ void Bullet::updateDirection()
 		angle = offset.x >= 0 ? angle : -angle;
 		// 设置子弹的旋转
 		setRotation(angle);
-		log("%d %d", getPositionX(), getPositionY());
+		RotateBy* ro = RotateBy::create(0.6f, 30);
+		Sequence *Ros = Sequence::create(ro, nullptr);
+		this->runAction(Ros->clone());
 		return;
 	}
 		else targetPos = target->getPosition();

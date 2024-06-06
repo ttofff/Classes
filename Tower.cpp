@@ -52,29 +52,57 @@ bool Tower::init()
 	// 根据不同塔类型初始化不同图片
 	switch (type) {
 	case BOTTLE:
-		if (Uptime==0)
+		if (Uptime == 0)
+		{
 			strcpy(filename, "Themes\\Towers\\TBottle-hd\\Bottle11.png");
-		else if (Uptime==1)
+		}
+		else if (Uptime == 1)
+		{
 			strcpy(filename, "Themes\\Towers\\TBottle-hd\\Bottle21.png");
-		else strcpy(filename, "Themes\\Towers\\TBottle-hd\\Bottle31.png");
+		}
+		else
+		{
+			strcpy(filename, "Themes\\Towers\\TBottle-hd\\Bottle31.png");
+		}
+		dz = __String::create("Themes\\Towers\\TBottle-hd\\Bottle-11.png");
 		IsRotator = true;
 		range = 150;
 		break;
 	case SHIT:
 		if (Uptime == 0)
+		{
 			strcpy(filename, "Themes\\Towers\\TShit-hd\\Shit11.png");
+			dz = __String::create("Themes\\Towers\\TShit-hd\\Shit-11.png");
+		}
 		else if (Uptime == 1)
+		{
 			strcpy(filename, "Themes\\Towers\\TShit-hd\\Shit21.png");
-		else strcpy(filename, "Themes\\Towers\\TShit-hd\\Shit31.png");		
+			dz = __String::create("Themes\\Towers\\TShit-hd\\Shit-12.png");
+		}
+		else 
+		{ 
+			strcpy(filename, "Themes\\Towers\\TShit-hd\\Shit31.png");
+			dz = __String::create("Themes\\Towers\\TShit-hd\\Shit-13.png");
+		}
 		IsRotator = false;
 		range = 150;
 		break;
 	case FAN:
 		if (Uptime == 0)
+		{
 			strcpy(filename, "Themes\\Towers\\TFan-hd\\Fan11.png");
+			dz = __String::create("Themes\\Towers\\TFan-hd\\Fan-11.png");
+		}
 		else if (Uptime == 1)
+		{
 			strcpy(filename, "Themes\\Towers\\TFan-hd\\Fan12.png");
-		else strcpy(filename, "Themes\\Towers\\TFan-hd\\Fan13.png");
+			dz = __String::create("Themes\\Towers\\TFan-hd\\Fan-12.png");
+		}
+		else
+		{
+			strcpy(filename, "Themes\\Towers\\TFan-hd\\Fan13.png");
+			dz = __String::create("Themes\\Towers\\TFan-hd\\Fan-13.png");
+		}
 		IsRotator = false;
 		range = 200;
 		break;
