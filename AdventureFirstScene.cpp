@@ -83,7 +83,7 @@ bool AdventureFirstScene::init()
 	});
 
 	//关卡可用的炮塔
-	__String* s1 = __String::createWithFormat("Themes\\scene\\stages_theme1-hd\\ss_towers_%02d.png", smallcheck);
+	__String* s1 = __String::createWithFormat("Themes\\scene\\stages_theme1-hd\\ss_tower_%02d.png", smallcheck);
 	Sprite* ss_towers_01 = Sprite::create(s1->getCString());
 	ss_towers_01->setAnchorPoint(Vec2(0.5, 0));
 	ss_towers_01->setPosition(Vec2(480, 90));

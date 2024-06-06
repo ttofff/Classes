@@ -137,6 +137,7 @@ bool StartScene::init()
 	btn_Boss->addClickEventListener([&](Ref* ref) {
 		Director* director = Director::getInstance();
 		Boss* boss = Boss::create();
+		boss->SetBlockSize(64);
 		director->replaceScene(boss);
 	});
 

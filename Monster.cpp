@@ -8,28 +8,28 @@ Monster::Monster(MonsterType type)
 	switch (type)
 	{
 	case Monster1:
-		hp = 50;
+		hp = 75;
 		break;
 	case Monster2:
 		hp = 100;
 		break;
 	case Monster3:
-		hp = 50;
+		hp = 95;
 		break;
 	case Monster4:
-		hp = 50;
+		hp = 85;
 		break;
 	case Monster5:
-		hp = 50;
+		hp = 115;
 		break;
 	case Monster6:
-		hp = 50;
+		hp = 120;
 		break;
 	case Monster7:
-		hp = 50;
+		hp = 105;
 		break;
 	case Monster8:
-		hp = 50;
+		hp = 90;
 		break;
 	}
 }

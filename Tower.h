@@ -13,7 +13,8 @@ enum TowerType
 {
 	BOTTLE,
 	SHIT,
-	FAN
+	FAN,
+	STAR
 };
 
 // 塔类

@@ -55,7 +55,12 @@ Bullet* Bullet::create(TowerType type, int time)
 	}
 	if (type == TowerType::FAN)
 	{
-		ret->damage = 10 * (time + 1);
+		ret->damage = 15 * (time + 1);
+		ret->bulletlevel = time;
+	}
+	if (type == TowerType::STAR)
+	{
+		ret->damage = 15 * (time + 1);
 		ret->bulletlevel = time;
 	}
 
@@ -86,6 +91,10 @@ bool Bullet::init()
 		break;
 	case FAN:
 		filename = __String::createWithFormat("Themes\\Towers\\TFan-hd\\PFan%d1.png", bulletlevel + 1);
+		break;
+	case STAR:
+		filename = __String::createWithFormat("Themes\\Towers\\TStar-hd\\PStar%d1.png", bulletlevel + 1);
+		break;
 	}
 	
 	if (!Sprite::initWithFile(filename->getCString()))

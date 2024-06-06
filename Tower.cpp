@@ -95,18 +95,36 @@ bool Tower::init()
 		}
 		else if (Uptime == 1)
 		{
-			strcpy(filename, "Themes\\Towers\\TFan-hd\\Fan12.png");
+			strcpy(filename, "Themes\\Towers\\TFan-hd\\Fan21.png");
 			dz = __String::create("Themes\\Towers\\TFan-hd\\Fan-12.png");
 		}
 		else
 		{
-			strcpy(filename, "Themes\\Towers\\TFan-hd\\Fan13.png");
+			strcpy(filename, "Themes\\Towers\\TFan-hd\\Fan31.png");
 			dz = __String::create("Themes\\Towers\\TFan-hd\\Fan-13.png");
 		}
 		IsRotator = false;
 		range = 200;
 		break;
-
+	case STAR:
+		if (Uptime == 0)
+		{
+			strcpy(filename, "Themes\\Towers\\TStar-hd\\Star11.png");
+			dz = __String::create("Themes\\Towers\\TStar-hd\\Star-11.png");
+		}
+		else if (Uptime == 1)
+		{
+			strcpy(filename, "Themes\\Towers\\TStar-hd\\Star21.png");
+			dz = __String::create("Themes\\Towers\\TStar-hd\\Star-12.png");
+		}
+		else
+		{
+			strcpy(filename, "Themes\\Towers\\TStar-hd\\Star31.png");
+			dz = __String::create("Themes\\Towers\\TStar-hd\\Star-13.png");
+		}
+		IsRotator = false;
+		range = 200;
+		break;
 	}
 	// 初始化
 	if (!Sprite::initWithFile(filename))

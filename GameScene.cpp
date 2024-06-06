@@ -19,7 +19,7 @@ GameScene* GameScene::create(int i, int size, int kind)
 	ret->index = i;
 	ret->hp = 10;
 	ret->Wave_Number = 1;
-	ret->TowerAllSelect = { { 1, 2 }, { 1, 2, 3 }, { 1, 2, 4 }, { 2, 5 }, { 2, 4 }, { 2, 3 }, { 1, 5 } };
+	ret->TowerAllSelect = { {1},{ 1, 2 }, { 1, 2, 3 }, { 1, 2, 4 }, { 2, 4 }, { 2, 3 }, { 1, 2, 3, 4 } };
 	ret->TowerSelect = ret->TowerAllSelect[ret->index - 1];
 	ret->blockSize = size;
 	ret->monsterNum = (rand() % (15 + ret->index + ret->Wave_Number)) + (5 + ret->index + ret->Wave_Number);
@@ -50,8 +50,13 @@ void GameScene::update(float dt)
 		{
 			waittime = 1.0f;
 			monsterNum--;
-			//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("Music\\Items\\GO.mp3"); //播放音效
 			Monster* newmonster = Monster::create((MonsterType)((rand() % 8) + 1), monsterKind);		//创建新的怪物
+			//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("Music\\Items\\GO.mp3"); //播放音效
+			if (Wave_Number == 15 && monsterNum == 1)
+			{
+				newmonster->setScale(2.f);
+				newmonster->hp = newmonster->hp * 50;
+			}
 			newmonster->onMonsterInit(tiledMap->wayPoints);
 			if (monsterKind == 2)
 			{
@@ -219,7 +224,7 @@ void GameScene::update(float dt)
 				if (isCrash)
 				{
 					// 怪物掉血
-					if (bullet->damage)
+					if (bullet->damage && isCrash)
 					{
 						SetHitAnim(Vec2(Targetmonster->getPositionX(), Targetmonster->getPositionY() + 20), bullet);
 					}
@@ -1041,7 +1046,151 @@ void GameScene::create_UpTool(Tower* tower, int time)
 			});
 		}
 	}
+	else if (tower->type == TowerType::STAR)
+	{
+		if (time == 0)  //星星升级次数为0
+		{
+			Button *star;
+			if (money >= 260)
+				star = Button::create("Themes\\Items\\Items02-hd\\upgrade_260.png");
+			else star = Button::create("Themes\\Items\\Items02-hd\\upgrade_-260.png");
+			star->setPosition(Vec2(-10, 110));
+			Upselect->addChild(star);
+			star->addClickEventListener([this, tower](Ref*)
+			{
 
+				// 如果金币不够，则不能建塔
+				if (money < 260)
+				{
+					Upselect->setVisible(false);
+					return;
+				}
+				// 创建Bottle塔,并隐藏选择工具
+				tower->dzsp->removeFromParent();
+				Tower* star = Tower::create(STAR, 1);
+				star->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+				star->setPosition(Upselect->getPosition());
+				star->dzsp = Sprite::create(star->dz->getCString());
+				star->dzsp->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+				star->dzsp->setPosition(Vec2(star->getPositionX(), star->getPositionY() - 10));
+				this->addChild(star->dzsp, 1);
+				this->addChild(star, 2);
+				Upselect->setVisible(false);
+				// 调用init方法
+				star->onTowerInit();
+				// 将塔添加到链表中
+				towers.pushBack(star);
+				tower->removeFromParent();        // 图层：从场景移除
+				towers.eraseObject(tower);
+				// 建塔消耗金币
+				money -= 260;
+				// 修改金币文本
+				char text[10];
+				sprintf(text, "%d", money);
+				moneyT->setString(text);
+			});
+			//删除按钮
+			Button* deletetower = Button::create("Themes\\Items\\Items02-hd\\sell_144.png");
+			deletetower->setPosition(Vec2(82, 110));
+			Upselect->addChild(deletetower);
+			deletetower->addClickEventListener([this, tower](Ref*)
+			{
+				Upselect->setVisible(false);
+				tower->dzsp->removeFromParent();
+				tower->removeFromParent();        // 图层：从场景移除
+				towers.eraseObject(tower);
+				// 建塔消耗金币
+				money += 144;
+				// 修改金币文本
+				char text[10];
+				sprintf(text, "%d", money);
+				moneyT->setString(text);
+			});
+		}
+		else   if (time == 1)//升级次数为1
+		{
+			Button *star;
+			if (money >= 380)
+				star = Button::create("Themes\\Items\\Items02-hd\\upgrade_380.png");
+			else star = Button::create("Themes\\Items\\Items02-hd\\upgrade_-380.png");
+			star->setPosition(Vec2(-10, 110));
+			Upselect->addChild(star);
+			star->addClickEventListener([this, tower](Ref*)
+			{
+
+				// 如果金币不够，则不能建塔
+				if (money < 380)
+				{
+					Upselect->setVisible(false);
+					return;
+				}
+				// 创建Bottle塔,并隐藏选择工具
+				tower->dzsp->removeFromParent();
+				Tower* star = Tower::create(STAR, 2);
+				star->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+				star->setPosition(Upselect->getPosition());
+				star->dzsp = Sprite::create(star->dz->getCString());
+				star->dzsp->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+				star->dzsp->setPosition(Vec2(star->getPositionX(), star->getPositionY() - 10));
+				this->addChild(star->dzsp, 1);
+				this->addChild(star, 2);
+				Upselect->setVisible(false);
+				// 调用init方法
+				star->onTowerInit();
+				// 将塔添加到链表中
+				towers.pushBack(star);
+				tower->removeFromParent();        // 图层：从场景移除
+				towers.eraseObject(tower);
+				// 建塔消耗金币
+				money -= 380;
+				// 修改金币文本
+				char text[10];
+				sprintf(text, "%d", money);
+				moneyT->setString(text);
+			});
+			//删除按钮
+			Button* deletetower = Button::create("Themes\\Items\\Items02-hd\\sell_224.png");
+			deletetower->setPosition(Vec2(82, 110));
+			Upselect->addChild(deletetower);
+			deletetower->addClickEventListener([this, tower](Ref*)
+			{
+				Upselect->setVisible(false);
+				tower->dzsp->removeFromParent();
+				tower->removeFromParent();        // 图层：从场景移除
+				towers.eraseObject(tower);
+				// 建塔消耗金币
+				money += 432;
+				// 修改金币文本
+				char text[10];
+				sprintf(text, "%d", money);
+				moneyT->setString(text);
+			});
+		}
+		else   //升级次数为2
+		{
+			Sprite *star;
+			star = Sprite::create("Themes\\Items\\Items02-hd\\upgrade_0_CN.png");
+			star->setPosition(Vec2(-10, 110));
+			Upselect->addChild(star);
+			//删除按钮
+			Button* deletetower = Button::create("Themes\\Items\\Items02-hd\\sell_352.png");
+			deletetower->setPosition(Vec2(82, 110));
+			Upselect->addChild(deletetower);
+			deletetower->addClickEventListener([this, tower](Ref*)
+			{
+				Upselect->setVisible(false);
+				tower->dzsp->removeFromParent();
+				tower->removeFromParent();        // 图层：从场景移除
+				towers.eraseObject(tower);
+				// 建塔消耗金币
+				money += 272;
+				// 修改金币文本
+				char text[10];
+				sprintf(text, "%d", money);
+				moneyT->setString(text);
+			});
+		}
+	}
 }
 
 
@@ -1182,6 +1331,35 @@ void GameScene::createBuildTool()
 			else  star = Button::create("Themes\\Towers\\TStar-hd\\Star00.png");
 			star->setPosition(Vec2(92 * i, 110));
 			select->addChild(star);
+			star->addClickEventListener([this](Ref*)
+			{
+				// 如果金币不够，则不能建塔
+				if (money < 160)
+				{
+					select->setVisible(false);
+					return;
+				}
+				// 创建Bottle塔,并隐藏选择工具
+				Tower* star = Tower::create(STAR);
+				star->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+				star->setPosition(select->getPosition());
+				star->dzsp = Sprite::create(star->dz->getCString());
+				star->dzsp->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+				star->dzsp->setPosition(Vec2(star->getPositionX(), star->getPositionY()));
+				this->addChild(star->dzsp, 1);
+				this->addChild(star, 2);
+				select->setVisible(false);
+				// 调用init方法
+				star->onTowerInit();
+				//// 将塔添加到链表中
+				towers.pushBack(star);
+				// 建塔消耗金币
+				money -= 120;
+				// 修改金币文本
+				char text[10];
+				sprintf(text, "%d", money);
+				moneyT->setString(text);
+			});
 			break;
 		case 5:
 			log("%d", TowerSelect[i]);
@@ -1217,6 +1395,10 @@ void GameScene::SetTowerAnim(Tower* tower)
 		break;
 	case FAN:
 		TowerAnim = __String::createWithFormat("Themes\\Towers\\TFan-hd\\Fan");
+		break;
+	case STAR:
+		TowerAnim = __String::createWithFormat("Themes\\Towers\\TStar-hd\\Star");
+		break;
 	}
 	
 	for (int i = 0; i < 4; ++i) {
@@ -1230,29 +1412,85 @@ void GameScene::SetTowerAnim(Tower* tower)
 }
 void GameScene::SetHitAnim(Vec2 Position, Bullet* bullet)
 {
-	//射击动画
+	//击中动画
 	Sprite* hitsp = Sprite::create();
 	this->addChild(hitsp);
 	hitsp->setPosition(Position);
 	Animation* pAnimation = Animation::create();
 	__String* HitAnim;
+	int animzhen = 0;
 	switch (bullet->type)
 	{
 	case BOTTLE:
 		HitAnim = __String::createWithFormat("Themes\\Towers\\TBottle-hd\\PBottle0");
+		animzhen = 3;
 		break;
 	case SHIT:
 		HitAnim = __String::createWithFormat("Themes\\Towers\\TShit-hd\\PShit0");
+		animzhen = 3;
 		break;
 	case FAN:
 		HitAnim = __String::createWithFormat("Themes\\Towers\\TFan-hd\\PFan0");
+		animzhen = 3;
+		break;
+	case STAR:
+		HitAnim = __String::createWithFormat("Themes\\Towers\\TStar-hd\\PStar-1");
+		animzhen = 7;
+		break;
 	}
 
-	for (int i = 1; i <3 ; ++i) {
+	for (int i = 1; i < animzhen; ++i) {
 		__String* str = __String::createWithFormat("%s%d.png", HitAnim->getCString(), i);
 		pAnimation->addSpriteFrameWithFile(str->getCString());
 	}
 	pAnimation->setLoops(1);
 	pAnimation->setDelayPerUnit(0.1f);
 	hitsp->runAction(Sequence::create(Animate::create(pAnimation), RemoveSelf::create(), nullptr));
+	if (bullet->type == STAR)
+	for (int i = 0; i < monster.size(); ++i)
+	{
+		Monster* Targetmonster = monster.at(i);
+		float isBulletJianShe = bullet->getPosition().getDistance(Targetmonster->getPosition());
+		if (isBulletJianShe > 100 && isBulletJianShe < 214)
+		{
+			// 怪物掉血
+			Targetmonster->hp -= bullet->damage/2;
+			// 检测怪物是否被消灭
+			if (Targetmonster->hp <= 0)
+			{
+				Targetmonster->hp = 0;
+				// 创建新精灵来播放怪物死亡帧动画
+				if (monsterselect == Targetmonster)
+					isselect = false;
+				Sprite* spBoom = Sprite::create("Map\\MonsterDead\\Dead_01.png");
+				this->addChild(spBoom);
+				// 设置位置（怪物的位置）
+				spBoom->setPosition(Vec2(Targetmonster->getPositionX(), Targetmonster->getPositionY() + 30.f));
+				Animation* monsterdead = Animation::create();
+				for (int i = 1; i < 15; ++i) {
+					__String* str = __String::createWithFormat("Map\\MonsterDead\\Dead_%02d.png", i);
+					monsterdead->addSpriteFrameWithFile(str->getCString());
+				}
+				monsterdead->setDelayPerUnit(0.1f);
+				monsterdead->setLoops(1);
+				Animate* animate = Animate::create(monsterdead);
+				// 移除动作
+				RemoveSelf* removeSelf = RemoveSelf::create();
+				// 序列动作
+				Sequence* seq = Sequence::create(animate, removeSelf, nullptr);
+				spBoom->runAction(seq);
+				// 移除怪物
+				monster.eraseObject(Targetmonster);
+				this->removeChild(Targetmonster);
+				// 怪物死亡数量+1(后续可以添加)
+
+				// 打怪随机获得金币
+				money += rand() % 21 + 10;// 80 - 180
+				// 修改金币文本
+				char text[10];
+				sprintf(text, "%d", money);
+				moneyT->setString(text);
+			}
+		}
+	}
 }
