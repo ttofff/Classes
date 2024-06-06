@@ -16,7 +16,7 @@ using namespace cocos2d::ui;
 BossScene* BossScene::create(int i, int size, int kind)
 {
 	BossScene* ret = new BossScene();
-	ret->money = 300;
+	ret->money = 2500;
 	ret->index = i;
 	ret->hp = 10;
 	ret->Wave_Number = 1;
@@ -253,7 +253,7 @@ void BossScene::update(float dt)
 						// 怪物死亡数量+1(后续可以添加)
 
 						// 打怪随机获得金币
-						money += rand() % 21 + 10;// 80 - 180
+						money += rand() % 2100 + 3000;// 80 - 180
 						// 修改金币文本
 						char text[10];
 						sprintf(text, "%d", money);
