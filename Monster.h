@@ -21,7 +21,7 @@ class Monster : public cocos2d::Sprite
 {
 public:
 	Monster(MonsterType type);
-	static Monster* create(MonsterType type);
+	static Monster* create(MonsterType type, int kind);
 	bool init() override;
 	void onMonsterInit(std::vector<cocos2d::Vec2> wayPoints);// 怪物初始化
 	bool onMonsterUpdate(float dt);// 怪物更新（移动）

@@ -60,7 +60,7 @@ void LoadingScene::onScheduleCallBack(float dt)
 	if (loadingBar->getPercentage() >= 100.f)
 	{
 		Director* director = Director::getInstance();
-		GameScene* gameScene = GameScene::create(index, blockSize);
+		GameScene* gameScene = GameScene::create(index, blockSize, monsterKind);
 		director->replaceScene(gameScene);
 	}
 }

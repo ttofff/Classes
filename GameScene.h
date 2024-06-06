@@ -16,7 +16,7 @@ using namespace cocos2d::ui;
 class GameScene : public Scene
 {
 public:
-	static GameScene* create(int i, int size);
+	static GameScene* create(int i, int size, int kind);
 	bool init() override;
 	void update(float dt);
 	Sprite* menuBG;
@@ -56,6 +56,8 @@ public:
 	Monster* monsterselect; 
 	bool isselect;
 	void RemoveFanbullet(float dt);
+	
+	int monsterKind;
 };
 
 #endif

@@ -35,9 +35,6 @@ bool AdventureFirstScene::init()
 		return false;
 	}
 
-
-	
-
 	//±³¾°
 	Sprite* mainbg = Sprite::create("Themes\\scene\\stages_bg-hd\\ss_bg.png");
 	mainbg->setPosition(Vec2(480, 320));
@@ -48,7 +45,6 @@ bool AdventureFirstScene::init()
 	ss_cloud->setPosition(Vec2(480, 0));
 	this->addChild(ss_cloud, 0);
 
-	
 	//¹Ø¿¨
 	float size = 0.f;
 	__String* s;
@@ -71,7 +67,7 @@ bool AdventureFirstScene::init()
 		s = __String::createWithFormat("Map\\ThirdKind\\Environment\\Level%02d\\Level.png", smallcheck);
 		size = 0.7f;
 		blockSize = 80;
-		monsterKind = 3;
+		monsterKind = 1;
 	}
 	Button* ss_map01 = Button::create(s->getCString());
 	ss_map01->setPosition(Vec2(480, 320));
@@ -168,6 +164,7 @@ bool AdventureFirstScene::init()
 		Director* director = Director::getInstance();
 		LoadingScene* loadingScene = LoadingScene::create(smallcheck);
 		loadingScene->SetBlockSize(blockSize);
+		loadingScene->SetMonsterKind(monsterKind);
 		director->replaceScene(loadingScene);
 	});
 

@@ -101,7 +101,7 @@ void GameEnd::SetMapIndex(int index)
 		Director* director = Director::getInstance();
 		this->setVisible(false);
 		Director::getInstance()->startAnimation();
-		GameScene* gameScene = GameScene::create(index, blockSize);
+		GameScene* gameScene = GameScene::create(index, blockSize, monsterKind);
 		director->replaceScene(gameScene);
 	});
 
@@ -119,7 +119,7 @@ void GameEnd::SetNextIndex(int index)
 		Director::getInstance()->startAnimation();
 		if (index < 7)
 		{
-			GameScene* gameScene = GameScene::create(index + 1, blockSize);
+			GameScene* gameScene = GameScene::create(index + 1, blockSize, monsterKind);
 			director->replaceScene(gameScene);
 		}
 		else

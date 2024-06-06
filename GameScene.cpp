@@ -12,17 +12,18 @@
 
 using namespace cocos2d::ui;
 
-GameScene* GameScene::create(int i, int size)
+GameScene* GameScene::create(int i, int size, int kind)
 {
 	GameScene* ret = new GameScene();
 	ret->money = 300;
 	ret->index = i;
 	ret->hp = 10;
-	ret->Wave_Number = 14;
+	ret->Wave_Number = 1;
 	ret->TowerAllSelect = { { 1, 2 }, { 1, 2, 3 }, { 1, 2, 4 }, { 2, 5 }, { 2, 4 }, { 2, 3 }, { 1, 5 } };
 	ret->TowerSelect = ret->TowerAllSelect[ret->index - 1];
 	ret->blockSize = size;
 	ret->monsterNum = (rand() % (15 + ret->index + ret->Wave_Number)) + (5 + ret->index + ret->Wave_Number);
+	ret->monsterKind = kind;
 	
 	if (ret && ret->init())
 	{
@@ -50,8 +51,13 @@ void GameScene::update(float dt)
 			waittime = 1.0f;
 			monsterNum--;
 			//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("Music\\Items\\GO.mp3"); //播放音效
-			Monster* newmonster = Monster::create((MonsterType)((rand() % 8) + 1));		//创建新的怪物
+			Monster* newmonster = Monster::create((MonsterType)((rand() % 8) + 1), monsterKind);		//创建新的怪物
 			newmonster->onMonsterInit(tiledMap->wayPoints);
+			if (monsterKind == 2)
+			{
+				newmonster->setScale(2.f);
+				newmonster->setAnchorPoint(Vec2(0.5, 0.5));
+			}
 			monster.pushBack(newmonster);				//加入怪物容器中
 			this->addChild(monster.back());
 		}
@@ -354,16 +360,17 @@ bool GameScene::init()
 		return false;
 	}
 
-
 	//暂停菜单
 	gamepause = Gamepause::create();
 	gamepause->SetBlockSize(blockSize);
+	gamepause->SetMonsterKind(monsterKind);
 	this->addChild(gamepause, 5);
 	gamepause->setVisible(false);
 
 	//结束界面
 	gameEnd = GameEnd::create();
 	gameEnd->SetBlockSize(blockSize);
+	gameEnd->SetMonsterKind(monsterKind);
 	gameEnd->SetTotalWave();
 	gameEnd->SetCurrIndex(index);
 	this->addChild(gameEnd, 5);

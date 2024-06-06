@@ -34,10 +34,10 @@ Monster::Monster(MonsterType type)
 	}
 }
 
-Monster* Monster::create(MonsterType type)
+Monster* Monster::create(MonsterType type, int kind)
 {
 	Monster* ret = new Monster(type);
-	ret->monsterKind = 1;
+	ret->monsterKind = kind;
 	if (ret && ret->init())
 	{
 		ret->autorelease();
