@@ -117,12 +117,25 @@ void GameEnd::SetNextIndex(int index)
 		Director* director = Director::getInstance();
 		this->setVisible(false);
 		Director::getInstance()->startAnimation();
-		GameScene* gameScene = GameScene::create(index + 1, blockSize);
-		director->replaceScene(gameScene);
+		if (index < 7)
+		{
+			GameScene* gameScene = GameScene::create(index + 1, blockSize);
+			director->replaceScene(gameScene);
+		}
+		else
+		{
+			AdventureFirstScene* adventureFirstScene = AdventureFirstScene::create(AdventureFirstScene::bigcheck);
+			director->replaceScene(adventureFirstScene);
+		}
 	});
 }
 
 void GameEnd::SetBlockSize(int size)
 {
 	this->blockSize = size;
+}
+
+void GameEnd::SetMonsterKind(int kind)
+{
+	this->monsterKind = kind;
 }

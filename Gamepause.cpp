@@ -75,3 +75,8 @@ void Gamepause::SetBlockSize(int size)
 {
 	this->blockSize = size;
 }
+
+void Gamepause::SetMonsterKind(int kind)
+{
+	this->monsterKind = kind;
+}

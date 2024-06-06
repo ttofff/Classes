@@ -31,6 +31,7 @@ private:
 	int curIndex;// 目前所在的路径点下标
 	MonsterType type;
 public:
+	int monsterKind; // 怪物类型
 	int hp;// 怪物血量
 	float GetSpeed()const { return speed; }
 	void SetSpeed(float s) { speed = s; }

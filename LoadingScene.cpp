@@ -69,3 +69,8 @@ void LoadingScene::SetBlockSize(int size)
 {
 	this->blockSize = size;
 }
+
+void LoadingScene::SetMonsterKind(int kind)
+{
+	this->monsterKind = kind;
+}

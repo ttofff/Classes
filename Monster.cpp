@@ -37,6 +37,7 @@ Monster::Monster(MonsterType type)
 Monster* Monster::create(MonsterType type)
 {
 	Monster* ret = new Monster(type);
+	ret->monsterKind = 1;
 	if (ret && ret->init())
 	{
 		ret->autorelease();
@@ -52,28 +53,62 @@ Monster* Monster::create(MonsterType type)
 
 bool Monster::init()
 {
-	// 根据类型的到怪物图片路径
-	
-	__String* s =__String::createWithFormat("Map\\FirstKind\\Monster\\%d\\1\\1.png",type);
-	
-
-	if (!Sprite::initWithFile(s->getCString()))
-	{
-		return false;
-	}
+	__String* s;
 
 	// 创建动画
 	Animation* ani = Animation::create();
-
-	for (int i = 1; i <= 4; i++)
+	// 根据类型的到怪物图片路径
+	switch (monsterKind)
 	{
-		char file[100];
-		sprintf(file, "Map\\FirstKind\\Monster\\%d\\1\\%d.png",(int)type, i);
-		ani->addSpriteFrameWithFile(file);
-	}
-		
-	
+	case 1:
+		s = __String::createWithFormat("Map\\FirstKind\\Monster\\%d\\1\\1.png", type);
 
+		if (!Sprite::initWithFile(s->getCString()))
+		{
+			return false;
+		}
+
+		for (int i = 1; i <= 4; i++)
+		{
+			char file[100];
+			sprintf(file, "Map\\FirstKind\\Monster\\%d\\1\\%d.png",(int)type, i);
+			ani->addSpriteFrameWithFile(file);
+		}
+		break;
+	case 2:
+		s = __String::createWithFormat("Map\\SecondKind\\Monster\\%d\\1.png", type);
+
+		if (!Sprite::initWithFile(s->getCString()))
+		{
+			return false;
+		}
+
+		for (int i = 1; i <= 6; i++)
+		{
+			char file[100];
+			sprintf(file, "Map\\SecondKind\\Monster\\%d\\%d.png", (int)type, i);
+			ani->addSpriteFrameWithFile(file);
+		}
+		break;
+	case 3:
+		s = __String::createWithFormat("Map\\ThirdKind\\Monster\\%d\\1.png", type);
+
+		if (!Sprite::initWithFile(s->getCString()))
+		{
+			return false;
+		}
+
+		for (int i = 1; i <= 4; i++)
+		{
+			char file[100];
+			sprintf(file, "Map\\ThirdKind\\Monster\\%d\\%d.png", (int)type, i);
+			ani->addSpriteFrameWithFile(file);
+		}
+		break;
+	default:
+		break;
+	}
+	
 	ani->setLoops(-1);
 	ani->setDelayPerUnit(0.3);
 	Animate* animate = Animate::create(ani);

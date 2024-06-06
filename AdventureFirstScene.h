@@ -14,6 +14,7 @@ public:
 	const int MAX = 7;
 
 	int blockSize;
+	int monsterKind;
 	
 };
 

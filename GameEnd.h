@@ -18,8 +18,12 @@ public:
 	void SetNextIndex(int index);
 
 	void SetBlockSize(int size);
+
+	void SetMonsterKind(int kind);
 private:
 	int blockSize; // ÏñËØ·½¿é´óĞ¡
+
+	int monsterKind;
 
 };
 

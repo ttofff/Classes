@@ -12,9 +12,13 @@ public:
 
 	void SetBlockSize(int size);
 
+	void SetMonsterKind(int kind);
+
 public:
 	int index;
 	int blockSize; // ÏñËØ·½¿é´óĞ¡
+
+	int monsterKind;
 
 };
 
