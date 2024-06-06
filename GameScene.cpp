@@ -1209,7 +1209,6 @@ void GameScene::createBuildTool()
 	Button* shit;
 	Button* fan;
 	Button* star;
-	Button* ball;
 	for (int i = 0; i < TowerSelect.size(); ++i)
 	{
 		
@@ -1361,15 +1360,6 @@ void GameScene::createBuildTool()
 				moneyT->setString(text);
 			});
 			break;
-		case 5:
-			log("%d", TowerSelect[i]);
-			if (money >= 160)
-				ball = Button::create("Themes\\Towers\\TBall-hd\\Ball01.png");
-			else  ball = Button::create("Themes\\Towers\\TBall-hd\\Ball00.png");
-			ball->setPosition(Vec2(92 * i, 110));
-			select->addChild(ball);
-			break;
-
 		}
 	}
 	
