@@ -5,7 +5,7 @@
 #include "GameScene.h"
 #include"HelpScene.h"
 #include "LoadingScene.h"
-
+#include "BossScene.h"
 using namespace cocos2d::ui;
 
 
@@ -60,8 +60,7 @@ bool Boss::init()
 	this->addChild(ss_map01,2);
 	ss_map01->addClickEventListener([&](Ref* ref){
 		Director* director = Director::getInstance();
-		LoadingScene* loadingScene = LoadingScene::create(smallcheck);
-		loadingScene->SetBlockSize(blockSize);
+		BossScene* loadingScene = BossScene::create(smallcheck, blockSize,9);
 		director->replaceScene(loadingScene);
 	});
 	//ÑªÌõ
@@ -156,8 +155,7 @@ bool Boss::init()
 	this->addChild(ss_begin_normal, 3);
 	ss_begin_normal->addClickEventListener([&](Ref* ref){
 		Director* director = Director::getInstance();
-		LoadingScene* loadingScene = LoadingScene::create(smallcheck);
-		loadingScene->SetBlockSize(blockSize);
+		BossScene* loadingScene = BossScene::create(smallcheck, blockSize,1);
 		director->replaceScene(loadingScene);
 	});
 	
